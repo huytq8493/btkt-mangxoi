@@ -132,6 +132,16 @@ svg{display:block;width:100%;overflow:visible}
 .barrow:hover .bl{fill:var(--ink)}
 
 /* tables */
+.lgbtn{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:2px 6px;border-radius:6px}
+.lgbtn:hover{background:var(--surface-2)}
+.lgbtn[aria-pressed="true"]{box-shadow:0 0 0 1px var(--ink)}
+.xtab th.num,.xtab td.num{text-align:right}
+.xtab td{padding:6px 11px;vertical-align:middle}
+.xcell{all:unset;cursor:pointer;min-width:44px;display:inline-block;text-align:right;padding:3px 8px;border-radius:6px;font-variant-numeric:tabular-nums}
+.xcell:hover:not([disabled]){background:var(--surface-2)}
+.xcell[disabled]{cursor:default;color:var(--muted)}
+.xcell.lech{box-shadow:inset 0 0 0 1.5px var(--serious);color:var(--serious);font-weight:650}
+.lk{all:unset;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
 .tbl-wrap{overflow-x:auto;border:1px solid var(--ring);border-radius:10px}
 table{border-collapse:separate;border-spacing:0;width:100%;font-size:13px}
 th,td{padding:9px 11px;text-align:left;vertical-align:top;border-bottom:1px solid var(--grid)}
@@ -154,6 +164,29 @@ td small{display:block;color:var(--muted);font-weight:400;font-size:11.5px;margi
 .pager button{min-width:32px}
 
 /* drawer */
+.slabar{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;padding:10px 12px;
+  border:1px solid var(--ring);border-radius:10px;background:var(--surface-2);margin-bottom:12px}
+.slabar .f{display:flex;flex-direction:column;gap:4px}
+.slabar label{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600;
+  display:flex;align-items:center;gap:5px}
+.slabar input{width:78px;background:var(--surface);border:1px solid var(--ring);border-radius:8px;
+  padding:6px 8px;font:600 13px system-ui;color:var(--ink);font-variant-numeric:tabular-nums}
+.slabar input:focus{outline:2px solid var(--s1);outline-offset:1px}
+.nacrow{display:grid;grid-template-columns:292px 1fr 104px;gap:14px;align-items:center;
+  padding:11px 8px;border-radius:10px;cursor:pointer;border:1px solid transparent}
+.nacrow+.nacrow{border-top:1px solid var(--grid);border-radius:10px}
+.nacrow:hover{background:var(--surface-2)}
+.nacrow[aria-pressed="true"]{border-color:var(--ring-2);background:var(--surface-2)}
+.nacrow .nl b{display:flex;align-items:center;gap:7px;font-size:13.5px;flex-wrap:wrap}
+.slatag{font-size:10.5px;font-weight:700;letter-spacing:.02em;white-space:nowrap;
+  border:1px solid var(--ring);border-radius:999px;padding:2px 7px;color:var(--ink-2);background:var(--surface-2)}
+.slatag.off{color:var(--muted);font-weight:600}
+.nacrow .nl small,.nacrow .nv small{display:block;color:var(--muted);font-size:11.5px;margin-top:3px;line-height:1.5}
+.nacrow .nv{text-align:right}
+.nacrow .nv b{font-size:17px;font-variant-numeric:tabular-nums}
+.nlg{display:block;color:var(--ink-2);font-size:11.5px;margin-top:6px;line-height:1.6}
+.nlg i{width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:4px}
+@media(max-width:900px){.nacrow{grid-template-columns:1fr;gap:6px}.nacrow .nv{text-align:left}}
 .pgnav{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 14px}
 .pgnav .seg{padding:4px}
 .pgnav .seg button{font-size:14px;font-weight:600;padding:8px 18px}
@@ -246,6 +279,37 @@ code{background:var(--surface-2);border:1px solid var(--ring);border-radius:5px;
   <div class="fld"><label for="fUnit_d">Đầu mối xử lý</label><select id="fUnit_d"></select></div>
   <div class="fld"><label for="fHien_d">Tình trạng máng xối</label><select id="fHien_d"></select></div>
   <div class="fld"><label for="fBuoc_d">Bước workflow hiện tại</label><select id="fBuoc_d"></select></div>
+  <div class="fld"><label for="fTask_d">Trạng thái theo task</label><select id="fTask_d">
+    <option value="">Tất cả</option>
+    <optgroup label="Trạng thái hiện tại">
+      <option value="chuaxong">Chưa xong – chưa có task</option>
+      <option value="dangmo">Task đang xử lý</option>
+      <option value="xong">Task hoàn tất</option>
+      <option value="chuadoc">Có task – chưa đọc được</option>
+      <option value="huy">Task đã huỷ</option>
+    </optgroup>
+    <optgroup label="Lịch sử">
+      <option value="has">Đã có task (bất kỳ)</option>
+      <option value="done">Đã từng có task xong</option>
+      <option value="nodone">Có task nhưng chưa xong lần nào</option>
+    </optgroup>
+    <optgroup label="Số task">
+      <option value="n0">0 task</option>
+      <option value="n1">1 task</option>
+      <option value="n2">2 task</option>
+      <option value="n3">3 task trở lên</option>
+    </optgroup>
+    <optgroup label="Đối chiếu Sheet">
+      <option value="lech1">Sheet hoàn thành – task chưa xong</option>
+      <option value="lech2">Task xong – Sheet chưa chốt</option>
+    </optgroup>
+  </select></div>
+  <div class="fld"><label for="fNac_d">Nấc xử lý</label><select id="fNac_d"></select></div>
+  <div class="fld"><label for="fSla_d">Hạn SLA</label><select id="fSla_d">
+    <option value="">Tất cả</option>
+    <option value="tre">Đang trễ hạn</option>
+    <option value="conh">Đang mở, còn hạn</option>
+  </select></div>
   <div class="fld"><label for="fTuXL_d">Tự xử lý tại chỗ</label><select id="fTuXL_d">
     <option value="">Tất cả</option>
     <option value="any">Có thể tự xử lý (bảo vệ hoặc NCC)</option>
@@ -295,7 +359,8 @@ code{background:var(--surface-2);border:1px solid var(--ring);border-radius:5px;
         <button data-d="tinh" aria-pressed="false">Tỉnh/Thành</button>
         <button data-d="qlvk" aria-pressed="false">QLVK</button>
         <button data-d="dauMoi" aria-pressed="false">Đầu mối</button>
-        <button data-d="buocNhom" aria-pressed="false">Theo task</button>
+        <button data-d="nac" aria-pressed="false">Theo nấc</button>
+      <button data-d="buocNhom" aria-pressed="false">Theo task</button>
       </div>
     </div>
     <div id="barDim"></div>
@@ -369,6 +434,37 @@ code{background:var(--surface-2);border:1px solid var(--ring);border-radius:5px;
   <div class="fld"><label for="fUnit_t">Đầu mối xử lý</label><select id="fUnit_t"></select></div>
   <div class="fld"><label for="fHien_t">Tình trạng máng xối</label><select id="fHien_t"></select></div>
   <div class="fld"><label for="fBuoc_t">Bước workflow hiện tại</label><select id="fBuoc_t"></select></div>
+  <div class="fld"><label for="fTask_t">Trạng thái theo task</label><select id="fTask_t">
+    <option value="">Tất cả</option>
+    <optgroup label="Trạng thái hiện tại">
+      <option value="chuaxong">Chưa xong – chưa có task</option>
+      <option value="dangmo">Task đang xử lý</option>
+      <option value="xong">Task hoàn tất</option>
+      <option value="chuadoc">Có task – chưa đọc được</option>
+      <option value="huy">Task đã huỷ</option>
+    </optgroup>
+    <optgroup label="Lịch sử">
+      <option value="has">Đã có task (bất kỳ)</option>
+      <option value="done">Đã từng có task xong</option>
+      <option value="nodone">Có task nhưng chưa xong lần nào</option>
+    </optgroup>
+    <optgroup label="Số task">
+      <option value="n0">0 task</option>
+      <option value="n1">1 task</option>
+      <option value="n2">2 task</option>
+      <option value="n3">3 task trở lên</option>
+    </optgroup>
+    <optgroup label="Đối chiếu Sheet">
+      <option value="lech1">Sheet hoàn thành – task chưa xong</option>
+      <option value="lech2">Task xong – Sheet chưa chốt</option>
+    </optgroup>
+  </select></div>
+  <div class="fld"><label for="fNac_t">Nấc xử lý</label><select id="fNac_t"></select></div>
+  <div class="fld"><label for="fSla_t">Hạn SLA</label><select id="fSla_t">
+    <option value="">Tất cả</option>
+    <option value="tre">Đang trễ hạn</option>
+    <option value="conh">Đang mở, còn hạn</option>
+  </select></div>
   <div class="fld"><label for="fTuXL_t">Tự xử lý tại chỗ</label><select id="fTuXL_t">
     <option value="">Tất cả</option>
     <option value="any">Có thể tự xử lý (bảo vệ hoặc NCC)</option>
@@ -392,15 +488,6 @@ code{background:var(--surface-2);border:1px solid var(--ring);border-radius:5px;
       <button class="btn" id="btnReset_t">Xoá bộ lọc</button>
     </div>
   </div>
-</section>
-
-<section class="card panel" style="margin-bottom:14px">
-  <div class="phead">
-    <h2>⚠ Các chi nhánh cần xử lý — <span id="cAct" class="tnum">0</span></h2>
-    <span class="hint">Xếp theo mức ưu tiên, quá hạn lâu nhất lên trước</span>
-  </div>
-  <div class="tbl-wrap"><table id="tblAct"></table></div>
-  <div class="pager" id="pgAct"></div>
 </section>
 
 <section class="card panel">
@@ -534,6 +621,67 @@ function ganDauMoi(rows){
 }
 
 /* Nhóm tiến độ của một dòng */
+/* =================== PHỄU XỬ LÝ THEO NẤC =====================
+   Quy trình leo thang anh Huy mô tả (23/09/2026):
+     Nấc 1  cửa hàng tự xử lý — bảo vệ lên khảo sát và vệ sinh
+     Nấc 2  bảo vệ không làm được → cửa hàng tự tìm NCC ngoài
+     Nấc 3  cửa hàng không xử lý được → lên Vận hành bảo trì
+              3a  VHBT đi tìm NCC (chủ yếu tỉnh xa)
+              3b  đội Bảo trì tự làm (chủ yếu HCM – Bình Dương)
+   Sheet không có cột "nấc"; nấc suy ra từ đầu mối xử lý thực tế
+   (Người thực hiện chính + Hướng xử lý) đã gộp sẵn ở DAU_MOI. */
+const NAC = {
+  nac1 :{key:"nac1", label:"Nấc 1 · Bảo vệ tự xử lý",           ngan:"Nấc 1",  color:"var(--s3)",
+         mo:"Cửa hàng tự xử lý — bảo vệ lên khảo sát và vệ sinh"},
+  nac2 :{key:"nac2", label:"Nấc 2 · Cửa hàng tự tìm NCC ngoài", ngan:"Nấc 2",  color:"var(--s1)",
+         mo:"Bảo vệ không làm được — cửa hàng chủ động thuê NCC tại chỗ"},
+  nac3a:{key:"nac3a",label:"Nấc 3a · Vận hành bảo trì tìm NCC", ngan:"Nấc 3a", color:"var(--s7)",
+         mo:"Cửa hàng không xử lý được — VHBT đi tìm NCC, chủ yếu tỉnh xa"},
+  nac3b:{key:"nac3b",label:"Nấc 3b · Bảo trì tự làm",           ngan:"Nấc 3b", color:"var(--s2)",
+         mo:"Cửa hàng không xử lý được — đội Bảo trì làm, chủ yếu HCM – Bình Dương"},
+  cho  :{key:"cho",  label:"Chờ vận hành xác nhận",             ngan:"Chờ XN", color:"var(--warning)",
+         mo:"Chưa chốt đi nhánh nào nên chưa tính hạn"},
+  none :{key:"none", label:"(chưa xếp được nấc)",               ngan:"—",      color:"var(--na)",
+         mo:"Sheet chưa ghi đủ Đơn vị thực hiện / Hướng xử lý"}
+};
+const NAC_ORDER = ["nac1","nac2","nac3a","nac3b","cho","none"];
+const NAC_SLA   = ["nac1","nac2","nac3a","nac3b"];      // 4 nấc có cam kết thời gian
+const DM2NAC = {bv:"nac1", chncc:"nac2", vhncc:"nac3a", bt:"nac3b",
+                cho:"cho", khac:"none", none:"none"};
+const nacKey = r => DM2NAC[r.dauMoiKey] || "none";
+const nacOf  = r => NAC[nacKey(r)].label;
+
+/* Số ngày cam kết mỗi nấc. Anh Huy CHƯA chốt rule nên để chỉnh ngay trên
+   dashboard; số đã chỉnh lưu trên máy này và đi theo file khi bấm "Lưu vào file". */
+const SLA_KEY = "mx_sla";
+const SLA_MAC_DINH = {nac1:3, nac2:7, nac3a:14, nac3b:10};
+let SLA = Object.assign({}, SLA_MAC_DINH);
+let SLA_TUFILE = false;
+
+function addDays(iso, n){
+  const d = new Date(iso + "T00:00:00");
+  d.setDate(d.getDate() + n);
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+}
+/* Mốc tính hạn: ngày tạo task WSHR nếu có. CN chưa mở task thì tính từ HÔM NAY
+   (anh Huy chọn) — nghĩa là nhóm đó luôn còn hạn, không bao giờ báo trễ. */
+function mocSla(r){ const t = taskOf(r); return (t && t.tao) ? t.tao : TODAY; }
+const mocThat = r => { const t = taskOf(r); return !!(t && t.tao); };
+function hanSla(r){
+  const k = nacKey(r), n = SLA[k];
+  if(!NAC_SLA.includes(k) || !(n >= 0)) return "";
+  return addDays(mocSla(r), n);
+}
+function treSla(r){
+  const h = hanSla(r); if(!h || !isOpen(r)) return 0;
+  const d = daysBetween(h, TODAY); return d > 0 ? d : 0;
+}
+function conLaiSla(r){
+  const h = hanSla(r); if(!h || !isOpen(r)) return null;
+  return -daysBetween(h, TODAY);            // âm = đã trễ
+}
+const treSlaCo = r => treSla(r) > 0;
+
 function groupOf(r){
   const st = r.trangThai;
   if(RAW_NA.includes(st)) return GROUPS.na;
@@ -730,6 +878,18 @@ let QLKV = {}, QLKVMETA = {};
 })();
 function lsGet0(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
 
+/* SLA: mặc định → số đi theo file (nếu có) → số đã chỉnh trên máy này */
+(function loadSla(){
+  try{
+    if(window.MX_SAVED && window.MX_SAVED.sla){ Object.assign(SLA, window.MX_SAVED.sla); SLA_TUFILE = true; }
+  }catch(e){}
+  try{
+    const o = JSON.parse(lsGet0(SLA_KEY) || "null");
+    if(o && typeof o === "object") Object.assign(SLA, o);
+  }catch(e){}
+  NAC_SLA.forEach(k => { const v = +SLA[k]; SLA[k] = (v >= 0 && v <= 365) ? Math.round(v) : SLA_MAC_DINH[k]; });
+})();
+
 /* Khảo sát tại chỗ của 1 chi nhánh */
 /* Khoá join phải giống hệt hai bên: Mã CN_Alias, thiếu thì mới lấy STT.
    KHÔNG được thử thêm r.stt như một khoá riêng — sheet chính có dòng mà
@@ -816,6 +976,71 @@ function getToken(){ return (WSHR_TOKEN || lsGet(TOK_KEY) || "").trim(); }
 })();
 function taskOf(r){ return MXT[r.ma] || MXT[r.ten] || null; }
 function hasTask(r){ return !!taskOf(r); }
+const nLinkTask = r => (r.tasks || []).filter(u => /task_id=\d+/.test(u)).length;
+/* Chi nhánh đã có task chưa, và lần gần nhất task HOÀN TẤT là khi nào.
+   Dữ liệu lưu trước 23/09/2026 chưa có nTask/doneLast → suy từ đơn đại diện,
+   và đánh dấu "thieu" nếu CN có >1 link (cần Làm mới để đọc đủ). */
+function taskInfo(r){
+  const t = taskOf(r), nl = nLinkTask(r);
+  if(!t && !nl) return {k:"none", n:0, nDone:0, doneLast:"", thieu:false};
+  if(!t)        return {k:"chuadoc", n:nl, nDone:0, doneLast:"", thieu:true};
+  const moi = t.nTask !== undefined;
+  const doneLast = moi ? (t.doneLast || "") : (t.tt === "Hoàn tất" && t.dong ? t.dong : "");
+  const n = moi ? t.nTask : Math.max(1, nl);
+  const nDone = moi ? t.nDone : (doneLast ? 1 : 0);
+  return {k: doneLast ? "done" : "open", n, nDone, doneLast, id: moi ? t.doneId : (doneLast ? t.id : 0),
+          thieu: !moi && nl > 1};
+}
+const ngayTuDone = r => { const x = taskInfo(r); return x.doneLast ? daysBetween(x.doneLast, TODAY) : null; };
+/* TRẠNG THÁI THEO TASK — chạy SONG SONG với trạng thái Sheet, không thay thế.
+   Không có task  => Chưa xong.
+   Có task        => trạng thái hiện tại của đơn đại diện (ưu tiên đơn còn mở;
+                     hết đơn mở thì lấy đơn tạo gần nhất).
+   Lần xong cuối  => lấy từ taskInfo(): đơn gốc Hoàn tất có ngày muộn nhất. */
+const TT = {
+  xong:    {key:"xong",    label:"Task hoàn tất",           ngan:"Hoàn tất",   color:"var(--good)"},
+  dangmo:  {key:"dangmo",  label:"Task đang xử lý",         ngan:"Đang xử lý", color:"var(--wait)"},
+  chuadoc: {key:"chuadoc", label:"Có task – chưa đọc được", ngan:"Chưa đọc",   color:"var(--warning)"},
+  huy:     {key:"huy",     label:"Task đã huỷ",             ngan:"Đã huỷ",     color:"var(--na)"},
+  chuaxong:{key:"chuaxong",label:"Chưa xong – chưa có task",ngan:"Chưa có task",color:"var(--critical)"}
+};
+const TT_ORDER = ["xong","dangmo","chuadoc","huy","chuaxong"];
+function ttOf(r){
+  const x = taskInfo(r);
+  if(x.k === "none") return TT.chuaxong;
+  const t = taskOf(r);
+  if(!t) return TT.chuadoc;
+  if(t.tt === "Hoàn tất") return TT.xong;
+  if(t.tt === "Đã huỷ")   return TT.huy;
+  if(!t.tt && t.dong)     return TT.xong;
+  return TT.dangmo;                       // Chưa xử lý / Đang xử lý / Chờ duyệt / Điều hướng WF
+}
+/* Dòng mô tả trạng thái hiện tại: đơn đang ở đâu, hoặc xong/huỷ ngày nào */
+function ttNow(r){
+  const k = ttOf(r).key, t = taskOf(r);
+  if(k === "chuaxong") return "Sheet chưa gắn link task";
+  if(k === "chuadoc")  return "có " + nLinkTask(r) + " link, chưa đọc từ WSHR — bấm Làm mới";
+  if(k === "xong")     return "đơn hiện tại xong " + (t.dong ? viDate(t.dong) : "(không rõ ngày)") + (t.lech ? " · ⚠ còn bước con mở" : "");
+  if(k === "huy")      return "đơn hiện tại huỷ" + (t.dong ? " " + viDate(t.dong) : "");
+  const st = stepOf(r);
+  return (t.tt || "Đang mở") + (st && buocChacChan(r) ? " · " + st : "");
+}
+/* Dòng lịch sử: có mấy task, lần cuối xong là khi nào */
+function ttLast(r){
+  const x = taskInfo(r);
+  if(x.k === "none") return "";
+  if(x.doneLast) return `${x.n} task · lần xong cuối ${viDate(x.doneLast)} (${ngayTuDone(r)} ngày trước)`;
+  return `${x.n} task · chưa lần nào xong`;
+}
+/* Số task của chi nhánh: số đơn gốc khác nhau (link trỏ vào bước con của cùng 1
+   đơn chỉ tính 1). CN có nhiều link mà dữ liệu cũ mới đọc 1 đơn => tạm lấy số link. */
+const soTask = r => taskInfo(r).n || 0;
+const SO_TASK = [{k:"n0", l:"0 task", lo:0, hi:0}, {k:"n1", l:"1 task", lo:1, hi:1},
+                 {k:"n2", l:"2 task", lo:2, hi:2}, {k:"n3", l:"3+ task", lo:3, hi:1e9}];
+const soTaskNhom = r => { const n = soTask(r); return SO_TASK.find(b => n >= b.lo && n <= b.hi).k; };
+/* So với Sheet: 2 kiểu lệch đáng chú ý */
+const lechSheetXong = r => isDone(r) && ttOf(r).key !== "xong";     // Sheet ghi hoàn thành, task chưa xong / chưa có
+const lechTaskXong  = r => isOpen(r) && ttOf(r).key === "xong";     // task xong, Sheet chưa chốt
 /* Tuổi task: từ ngày tạo đến ngày đóng, hoặc đến hôm nay nếu còn mở */
 function taskAge(r){
   const t = taskOf(r); if(!t || !t.tao) return null;
@@ -869,7 +1094,7 @@ let source = {live:false, at:SNAPSHOT_AT, err:""};
 /* Hai trang, hai bộ lọc HOÀN TOÀN ĐỘC LẬP: lọc ở trang này không đụng trang kia.
    _d = trang Dashboard (biểu đồ) · _t = trang Dữ liệu (bảng). */
 const newF = () => ({q:"", khuVuc:"", tinh:"", qlvk:"", nguoiTH:"", hienTrang:"", pri:"", buoc:"", tuXL:"",
-                     from:"", to:"", status:new Set(), closed:false, kpi:""});
+                     nac:"", sla:"", task:"", from:"", to:"", status:new Set(), closed:false, kpi:""});
 const FD = newF();            // Dashboard
 const FT = newF();            // Dữ liệu
 let PAGE = "dash";
@@ -909,6 +1134,20 @@ function applyFilters(rows, f){
     else if(f.buoc === "__done__"){ if(!hasTask(r) || !taskOf(r).buocXong) return false; }
     else if(f.buoc === "__unk__"){ if(!hasTask(r) || taskOf(r).buocXong || buocChacChan(r)) return false; }
     else if(f.buoc && stepKey(r) !== f.buoc) return false;
+    if(f.nac && nacKey(r) !== f.nac) return false;
+    if(f.task){
+      const x = taskInfo(r);
+      if(f.task === "none"   && x.k !== "none") return false;
+      if(f.task === "has"    && x.k === "none") return false;
+      if(f.task === "done"   && x.k !== "done") return false;
+      if(f.task === "nodone" && !(x.k === "open" || x.k === "chuadoc")) return false;
+      if(TT[f.task] && ttOf(r).key !== f.task) return false;
+      if(f.task === "lech1" && !lechSheetXong(r)) return false;
+      if(f.task === "lech2" && !lechTaskXong(r)) return false;
+      if(/^n\d$/.test(f.task) && soTaskNhom(r) !== f.task) return false;
+    }
+    if(f.sla === "tre"  && !(isOpen(r) && treSlaCo(r))) return false;
+    if(f.sla === "conh" && !(isOpen(r) && hanSla(r) && !treSlaCo(r))) return false;
     if(f.status.size && !f.status.has(groupOf(r).key)) return false;
     if(f.from && (!r.ngay || r.ngay < f.from)) return false;
     if(f.to   && (!r.ngay || r.ngay > f.to))   return false;
@@ -957,6 +1196,13 @@ function buildFilters(f, suf){
     + `<option value="__none__">— Chưa gắn task —</option>`;
   selB.value = (["__none__","__done__","__unk__"].includes(curB) || steps.includes(curB)) ? curB : "";
   f.buoc = selB.value;
+
+  const selN = G("fNac"); const curN = selN.value;
+  const conN = NAC_ORDER.filter(k => base.some(r => nacKey(r) === k));
+  selN.innerHTML = `<option value="">Tất cả các nấc</option>`
+    + conN.map(k => `<option value="${k}">${esc(NAC[k].label)}</option>`).join("");
+  selN.value = conN.includes(curN) ? curN : "";
+  f.nac = selN.value;
 
   const counts = calculateStatusSummary(base);
   G("fStatus").innerHTML = GROUP_ORDER.map(k => {
@@ -1016,6 +1262,48 @@ function renderProgress(rows){
      <span class="muted tnum">(${pct1(g.n, s.total)}%)</span></span>`).join("");
   $("#progHint").innerHTML = `<b class="tnum" style="font-size:16px;color:var(--ink)">${pct1(s.done, s.base)}%</b>
     <span class="muted"> hoàn thành · ${fmt(s.done)}/${fmt(s.base)} CN</span>`;
+}
+
+/* Trạng thái theo task + đối chiếu với Sheet */
+function renderTT(rows){
+  const base = rows.filter(r => !isNA(r));
+  const n = {}; TT_ORDER.forEach(k => n[k] = 0); base.forEach(r => n[ttOf(r).key]++);
+  const segs = TT_ORDER.filter(k => n[k]).map(k => ({...TT[k], n:n[k]}));
+  $("#ttProg").innerHTML = segs.map(g =>
+    `<i style="width:${(g.n / Math.max(base.length,1) * 100).toFixed(2)}%;background:${g.color}" title="${esc(g.label)}: ${g.n}"></i>`).join("");
+  $("#ttLegend").innerHTML = segs.map(g =>
+    `<button class="lgbtn" data-t="${g.key}" aria-pressed="${FD.task === g.key}"><i class="ic" style="background:${g.color}"></i>${esc(g.label)}: <b class="tnum">${fmt(g.n)}</b>
+     <span class="muted tnum">(${pct1(g.n, base.length)}%)</span></button>`).join("");
+  $("#ttHint").innerHTML = `<b class="tnum" style="font-size:16px;color:var(--ink)">${pct1(n.xong, base.length)}%</b>
+    <span class="muted"> có task hoàn tất · ${fmt(n.xong)}/${fmt(base.length)} CN · Sheet ghi ${pct1(base.filter(isDone).length, base.length)}%</span>`;
+  // bảng đối chiếu: hàng = trạng thái Sheet, cột = trạng thái task
+  const gs = GROUP_ORDER.filter(g => g !== "na" && base.some(r => groupOf(r).key === g));
+  const cot = TT_ORDER.filter(k => n[k]);
+  const dem = (g,k) => base.filter(r => groupOf(r).key === g && ttOf(r).key === k).length;
+  const lech = (g,k) => (g === "done" && k !== "xong") || (g !== "done" && k === "xong");
+  $("#ttCross").innerHTML = `<thead><tr><th>Sheet \\ Task</th>${cot.map(k => `<th class="num"><i class="ic" style="background:${TT[k].color}"></i> ${esc(TT[k].ngan)}</th>`).join("")}<th class="num">Tổng</th></tr></thead>
+    <tbody>${gs.map(g => `<tr><td><i class="ic" style="background:${GROUPS[g].color}"></i> ${esc(GROUPS[g].label)}</td>${cot.map(k => { const v = dem(g,k);
+        return `<td class="num"><button class="xcell${v && lech(g,k) ? " lech" : ""}" data-g="${g}" data-t="${k}" ${v ? "" : "disabled"}>${v ? fmt(v) : "·"}</button></td>`; }).join("")}
+      <td class="num tnum"><b>${fmt(base.filter(r => groupOf(r).key === g).length)}</b></td></tr>`).join("")}</tbody>`;
+  const nt = {}; SO_TASK.forEach(b => nt[b.k] = 0); base.forEach(r => nt[soTaskNhom(r)]++);
+  const tong = base.reduce((a,r) => a + soTask(r), 0), coTask = base.length - nt.n0;
+  $("#ttCount").innerHTML = `<span class="muted">Số task mỗi chi nhánh:</span>
+    ${SO_TASK.map(b => `<button class="lgbtn" data-t="${b.k}" aria-pressed="${FD.task === b.k}"><b class="tnum">${fmt(nt[b.k])}</b> CN có ${b.l}</button>`).join('<span class="muted">·</span>')}
+    <span class="muted">— tổng <b class="tnum" style="color:var(--ink)">${fmt(tong)}</b> task trên ${fmt(coTask)} CN có task${coTask ? ` (bình quân ${(tong / coTask).toFixed(1)})` : ""}</span>`;
+  $("#ttCount").querySelectorAll(".lgbtn").forEach(b => b.onclick = () => setTask(b.dataset.t));
+  const l1 = base.filter(lechSheetXong).length, l2 = base.filter(lechTaskXong).length;
+  $("#ttNote").innerHTML = (l1 || l2) ? `<b style="color:var(--serious)">⚠ Lệch:</b>
+      ${l1 ? `<button class="lk" data-t="lech1">${fmt(l1)} CN Sheet ghi hoàn thành nhưng task chưa xong / chưa có task</button>` : ""}
+      ${l1 && l2 ? " · " : ""}${l2 ? `<button class="lk" data-t="lech2">${fmt(l2)} CN task đã xong nhưng Sheet chưa chốt</button>` : ""}`
+    : `<span class="muted">Sheet và task khớp nhau.</span>`;
+  const setTask = (t, g) => {
+    FD.task = FD.task === t && !g ? "" : t; FD.kpi = "";
+    FD.status.clear(); if(g) FD.status.add(g);
+    $("#fTask_d").value = FD.task; resetPages(); buildFilters(FD, "_d"); renderDash();
+  };
+  $("#ttLegend").querySelectorAll(".lgbtn").forEach(b => b.onclick = () => setTask(b.dataset.t));
+  $("#ttCross").querySelectorAll(".xcell").forEach(b => b.onclick = () => setTask(b.dataset.t, b.dataset.g));
+  $("#ttNote").querySelectorAll(".lk").forEach(b => b.onclick = () => setTask(b.dataset.t));
 }
 
 /* ------------------------ 10. BIỂU ĐỒ -------------------------- */
@@ -1092,11 +1380,14 @@ function renderDonut(rows){
 /* Thanh ngang xếp chồng theo chiều dữ liệu */
 function renderBarDim(rows){
   const host = $("#barDim"); host.innerHTML = "";
-  const DIM_GET = {buocNhom: buocNhomOf};
+  const DIM_GET = {buocNhom: buocNhomOf, nac: nacOf};
   let data = calculateRegionalProgress(rows, DIM_GET[dim] || dim);
   if(!data.length){ host.innerHTML = `<div class="empty">Không có dữ liệu khớp bộ lọc</div>`; return; }
   if(dim === "dauMoi"){
     const ord = DAU_MOI_ORDER.map(k => DAU_MOI[k].label);
+    data.sort((a,b) => ord.indexOf(a.key) - ord.indexOf(b.key));
+  } else if(dim === "nac"){
+    const ord = NAC_ORDER.map(k => NAC[k].label);
     data.sort((a,b) => ord.indexOf(a.key) - ord.indexOf(b.key));
   } else if(dim === "buocNhom"){
     // bước B* theo thứ tự workflow trước, ba nhóm ngoài luồng xuống cuối
@@ -1144,6 +1435,10 @@ function renderBarDim(rows){
         const mau = rows.find(r => buocNhomOf(r) === d.key);
         const k = mau ? buocNhomKey(mau) : "";
         FD.buoc = FD.buoc === k ? "" : k; $("#fBuoc_d").value = FD.buoc;
+      }else if(dim === "nac"){
+        const mau = rows.find(r => nacOf(r) === d.key);
+        const k = mau ? nacKey(mau) : "";
+        FD.nac = FD.nac === k ? "" : k; $("#fNac_d").value = FD.nac;
       }else{
         if(String(d.key).startsWith("(")) return;
         const sel = {khuVuc:"#fKhuVuc_d", tinh:"#fTinh_d", qlvk:"#fQlvk_d", dauMoi:"#fUnit_d"}[dim];
@@ -1409,6 +1704,105 @@ function renderTuXL(rows){
   renderTable("#tblTuXL", "#pgTuXL", co, COLS_TUXL, "tuxl", "tuxl");
 }
 
+/* ---------------- 10c. PHỄU XỬ LÝ THEO NẤC --------------------- */
+/* Ô nhập SLA dựng 1 lần, không dựng lại mỗi render để khỏi mất con trỏ. */
+function buildSlaBar(){
+  const host = $("#slaBar"); if(!host) return;
+  host.innerHTML = NAC_SLA.map(k => `
+    <div class="f">
+      <label for="sla_${k}"><i class="ic" style="background:${NAC[k].color}"></i> ${esc(NAC[k].ngan)}</label>
+      <input id="sla_${k}" type="number" min="0" max="365" step="1" value="${SLA[k]}" aria-label="Số ngày cam kết ${esc(NAC[k].ngan)}">
+    </div>`).join("")
+    + `<div class="f" style="flex:1 1 260px;min-width:200px">
+         <label>&nbsp;</label>
+         <span class="hint muted" style="padding-bottom:6px">Số ngày cam kết. Chỉnh xong bấm ra ngoài là mọi con số chạy lại; số này lưu trên máy anh và đi theo file khi bấm 💾.</span>
+       </div>
+       <div class="f"><label>&nbsp;</label><button class="btn" id="slaReset" style="margin-bottom:1px">Về mặc định</button></div>`;
+  NAC_SLA.forEach(k => $("#sla_" + k).addEventListener("change", e => {
+    const v = Math.round(+e.target.value);
+    SLA[k] = (v >= 0 && v <= 365) ? v : SLA_MAC_DINH[k];
+    e.target.value = SLA[k];
+    luuSla(); render();
+  }));
+  $("#slaReset").onclick = () => {
+    Object.assign(SLA, SLA_MAC_DINH);
+    NAC_SLA.forEach(k => $("#sla_" + k).value = SLA[k]);
+    luuSla(); render();
+  };
+}
+function luuSla(){ try{ localStorage.setItem(SLA_KEY, JSON.stringify(SLA)); }catch(e){} }
+
+function renderNac(rows){
+  const host = $("#nacRows"); if(!host) return;
+  const g = {};
+  NAC_ORDER.forEach(k => g[k] = []);
+  rows.forEach(r => g[nacKey(r)].push(r));
+
+  const seg = (w, c, t) => w > 0 ? `<i style="width:${w}%;background:${c}" title="${esc(t)}"></i>` : "";
+  host.innerHTML = NAC_ORDER.filter(k => g[k].length).map(k => {
+    const rs = g[k], N = NAC[k], coSla = NAC_SLA.includes(k);
+    const s    = calculateStatusSummary(rs);
+    const done = s.done, na = s.na;
+    const mo   = rs.filter(isOpen);
+    const tre  = coSla ? mo.filter(treSlaCo).length : 0;
+    const conh = mo.length - tre;
+    const tong = rs.length || 1;
+    /* "hạn gần nhất" chỉ tính trên CN CÒN hạn — nếu lấy cả CN đã trễ thì
+       sẽ hiện ra một ngày trong quá khứ, đọc rất dễ hiểu nhầm. */
+    const hans = coSla ? mo.filter(r => !treSlaCo(r)).map(hanSla).filter(Boolean).sort() : [];
+    const treMax = coSla ? mo.reduce((a,r) => Math.max(a, treSla(r)), 0) : 0;
+    const chuaTask = coSla ? mo.filter(r => !mocThat(r)).length : 0;
+    return `<div class="nacrow" data-k="${k}" role="button" tabindex="0"
+              aria-pressed="${FD.nac === k}" title="${esc(N.mo)}">
+      <div class="nl">
+        <b><i class="ic" style="background:${N.color}"></i> ${esc(N.label)}
+          ${coSla ? `<span class="slatag">SLA ${SLA[k]} ngày</span>` : `<span class="slatag off">không tính hạn</span>`}</b>
+        <small>${esc(N.mo)}</small>
+      </div>
+      <div class="nb">
+        <div class="prog" style="height:20px">
+          ${seg(done/tong*100, "var(--done)", "Đã hoàn thành")}
+          ${seg(conh/tong*100, "var(--wait)", "Đang mở, còn hạn")}
+          ${seg(tre /tong*100, "var(--over)", "Đang mở, trễ hạn")}
+          ${seg(na  /tong*100, "var(--na)",   "Không áp dụng")}
+        </div>
+        <span class="nlg">
+          <b class="tnum">${fmt(rs.length)}</b> CN ·
+          <i style="background:var(--done)"></i>${fmt(done)} xong ·
+          <i style="background:var(--wait)"></i>${fmt(conh)} đang mở${coSla ? " còn hạn" : ""}
+          ${coSla ? ` · <i style="background:var(--over)"></i><b style="color:${tre ? "var(--critical)" : "var(--muted)"}">${fmt(tre)} trễ hạn</b>` : ""}
+          ${na ? ` · <i style="background:var(--na)"></i>${fmt(na)} không áp dụng` : ""}
+          ${hans.length ? ` · hạn gần nhất <b class="tnum">${viDate(hans[0])}</b>` : ""}
+          ${treMax ? ` · trễ nhiều nhất <b class="tnum">${treMax}</b> ngày` : ""}
+          ${chuaTask ? ` · <span title="Chưa mở task WSHR nên hạn tính từ hôm nay">${fmt(chuaTask)} CN tính hạn từ hôm nay</span>` : ""}
+        </span>
+      </div>
+      <div class="nv">
+        <b class="tnum">${pct1(done, s.base)}%</b>
+        <small>${fmt(done)}/${fmt(s.base)} CN</small>
+      </div>
+    </div>`;
+  }).join("") || `<div class="empty">Không có chi nhánh nào khớp bộ lọc</div>`;
+
+  host.querySelectorAll(".nacrow").forEach(el => {
+    const go = () => { FD.nac = FD.nac === el.dataset.k ? "" : el.dataset.k;
+                       $("#fNac_d").value = FD.nac; resetPages(); renderDash(); };
+    el.onclick = go;
+    el.onkeydown = e => { if(e.key === "Enter" || e.key === " "){ e.preventDefault(); go(); } };
+  });
+
+  const trongPheu = NAC_SLA.reduce((a,k) => a + g[k].length, 0);
+  const treAll = NAC_SLA.reduce((a,k) => a + g[k].filter(r => isOpen(r) && treSlaCo(r)).length, 0);
+  const ngoai = ["cho","none"].reduce((a,k) => a + g[k].length, 0);
+  $("#nacHint").innerHTML = `${fmt(trongPheu)} CN trong phễu · <b style="color:${treAll ? "var(--critical)" : "var(--ink)"}">${fmt(treAll)} trễ hạn</b>`;
+  $("#nacNote").innerHTML =
+    `Nấc suy ra từ <b>Đơn vị thực hiện</b> + <b>Hướng xử lý</b> trong Sheet, không phải cột riêng.
+     Hạn tính từ <b>ngày tạo task WSHR</b>; chi nhánh chưa mở task thì tính từ <b>hôm nay</b> nên không bao giờ báo trễ —
+     đó là lựa chọn của anh, đọc số trễ hạn cần nhớ điều này.
+     ${ngoai ? `<b>${fmt(ngoai)} CN</b> nằm ngoài phễu (chờ vận hành xác nhận hoặc Sheet chưa ghi đủ đầu mối).` : ""}
+     ${SLA_TUFILE ? " Số ngày cam kết đang lấy theo file." : ""}`;
+}
+
 /* ------------------- 11. NHẬN ĐỊNH QUẢN LÝ --------------------- */
 function renderInsights(rows){
   const s = calculateStatusSummary(rows);
@@ -1480,12 +1874,35 @@ function statusCell(r){
       ${od ? `<small style="color:var(--critical);font-weight:600">🔴 Quá hạn ${od} ngày</small>` : ""}
       ${!od && isDueToday(r) ? `<small style="color:var(--serious);font-weight:600">Đến hạn hôm nay</small>` : ""}`;
 }
+function nacCell(r){
+  const k = nacKey(r), N = NAC[k], h = hanSla(r), tre = treSla(r), con = conLaiSla(r);
+  let d;
+  if(!h)                d = `<small class="muted">không tính hạn</small>`;
+  else if(!isOpen(r))   d = `<small class="muted">đã xong · hạn ${viDate(h)}</small>`;
+  else if(tre > 0)      d = `<small style="color:var(--critical)">hạn ${viDate(h)} · <b>trễ ${tre} ngày</b></small>`;
+  else                  d = `<small>hạn ${viDate(h)} · còn ${con} ngày${mocThat(r) ? "" : " (tính từ hôm nay)"}</small>`;
+  return `<span class="pill" style="border-color:${N.color}55;background:${N.color}15"><i class="ic" style="background:${N.color}"></i>${esc(N.ngan)}</span>${d}`;
+}
 const COLS = [
   {k:"ma",   t:"Chi nhánh", get:r => `<div class="nm">${esc(r.ten)}<small>${esc(r.ma)}${r.shopId ? " · shop " + esc(r.shopId) : ""}${r.dup ? " · ⚠ trùng mã" : ""}</small></div>`, s:r => r.ten},
   {k:"tinh", t:"Tỉnh / Khu vực", get:r => `${esc(r.tinh)}<small>${esc(r.khuVuc)}</small>`, s:r => r.tinh},
-  {k:"trangThai", t:"Trạng thái", get:statusCell, s:r => GROUP_ORDER.indexOf(groupOf(r).key) + r.trangThai},
+  {k:"trangThai", t:"Trạng thái (Sheet)", get:statusCell, s:r => GROUP_ORDER.indexOf(groupOf(r).key) + r.trangThai},
   {k:"ngay", t:"Ngày hẹn", get:r => r.ngay ? `<span class="tnum">${viDate(r.ngay)}</span>` :
       (r.ngayText ? `<small>${esc(r.ngayText)}</small>` : `<span class="muted">—</span>`), s:r => r.ngay || "9999"},
+  {k:"taskDone", t:"Trạng thái theo task", get:r => {
+      const T = ttOf(r), x = taskInfo(r), L = ttLast(r);
+      return `<span class="pill" style="border-color:${T.color}55;background:${T.color}15"><i class="ic" style="background:${T.color}"></i>${esc(T.label)}</span>`
+        + `<small>${esc(ttNow(r))}</small>`
+        + (L ? `<small>${x.doneLast ? `${x.n} task · lần xong cuối <b class="tnum">${viDate(x.doneLast)}</b> · ${ngayTuDone(r)} ngày trước` : esc(L)}</small>` : "")
+        + (lechSheetXong(r) ? `<small style="color:var(--serious)">⚠ Sheet ghi hoàn thành nhưng task chưa xong</small>` : "")
+        + (lechTaskXong(r)  ? `<small style="color:var(--serious)">⚠ Task xong nhưng Sheet chưa chốt</small>` : "")
+        + (x.thieu ? `<small style="color:var(--serious)">có ${nLinkTask(r)} link — bấm Làm mới để đọc đủ</small>` : ""); },
+   s:r => TT_ORDER.indexOf(ttOf(r).key) + (taskInfo(r).doneLast || "0")},
+  {k:"soTask", t:"Số task", get:r => { const x = taskInfo(r);
+      if(!x.n) return `<span class="tnum muted">0</span>`;
+      return `<b class="tnum" style="font-size:15px">${x.n}</b>${x.thieu ? `<small style="color:var(--serious)" title="Dữ liệu cũ mới đọc 1 đơn; đang tạm đếm theo số link">theo link*</small>` : ""}`
+        + `<small>${x.k === "chuadoc" ? "chưa đọc" : x.nDone + " xong · " + (x.n - x.nDone) + " chưa xong"}</small>`; },
+   s:r => String(soTask(r)).padStart(3,"0") + (taskInfo(r).nDone || 0)},
   {k:"taskTao", t:"Ngày tạo task", get:r => { const t = taskOf(r); if(!t || !t.tao) return `<span class="muted">—</span>`;
       const a = taskAge(r);
       return `<span class="tnum">${viDate(t.tao)}</span><small>${t.dong ? "task đóng " + viDate(t.dong)
@@ -1511,6 +1928,8 @@ const COLS = [
         + (c != null ? `<small>chi phí ${fmt(c)} đ</small>` : "")
         + (r.dup ? `<small style="color:var(--critical)">⚠ mã CN trùng — có thể ghép nhầm</small>` : ""); },
    s:r => ({bv:"1", ncc:"2", no:"3", none:"4"})[tcKey(r)]},
+  {k:"nac", t:"Nấc & hạn SLA", get:nacCell,
+   s:r => NAC_ORDER.indexOf(nacKey(r)) + "|" + (hanSla(r) || "9999")},
   {k:"hienTrang", t:"Tình trạng", get:r => `${esc(r.hienTrang || "—")}<small>${esc(r.ketQua || "")}</small>`, s:r => r.hienTrang},
   {k:"loiLen", t:"Lối lên", get:r => r.loiLen ? esc(r.loiLen) : `<span class="muted">—</span>`, s:r => r.loiLen},
   {k:"nguoiTH", t:"Đầu mối xử lý", get:r => `<span class="pill" style="border-color:${DAU_MOI[r.dauMoiKey].color}55;background:${DAU_MOI[r.dauMoiKey].color}15"><i class="ic" style="background:${DAU_MOI[r.dauMoiKey].color}"></i>${esc(r.dauMoi)}</span><small>${esc(r.nguoiTH)}${r.xacNhan ? " · " + esc(r.xacNhan) : ""}</small>`,
@@ -1524,6 +1943,8 @@ const COLS_ACT = [
    s:r => priorityOf(r).rank * 10000 - overdueDays(r)},
   COLS[0],
   {k:"issue", t:"Vấn đề cần xử lý", get:r => issueOf(r).map(x => `<div>${esc(x)}</div>`).join(""), s:r => issueOf(r)[0]},
+  {k:"nac", t:"Nấc & hạn SLA", get:nacCell,
+   s:r => NAC_ORDER.indexOf(nacKey(r)) + "|" + (hanSla(r) || "9999")},
   {k:"ngay", t:"Hạn", get:r => r.ngay ? `<span class="tnum">${viDate(r.ngay)}</span>${overdueDays(r) ? `<small style="color:var(--critical)">trễ ${overdueDays(r)} ngày</small>` : ""}`
       : `<span class="muted">chưa có</span>`, s:r => r.ngay || "9999"},
   {k:"buoc", t:"Bước hiện tại", get:r => { const t = taskOf(r);
@@ -1723,10 +2144,18 @@ async function fetchTasks(silent){
     }
 
     const rows = {};
+    /* Một CN có thể có 2–3 link task. rows[] chỉ giữ 1 đơn đại diện (ưu tiên đơn
+       còn mở), nên gom riêng TẤT CẢ đơn gốc để biết lần gần nhất task hoàn tất. */
+    const gom = {};
     want.forEach(w => {
       const d = rec.get(w.id); if(!d) return;
       const isKid = !!d.parent_id;
       const root = (isKid ? rec.get(d.parent_id) : d) || d;
+      const G = gom[w.key] || (gom[w.key] = {ids:new Set(), done:[]});
+      if(!G.ids.has(root.id)){
+        G.ids.add(root.id);
+        if(root.status === 2 && root.finished_at) G.done.push({ngay:root.finished_at.slice(0,10), id:root.id});
+      }
       const cs = root.current_step;
       const kids = kidsOf.get(root.id) || [];
       const conMo = kids.filter(k => OPEN_ST.has(k.status));
@@ -1769,6 +2198,12 @@ async function fetchTasks(silent){
       };
       const prev = rows[w.key];
       if(!prev || (!cand.dong && prev.dong) || (!!cand.dong === !!prev.dong && cand.tao > prev.tao)) rows[w.key] = cand;
+    });
+    Object.keys(rows).forEach(k => {
+      const G = gom[k]; if(!G) return;
+      const last = G.done.sort((a,b) => a.ngay < b.ngay ? 1 : -1)[0];
+      Object.assign(rows[k], {nTask:G.ids.size, nDone:G.done.length,
+        doneLast: last ? last.ngay : "", doneId: last ? last.id : 0});
     });
     MXT = rows;
     const nThieu = Object.values(rows).filter(t => !t.buoc || !t.buocChac).length;
@@ -1815,19 +2250,35 @@ function openDrawer(i){
       ${kv("Tỉnh/Thành", esc(r.tinh))}${kv("Khu vực xử lý", esc(r.khuVuc))}
       ${kv("QLVK phụ trách", esc(r.qlvk) + (r.qlvkId ? ` <span class="muted">#${esc(r.qlvkId)}</span>` : ""))}
     </dl></div>
-    <div class="dsec"><h3>Tiến độ</h3><dl class="kv">
-      ${kv("Trạng thái báo cáo", `<span class="pill" style="border-color:${g.color}55;background:${g.color}18"><i class="ic" style="background:${g.color}"></i>${esc(r.trangThai)}</span>`)}
-      ${kv("Nhóm tiến độ", esc(g.label))}
-      ${kv("Ngày hẹn xử lý", r.ngay ? viDate(r.ngay) + (od ? ` <b style="color:var(--critical)">— quá hạn ${od} ngày</b>` : isDueToday(r) ? ` <b style="color:var(--serious)">— đến hạn hôm nay</b>` : "") : (r.ngayText ? esc(r.ngayText) : ""))}
-      ${kv("Đầu mối xử lý", `<b>${esc(r.dauMoi)}</b>`)}
-      ${kv("Người thực hiện chính", esc(r.nguoiTH))}${kv("Vận hành xác nhận", esc(r.xacNhan))}
-      ${kv("Hướng xử lý", esc(r.huong))}${kv("Loại yêu cầu", esc(r.loaiYc))}
-    </dl></div>
     <div class="dsec"><h3>Hiện trạng</h3><dl class="kv">
       ${kv("Có lối lên mái", esc(r.loiLen))}${kv("Khu vực đã kiểm tra", esc(r.kvKiemTra))}
       ${kv("Hiện trạng trước vệ sinh", esc(r.hienTrang))}${kv("Kết quả kiểm tra/vệ sinh", esc(r.ketQua))}
       ${kv("Bằng chứng cần nộp", esc(r.bangChung))}${kv("Ghi chú bảo trì", esc(r.note))}
     </dl></div>
+    <div class="dsec"><h3>Tiến độ</h3><dl class="kv">
+      ${kv("Trạng thái báo cáo", `<span class="pill" style="border-color:${g.color}55;background:${g.color}18"><i class="ic" style="background:${g.color}"></i>${esc(r.trangThai)}</span>`)}
+      ${kv("Nhóm tiến độ", esc(g.label))}
+      ${kv("Ngày hẹn xử lý", r.ngay ? viDate(r.ngay) + (od ? ` <b style="color:var(--critical)">— quá hạn ${od} ngày</b>` : isDueToday(r) ? ` <b style="color:var(--serious)">— đến hạn hôm nay</b>` : "") : (r.ngayText ? esc(r.ngayText) : ""))}
+      ${kv("Nấc xử lý", `<span class="pill" style="border-color:${NAC[nacKey(r)].color}55;background:${NAC[nacKey(r)].color}18"><i class="ic" style="background:${NAC[nacKey(r)].color}"></i>${esc(NAC[nacKey(r)].label)}</span>`)}
+      ${kv("Hạn theo SLA", (() => { const h = hanSla(r); if(!h) return '<span class="muted">nấc này không tính hạn</span>';
+        const tre = treSla(r), con = conLaiSla(r);
+        return `${viDate(h)} <span class="muted">(cam kết ${SLA[nacKey(r)]} ngày từ ${viDate(mocSla(r))}${mocThat(r) ? " — ngày tạo task" : " — hôm nay, chi nhánh chưa mở task"})</span>`
+          + (!isOpen(r) ? "" : tre > 0 ? ` <b style="color:var(--critical)">— trễ ${tre} ngày</b>` : ` <b style="color:var(--good)">— còn ${con} ngày</b>`); })())}
+      ${kv("Đầu mối xử lý", `<b>${esc(r.dauMoi)}</b>`)}
+      ${kv("Người thực hiện chính", esc(r.nguoiTH))}${kv("Vận hành xác nhận", esc(r.xacNhan))}
+      ${kv("Hướng xử lý", esc(r.huong))}${kv("Loại yêu cầu", esc(r.loaiYc))}
+    </dl></div>
+    ${(() => { const x = taskInfo(r); return `<div class="dsec"><h3>Lịch sử task</h3><dl class="kv">
+        ${kv("Trạng thái theo task", `<b style="color:${ttOf(r).color}">${esc(ttOf(r).label)}</b> <span class="muted">— ${esc(ttNow(r))}</span>`)}
+        ${kv("So với Sheet", `Sheet: <b>${esc(groupOf(r).label)}</b>` + (lechSheetXong(r) ? ' <b style="color:var(--serious)">⚠ Sheet ghi hoàn thành nhưng task chưa xong</b>'
+            : lechTaskXong(r) ? ' <b style="color:var(--serious)">⚠ task xong nhưng Sheet chưa chốt</b>' : ' <span class="muted">— khớp</span>'))}
+        ${kv("Có task chưa", x.k === "none" ? '<b style="color:var(--critical)">Chưa có task</b> — Sheet chưa gắn link'
+            : `<b>Có ${x.n} task</b>` + (x.k === "chuadoc" ? ' <span class="muted">(chưa đọc được từ WSHR)</span>' : ""))}
+        ${kv("Số task đã hoàn tất", x.k === "none" ? "" : String(x.nDone))}
+        ${kv("Lần task done cuối", x.doneLast ? `<b>${viDate(x.doneLast)}</b> <span class="muted">(${ngayTuDone(r)} ngày trước${x.id ? " · task " + x.id : ""})</span>`
+            : (x.k === "none" ? "" : '<span class="muted">chưa task nào hoàn tất</span>'))}
+        ${x.thieu ? kv("Ghi chú", `<span style="color:var(--serious)">CN có ${nLinkTask(r)} link task; dữ liệu đang lưu mới đọc 1 đơn — bấm Làm mới để tính đủ.</span>`) : ""}
+      </dl></div>`; })()}
     ${(() => { const t = taskOf(r); if(!t) return `<div class="dsec"><h3>Task WSHR</h3>
         <div class="muted">Chi nhánh này chưa gắn được task nào trong dữ liệu WSHR (bộ phận Vận hành – Bảo trì).</div></div>`;
       const a = taskAge(r);
@@ -1873,12 +2324,25 @@ const EXPORT_COLS = [
   ["QLVK", r => r.qlvk], ["Có lối lên mái", r => r.loiLen], ["Khu vực đã kiểm tra", r => r.kvKiemTra],
   ["Hiện trạng trước vệ sinh", r => r.hienTrang], ["Kết quả kiểm tra/vệ sinh", r => r.ketQua],
   ["Trạng thái báo cáo (gốc)", r => r.trangThai], ["Nhóm tiến độ", r => groupOf(r).label],
+  ["Trạng thái theo task", r => ttOf(r).label], ["Chi tiết trạng thái task", r => ttNow(r)],
+  ["Lệch Sheet ↔ task", r => lechSheetXong(r) ? "Sheet hoàn thành, task chưa xong" : lechTaskXong(r) ? "Task xong, Sheet chưa chốt" : ""],
   ["Mức ưu tiên", r => priorityOf(r).label], ["Quá hạn (ngày)", r => overdueDays(r) || ""],
   ["Ngày hẹn xử lý", r => viDate(r.ngay) || r.ngayText],
+  ["Nấc xử lý", r => NAC[nacKey(r)].label],
+  ["Số ngày cam kết (SLA)", r => NAC_SLA.includes(nacKey(r)) ? SLA[nacKey(r)] : ""],
+  ["Mốc tính hạn", r => NAC_SLA.includes(nacKey(r)) ? viDate(mocSla(r)) + (mocThat(r) ? "" : " (hôm nay — chưa mở task)") : ""],
+  ["Hạn SLA", r => viDate(hanSla(r))],
+  ["Trễ SLA (ngày)", r => treSla(r) || ""],
+  ["Còn lại theo SLA (ngày)", r => { const c = conLaiSla(r); return c == null ? "" : c; }],
   ["Vấn đề cần xử lý", r => isOpen(r) ? issueOf(r).join("; ") : ""],
   ["Task WSHR (id)", r => { const t = taskOf(r); return t ? t.id : ""; }],
   ["Ngày tạo task", r => { const t = taskOf(r); return t ? viDate(t.tao) : ""; }],
   ["Ngày đóng task", r => { const t = taskOf(r); return t && t.dong ? viDate(t.dong) : ""; }],
+  ["Có task chưa", r => taskInfo(r).k === "none" ? "Chưa có task" : "Có task"],
+  ["Số task", r => taskInfo(r).n || ""],
+  ["Số task đã hoàn tất", r => taskInfo(r).k === "none" ? "" : taskInfo(r).nDone],
+  ["Lần task done cuối", r => viDate(taskInfo(r).doneLast)],
+  ["Số ngày từ lần done cuối", r => { const d = ngayTuDone(r); return d == null ? "" : d; }],
   ["Tuổi task (ngày)", r => { const a = taskAge(r); return a == null ? "" : a; }],
   ["Trạng thái task", r => { const t = taskOf(r); return t ? t.tt : ""; }],
   ["Bước hiện tại", r => stepOf(r)],
@@ -2027,9 +2491,7 @@ function renderDash(){
 function renderData(){
   const rows = rowsOf(FT);
   const act = rows.filter(r => isOpen(r)).filter(r => priorityOf(r).key !== "low");
-  $("#cAct").textContent = fmt(act.length);
   $("#cAll").textContent = fmt(rows.length);
-  renderTable("#tblAct", "#pgAct", act, COLS_ACT, "act", "act");
   renderTable("#tblAll", "#pgAll", rows, COLS, "all", "all");
   const s = calculateStatusSummary(rows);
   SUB.data = `Dữ liệu chi tiết · ${fmt(s.total)} CN trong bộ lọc · ${fmt(act.length)} CN cần xử lý · cập nhật ${source.at}`;
@@ -2059,6 +2521,7 @@ function bindPage(f, suf){
   bindSel("fKhuVuc","khuVuc"); bindSel("fTinh","tinh"); bindSel("fQlvk","qlvk");
   bindSel("fUnit","nguoiTH");  bindSel("fHien","hienTrang"); bindSel("fPri","pri");
   bindSel("fBuoc","buoc");     bindSel("fTuXL","tuXL");
+  bindSel("fNac","nac");       bindSel("fSla","sla");       bindSel("fTask","task");
   bindSel("fFrom","from");     bindSel("fTo","to");
   let qt; G("q").addEventListener("input", e => {
     clearTimeout(qt); qt = setTimeout(() => { f.q = e.target.value; rr(); }, 180);
@@ -2069,11 +2532,11 @@ function bindPage(f, suf){
   };
   G("btnReset").onclick = () => {
     Object.assign(f, {q:"", khuVuc:"", tinh:"", qlvk:"", nguoiTH:"", hienTrang:"", pri:"",
-                      buoc:"", tuXL:"", from:"", to:"", kpi:"", closed:false});
+                      buoc:"", tuXL:"", nac:"", sla:"", task:"", from:"", to:"", kpi:"", closed:false});
     f.status.clear();
     /* phải xoá CẢ 5 dropdown động: fillSelect giữ lại giá trị cũ nếu vẫn còn trong
        danh sách, nên không xoá ở đây thì buildFilters sẽ nạp ngược lại vào f. */
-    ["q","fFrom","fTo","fPri","fBuoc","fTuXL",
+    ["q","fFrom","fTo","fPri","fBuoc","fTuXL","fNac","fSla","fTask",
      "fKhuVuc","fTinh","fQlvk","fUnit","fHien"].forEach(id => G(id).value = "");
     G("fClosed").setAttribute("aria-pressed","false");
     resetPages(); buildFilters(f, suf); renderOne(f);
@@ -2092,7 +2555,7 @@ $("#segDim").querySelectorAll("button").forEach(b => b.onclick = () => {
   dim = b.dataset.d;
   $("#segDim").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b));
   $("#dimName").textContent = {khuVuc:"khu vực", tinh:"tỉnh/thành", qlvk:"QLVK",
-    dauMoi:"đầu mối xử lý", buocNhom:"bước task đang treo"}[dim];
+    dauMoi:"đầu mối xử lý", buocNhom:"bước task đang treo", nac:"nấc xử lý"}[dim];
   renderBarDim(rowsOf(FD));
 });
 $("#segTime").querySelectorAll("button").forEach(b => b.onclick = () => {
@@ -2142,7 +2605,7 @@ $("#btnSave").onclick = () => {
     setTokState("File này không có khối để ghi dữ liệu task (bản dựng cũ) — nhờ dựng lại file.");
     $("#tokBox").hidden = false; return;
   }
-  const goi = {rows:MXT, meta:Object.assign({}, MXMETA, {tuFile:true}), qlkv:{rows:QLKV, meta:QLKVMETA}};
+  const goi = {rows:MXT, meta:Object.assign({}, MXMETA, {tuFile:true}), qlkv:{rows:QLKV, meta:QLKVMETA}, sla:Object.assign({}, SLA)};
   const moi = PRISTINE.slice(0, a) + MXT_A + "window.MX_SAVED=" + JSON.stringify(goi) + ";" + MXT_B
             + PRISTINE.slice(b + MXT_B.length);
   download("Dashboard_TienDo_VeSinhMangXoi.html", moi, "text/html;charset=utf-8");
@@ -2233,6 +2696,47 @@ function selfTest(){
   console.table(t);
   const fail = t.filter(x => x["Kết quả"] === "FAIL");
   if(fail.length) console.warn("Có " + fail.length + " kiểm tra FAIL:", fail);
+  /* --- lịch sử task --- */
+  const tiAll = base.map(taskInfo);
+  ok("CN không có link task thì 'Chưa có task'",
+     base.every((r,i) => nLinkTask(r) || taskOf(r) ? tiAll[i].k !== "none" : tiAll[i].k === "none"),
+     tiAll.filter(x => x.k === "none").length + " CN chưa có task");
+  ok("Lần done cuối không nằm trong tương lai",
+     tiAll.every(x => !x.doneLast || x.doneLast <= TODAY),
+     tiAll.filter(x => x.doneLast).length + " CN có task đã done");
+  ok("Số task done ≤ số task", tiAll.every(x => x.nDone <= x.n), "");
+  const ttN = {}; base.forEach(r => { const k = ttOf(r).key; ttN[k] = (ttN[k] || 0) + 1; });
+  ok("Trạng thái theo task: mỗi CN đúng 1 nhóm, không có task = Chưa xong",
+     base.every((r,i) => TT[ttOf(r).key] && ((tiAll[i].k === "none") === (ttOf(r).key === "chuaxong"))),
+     TT_ORDER.filter(k => ttN[k]).map(k => TT[k].ngan + "=" + ttN[k]).join(" · "));
+  const ntT = {}; base.forEach(r => { const k = soTaskNhom(r); ntT[k] = (ntT[k] || 0) + 1; });
+  ok("Đếm số task: mỗi CN vào đúng 1 nhóm, 0 task = chưa có task",
+     base.every(r => (soTask(r) === 0) === (ttOf(r).key === "chuaxong")) && SO_TASK.reduce((a,b) => a + (ntT[b.k] || 0), 0) === base.length,
+     SO_TASK.map(b => b.l + "=" + (ntT[b.k] || 0)).join(" · ") + " · tổng " + base.reduce((a,r) => a + soTask(r), 0) + " task");
+  ok("Task hoàn tất khớp trạng thái đơn WSHR",
+     base.filter(r => ttOf(r).key === "xong").every(r => taskOf(r).tt === "Hoàn tất" || (!taskOf(r).tt && taskOf(r).dong)), "");
+  /* --- phễu theo nấc --- */
+  const nacN = {}; NAC_ORDER.forEach(k => nacN[k] = base.filter(r => nacKey(r) === k).length);
+  ok("Mọi CN xếp được đúng 1 nấc",
+     Object.values(nacN).reduce((a,b) => a+b, 0) === base.length,
+     Object.entries(nacN).filter(([,v]) => v).map(([k,v]) => NAC[k].ngan + "=" + v).join(" · "));
+  ok("Nấc khớp đầu mối xử lý",
+     base.every(r => DM2NAC[r.dauMoiKey] === nacKey(r)),
+     "nac1←bv · nac2←chncc · nac3a←vhncc · nac3b←bt");
+  const coHan = base.filter(r => hanSla(r));
+  ok("4 nấc có SLA đều tính ra hạn",
+     coHan.length === NAC_SLA.reduce((a,k) => a + nacN[k], 0),
+     `${coHan.length} CN có hạn · SLA ${NAC_SLA.map(k => NAC[k].ngan+" "+SLA[k]+"n").join(" · ")}`);
+  ok("Hạn = mốc + số ngày cam kết",
+     coHan.every(r => hanSla(r) === addDays(mocSla(r), SLA[nacKey(r)])),
+     "kiểm lại trên " + coHan.length + " CN");
+  ok("CN đã đóng không bị tính trễ",
+     base.every(r => isOpen(r) || treSla(r) === 0),
+     "trễ hạn chỉ đếm CN còn mở");
+  ok("CN chưa mở task thì không thể trễ",
+     base.every(r => mocThat(r) || treSla(r) === 0),
+     base.filter(r => !mocThat(r)).length + " CN tính hạn từ hôm nay");
+
   window.__selfTest = t;
 }
 
