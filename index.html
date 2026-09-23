@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="vi"><head>
+<html lang="vi">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Dashboard tiến độ kiểm tra &amp; vệ sinh máng xối — Hasaki</title>
@@ -153,6 +154,9 @@ td small{display:block;color:var(--muted);font-weight:400;font-size:11.5px;margi
 .pager button{min-width:32px}
 
 /* drawer */
+.pgnav{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 14px}
+.pgnav .seg{padding:4px}
+.pgnav .seg button{font-size:14px;font-weight:600;padding:8px 18px}
 .scrim{position:fixed;inset:0;background:rgba(11,11,11,.42);opacity:0;pointer-events:none;transition:opacity .16s;z-index:90}
 .scrim.on{opacity:1;pointer-events:auto}
 .drawer{position:fixed;top:0;right:0;height:100%;width:min(560px,100%);background:var(--surface);z-index:91;
@@ -201,9 +205,17 @@ code{background:var(--surface-2);border:1px solid var(--ring);border-radius:5px;
   </div>
 </header>
 
+<nav class="pgnav">
+  <div class="seg" id="segPage">
+    <button data-p="dash" aria-pressed="true">📊 Dashboard</button>
+    <button data-p="data" aria-pressed="false">📋 Dữ liệu</button>
+  </div>
+  <span class="hint muted">Hai trang có bộ lọc riêng — lọc ở trang này không đổi trang kia</span>
+</nav>
+
 <div id="notice"></div>
 
-<section class="card panel" id="tokBox" hidden="" style="margin-bottom:14px">
+<section class="card panel" id="tokBox" hidden style="margin-bottom:14px">
   <div class="phead"><h2>Token WSHR</h2><span class="hint">Chỉ dùng để đọc ngày tạo task và bước hiện tại</span></div>
   <p style="margin:0 0 10px;font-size:13px;line-height:1.55;color:var(--ink-2)">
     Dashboard gọi thẳng <code>wshr.hasaki.vn</code> để lấy dữ liệu task. API bắt buộc Bearer token,
@@ -216,22 +228,25 @@ code{background:var(--surface-2);border:1px solid var(--ring);border-radius:5px;
     <code>const WSHR_TOKEN = "";</code> và dán token vào giữa hai dấu nháy.
   </p>
   <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-    <input id="tokInput" type="password" placeholder="Dán JWT WSHR vào đây…" autocomplete="off" style="flex:1 1 320px;min-width:0;background:var(--surface-2);border:1px solid var(--ring);border-radius:8px;padding:8px 10px">
+    <input id="tokInput" type="password" placeholder="Dán JWT WSHR vào đây…" autocomplete="off"
+      style="flex:1 1 320px;min-width:0;background:var(--surface-2);border:1px solid var(--ring);border-radius:8px;padding:8px 10px">
     <button class="btn pri" id="tokSave">Lưu &amp; lấy dữ liệu task</button>
     <button class="btn" id="tokClear">Xoá token khỏi máy này</button>
   </div>
   <p class="hint muted" id="tokState" style="margin:10px 0 0"></p>
 </section>
 
-<section class="card filters">
-  <div class="fld"><label for="q">Tìm chi nhánh</label><input id="q" type="search" placeholder="Tên, mã CN, địa chỉ, ghi chú…" autocomplete="off"></div>
-  <div class="fld"><label for="fKhuVuc">Khu vực xử lý</label><select id="fKhuVuc"></select></div>
-  <div class="fld"><label for="fTinh">Tỉnh / Thành</label><select id="fTinh"></select></div>
-  <div class="fld"><label for="fQlvk">QLVK phụ trách</label><select id="fQlvk"></select></div>
-  <div class="fld"><label for="fUnit">Đầu mối xử lý</label><select id="fUnit"></select></div>
-  <div class="fld"><label for="fHien">Tình trạng máng xối</label><select id="fHien"></select></div>
-  <div class="fld"><label for="fBuoc">Bước workflow hiện tại</label><select id="fBuoc"></select></div>
-  <div class="fld"><label for="fTuXL">Tự xử lý tại chỗ</label><select id="fTuXL">
+<div id="pgDash">
+
+<section class="card filters" data-pg="dash">
+  <div class="fld"><label for="q_d">Tìm chi nhánh</label><input id="q_d" type="search" placeholder="Tên, mã CN, địa chỉ, ghi chú…" autocomplete="off"></div>
+  <div class="fld"><label for="fKhuVuc_d">Khu vực xử lý</label><select id="fKhuVuc_d"></select></div>
+  <div class="fld"><label for="fTinh_d">Tỉnh / Thành</label><select id="fTinh_d"></select></div>
+  <div class="fld"><label for="fQlvk_d">QLVK phụ trách</label><select id="fQlvk_d"></select></div>
+  <div class="fld"><label for="fUnit_d">Đầu mối xử lý</label><select id="fUnit_d"></select></div>
+  <div class="fld"><label for="fHien_d">Tình trạng máng xối</label><select id="fHien_d"></select></div>
+  <div class="fld"><label for="fBuoc_d">Bước workflow hiện tại</label><select id="fBuoc_d"></select></div>
+  <div class="fld"><label for="fTuXL_d">Tự xử lý tại chỗ</label><select id="fTuXL_d">
     <option value="">Tất cả</option>
     <option value="any">Có thể tự xử lý (bảo vệ hoặc NCC)</option>
     <option value="bv">Bảo vệ tự lên khảo sát được</option>
@@ -239,19 +254,19 @@ code{background:var(--surface-2);border:1px solid var(--ring);border-radius:5px;
     <option value="no">Cả hai đều Không</option>
     <option value="none">Chưa khảo sát</option>
   </select></div>
-  <div class="fld"><label for="fPri">Mức ưu tiên</label><select id="fPri">
+  <div class="fld"><label for="fPri_d">Mức ưu tiên</label><select id="fPri_d">
     <option value="">Tất cả</option><option value="high">Cao</option><option value="med">Trung bình</option><option value="low">Thấp</option>
   </select></div>
-  <div class="fld"><label for="fFrom">Ngày hẹn từ</label><input id="fFrom" type="date"></div>
-  <div class="fld"><label for="fTo">Ngày hẹn đến</label><input id="fTo" type="date"></div>
+  <div class="fld"><label for="fFrom_d">Ngày hẹn từ</label><input id="fFrom_d" type="date"></div>
+  <div class="fld"><label for="fTo_d">Ngày hẹn đến</label><input id="fTo_d" type="date"></div>
   <div class="frow">
     <div class="fld" style="flex:1 1 420px">
       <label>Trạng thái (chọn nhiều)</label>
-      <div class="chips" id="fStatus"></div>
+      <div class="chips" id="fStatus_d"></div>
     </div>
     <div class="chips">
-      <button class="chip" id="fClosed" aria-pressed="false" title="Mặc định loại các dòng closed / Relocation khỏi mẫu số">Gồm CN closed &amp; Relocation</button>
-      <button class="btn" id="btnReset">Xoá bộ lọc</button>
+      <button class="chip" id="fClosed_d" aria-pressed="false" title="Mặc định loại các dòng closed / Relocation khỏi mẫu số">Gồm CN closed &amp; Relocation</button>
+      <button class="btn" id="btnReset_d">Xoá bộ lọc</button>
     </div>
   </div>
 </section>
@@ -342,6 +357,43 @@ code{background:var(--surface-2);border:1px solid var(--ring);border-radius:5px;
   <ul class="ins" id="insights"></ul>
 </section>
 
+</div><!-- /pgDash -->
+
+<div id="pgData" hidden>
+
+<section class="card filters" data-pg="data">
+  <div class="fld"><label for="q_t">Tìm chi nhánh</label><input id="q_t" type="search" placeholder="Tên, mã CN, địa chỉ, ghi chú…" autocomplete="off"></div>
+  <div class="fld"><label for="fKhuVuc_t">Khu vực xử lý</label><select id="fKhuVuc_t"></select></div>
+  <div class="fld"><label for="fTinh_t">Tỉnh / Thành</label><select id="fTinh_t"></select></div>
+  <div class="fld"><label for="fQlvk_t">QLVK phụ trách</label><select id="fQlvk_t"></select></div>
+  <div class="fld"><label for="fUnit_t">Đầu mối xử lý</label><select id="fUnit_t"></select></div>
+  <div class="fld"><label for="fHien_t">Tình trạng máng xối</label><select id="fHien_t"></select></div>
+  <div class="fld"><label for="fBuoc_t">Bước workflow hiện tại</label><select id="fBuoc_t"></select></div>
+  <div class="fld"><label for="fTuXL_t">Tự xử lý tại chỗ</label><select id="fTuXL_t">
+    <option value="">Tất cả</option>
+    <option value="any">Có thể tự xử lý (bảo vệ hoặc NCC)</option>
+    <option value="bv">Bảo vệ tự lên khảo sát được</option>
+    <option value="ncc">Có NCC tại địa phương</option>
+    <option value="no">Cả hai đều Không</option>
+    <option value="none">Chưa khảo sát</option>
+  </select></div>
+  <div class="fld"><label for="fPri_t">Mức ưu tiên</label><select id="fPri_t">
+    <option value="">Tất cả</option><option value="high">Cao</option><option value="med">Trung bình</option><option value="low">Thấp</option>
+  </select></div>
+  <div class="fld"><label for="fFrom_t">Ngày hẹn từ</label><input id="fFrom_t" type="date"></div>
+  <div class="fld"><label for="fTo_t">Ngày hẹn đến</label><input id="fTo_t" type="date"></div>
+  <div class="frow">
+    <div class="fld" style="flex:1 1 420px">
+      <label>Trạng thái (chọn nhiều)</label>
+      <div class="chips" id="fStatus_t"></div>
+    </div>
+    <div class="chips">
+      <button class="chip" id="fClosed_t" aria-pressed="false" title="Mặc định loại các dòng closed / Relocation khỏi mẫu số">Gồm CN closed &amp; Relocation</button>
+      <button class="btn" id="btnReset_t">Xoá bộ lọc</button>
+    </div>
+  </div>
+</section>
+
 <section class="card panel" style="margin-bottom:14px">
   <div class="phead">
     <h2>⚠ Các chi nhánh cần xử lý — <span id="cAct" class="tnum">0</span></h2>
@@ -359,6 +411,8 @@ code{background:var(--surface-2);border:1px solid var(--ring);border-radius:5px;
   <div class="tbl-wrap"><table id="tblAll"></table></div>
   <div class="pager" id="pgAll"></div>
 </section>
+
+</div><!-- /pgData -->
 
 </div>
 
@@ -731,7 +785,7 @@ async function fetchQlkv(){
   QLKV = rows;
   QLKVMETA = {when:new Date().toLocaleString("vi-VN"), sheet:ok, hong:hong.length};
   try{ localStorage.setItem(QCACHE_KEY, JSON.stringify({rows:QLKV, meta:QLKVMETA})); }catch(e){}
-  buildFilters(); render();
+  buildAll(); render();
 }
 function chuanCoKhong(v){
   const t = noAccent(v);
@@ -812,8 +866,16 @@ const ageBucket = d => AGE_BUCKETS.find(b => d >= b.lo && d <= b.hi);
 /* ------------------- 7. TRẠNG THÁI ỨNG DỤNG -------------------- */
 let ALL = [];
 let source = {live:false, at:SNAPSHOT_AT, err:""};
-const F = {q:"", khuVuc:"", tinh:"", qlvk:"", nguoiTH:"", hienTrang:"", pri:"", buoc:"", tuXL:"",
-           from:"", to:"", status:new Set(), closed:false, kpi:""};
+/* Hai trang, hai bộ lọc HOÀN TOÀN ĐỘC LẬP: lọc ở trang này không đụng trang kia.
+   _d = trang Dashboard (biểu đồ) · _t = trang Dữ liệu (bảng). */
+const newF = () => ({q:"", khuVuc:"", tinh:"", qlvk:"", nguoiTH:"", hienTrang:"", pri:"", buoc:"", tuXL:"",
+                     from:"", to:"", status:new Set(), closed:false, kpi:""});
+const FD = newF();            // Dashboard
+const FT = newF();            // Dữ liệu
+let PAGE = "dash";
+const FOF  = {dash:FD, data:FT};
+const SUF  = {dash:"_d", data:"_t"};
+const curF = () => FOF[PAGE];
 const PG = {act:1, all:1, tuxl:1};
 const SORT = {act:{k:"pri", dir:1}, all:{k:"ma", dir:1}, tuxl:{k:"cach", dir:1}};
 let dim = "khuVuc", timeMode = "day";
@@ -825,31 +887,33 @@ const fmt = n => new Intl.NumberFormat("vi-VN").format(n);
 const pct1 = (a,b) => b ? (a / b * 100).toFixed(1) : "0.0";
 
 /* Mẫu số: bỏ dòng rỗng do công thức, và (mặc định) bỏ CN closed / Relocation */
-function scope(){
+function scope(f){
+  f = f || FD;
   const live = ALL.filter(r => !r.blank);
-  return F.closed ? live : live.filter(r => !r.closed && !r.reloc);
+  return f.closed ? live : live.filter(r => !r.closed && !r.reloc);
 }
 
-function applyFilters(rows){
-  const q = noAccent(F.q);
+function applyFilters(rows, f){
+  f = f || FD;
+  const q = noAccent(f.q);
   return rows.filter(r => {
-    if(F.khuVuc && r.khuVuc !== F.khuVuc) return false;
-    if(F.tinh && r.tinh !== F.tinh) return false;
-    if(F.qlvk && r.qlvk !== F.qlvk) return false;
-    if(F.nguoiTH && r.dauMoi !== F.nguoiTH) return false;
-    if(F.hienTrang && r.hienTrang !== F.hienTrang) return false;
-    if(F.pri && priorityOf(r).key !== F.pri) return false;
-    if(F.tuXL === "any" && !tuXuLyDuoc(r)) return false;
-    else if(F.tuXL && F.tuXL !== "any" && tcKey(r) !== F.tuXL) return false;
-    if(F.buoc === "__none__"){ if(hasTask(r)) return false; }
-    else if(F.buoc === "__done__"){ if(!hasTask(r) || !taskOf(r).buocXong) return false; }
-    else if(F.buoc === "__unk__"){ if(!hasTask(r) || taskOf(r).buocXong || buocChacChan(r)) return false; }
-    else if(F.buoc && stepKey(r) !== F.buoc) return false;
-    if(F.status.size && !F.status.has(groupOf(r).key)) return false;
-    if(F.from && (!r.ngay || r.ngay < F.from)) return false;
-    if(F.to   && (!r.ngay || r.ngay > F.to))   return false;
-    if(F.kpi === "overdue" && !isOverdue(r)) return false;
-    if(F.kpi === "attention" && !needsAttention(r)) return false;
+    if(f.khuVuc && r.khuVuc !== f.khuVuc) return false;
+    if(f.tinh && r.tinh !== f.tinh) return false;
+    if(f.qlvk && r.qlvk !== f.qlvk) return false;
+    if(f.nguoiTH && r.dauMoi !== f.nguoiTH) return false;
+    if(f.hienTrang && r.hienTrang !== f.hienTrang) return false;
+    if(f.pri && priorityOf(r).key !== f.pri) return false;
+    if(f.tuXL === "any" && !tuXuLyDuoc(r)) return false;
+    else if(f.tuXL && f.tuXL !== "any" && tcKey(r) !== f.tuXL) return false;
+    if(f.buoc === "__none__"){ if(hasTask(r)) return false; }
+    else if(f.buoc === "__done__"){ if(!hasTask(r) || !taskOf(r).buocXong) return false; }
+    else if(f.buoc === "__unk__"){ if(!hasTask(r) || taskOf(r).buocXong || buocChacChan(r)) return false; }
+    else if(f.buoc && stepKey(r) !== f.buoc) return false;
+    if(f.status.size && !f.status.has(groupOf(r).key)) return false;
+    if(f.from && (!r.ngay || r.ngay < f.from)) return false;
+    if(f.to   && (!r.ngay || r.ngay > f.to))   return false;
+    if(f.kpi === "overdue" && !isOverdue(r)) return false;
+    if(f.kpi === "attention" && !needsAttention(r)) return false;
     if(q){
       const t = taskOf(r);
       const hay = noAccent([r.ma, r.ten, r.shop, r.diaChi, r.tinh, r.quan, r.qlvk,
@@ -868,44 +932,47 @@ function fillSelect(el, values, label){
     values.map(v => `<option value="${esc(v)}">${esc(v)}</option>`).join("");
   if(values.includes(cur)) el.value = cur; else el.value = "";
 }
-function buildFilters(){
-  const base = scope();
+function buildFilters(f, suf){
+  const G = id => $("#" + id + suf);
+  const base = scope(f);
   const uniq = k => [...new Set(base.map(r => (r[k] || "").trim()).filter(Boolean))]
     .sort((a,b) => a.localeCompare(b, "vi"));
-  fillSelect($("#fKhuVuc"), uniq("khuVuc"), "Tất cả khu vực");
-  fillSelect($("#fTinh"),   uniq("tinh"),   "Tất cả tỉnh/thành");
-  fillSelect($("#fQlvk"),   uniq("qlvk"),   "Tất cả QLVK");
-  fillSelect($("#fUnit"),
+  fillSelect(G("fKhuVuc"), uniq("khuVuc"), "Tất cả khu vực");
+  fillSelect(G("fTinh"),   uniq("tinh"),   "Tất cả tỉnh/thành");
+  fillSelect(G("fQlvk"),   uniq("qlvk"),   "Tất cả QLVK");
+  fillSelect(G("fUnit"),
     DAU_MOI_ORDER.map(k => DAU_MOI[k].label).filter(l => base.some(r => r.dauMoi === l)),
     "Tất cả đầu mối");
-  fillSelect($("#fHien"),   uniq("hienTrang"), "Tất cả tình trạng");
+  fillSelect(G("fHien"),   uniq("hienTrang"), "Tất cả tình trạng");
   ["khuVuc","tinh","qlvk","nguoiTH","hienTrang"].forEach((k,i) => {   // fUnit lọc theo r.dauMoi
-    F[k] = [$("#fKhuVuc"),$("#fTinh"),$("#fQlvk"),$("#fUnit"),$("#fHien")][i].value;
+    f[k] = [G("fKhuVuc"),G("fTinh"),G("fQlvk"),G("fUnit"),G("fHien")][i].value;
   });
   const steps = [...new Set(base.filter(hasTask).map(stepKey).filter(Boolean))]
     .sort((a,b) => a.localeCompare(b, "vi", {numeric:true}));
-  const selB = $("#fBuoc"); const curB = selB.value;
+  const selB = G("fBuoc"); const curB = selB.value;
   selB.innerHTML = `<option value="">Tất cả bước</option>`
     + steps.map(v => `<option value="${esc(v)}">${esc(v)} — ${esc((base.find(r => stepKey(r) === v) ? stepOf(base.find(r => stepKey(r) === v)) : v).replace(/^B[\d.]+\.?\s*/,"")).slice(0,42)}</option>`).join("")
     + `<option value="__unk__">— Chưa đọc được bước —</option>`
     + `<option value="__done__">— Task đã đóng —</option>`
     + `<option value="__none__">— Chưa gắn task —</option>`;
   selB.value = (["__none__","__done__","__unk__"].includes(curB) || steps.includes(curB)) ? curB : "";
-  F.buoc = selB.value;
+  f.buoc = selB.value;
 
   const counts = calculateStatusSummary(base);
-  $("#fStatus").innerHTML = GROUP_ORDER.map(k => {
+  G("fStatus").innerHTML = GROUP_ORDER.map(k => {
     const g = GROUPS[k];
-    return `<button class="chip" data-s="${k}" aria-pressed="${F.status.has(k)}">
+    return `<button class="chip" data-s="${k}" aria-pressed="${f.status.has(k)}">
       <span class="sw" style="background:${g.color}"></span>${esc(g.label)}
       <span class="muted tnum">${counts[k]}</span></button>`;
   }).join("");
-  $("#fStatus").querySelectorAll(".chip").forEach(b => b.onclick = () => {
+  G("fStatus").querySelectorAll(".chip").forEach(b => b.onclick = () => {
     const k = b.dataset.s;
-    F.status.has(k) ? F.status.delete(k) : F.status.add(k);
-    resetPages(); buildFilters(); render();
+    f.status.has(k) ? f.status.delete(k) : f.status.add(k);
+    resetPages(); buildFilters(f, suf); renderOne(f);
   });
 }
+function buildAll(){ buildFilters(FD, "_d"); buildFilters(FT, "_t"); }
+
 function resetPages(){ PG.act = 1; PG.all = 1; PG.tuxl = 1; }
 
 /* --------------------------- 9. KPI ---------------------------- */
@@ -923,7 +990,7 @@ function renderKpis(rows){
     {k:"attention", l:"Cần xử lý", v:fmt(att.length), s:"Phát sinh sau kiểm tra, còn mở", c:"var(--risk)"}
   ];
   $("#kpis").innerHTML = cards.map(c => `
-    <button class="card kpi" data-k="${c.k}" aria-pressed="${F.kpi === c.k && !!c.k}">
+    <button class="card kpi" data-k="${c.k}" aria-pressed="${FD.kpi === c.k && !!c.k}">
       <span class="k-l"><i class="ic" style="background:${c.c}"></i>${esc(c.l)}</span>
       <span class="k-v tnum">${c.v}</span>
       <span class="k-s">${esc(c.s)}</span>
@@ -931,10 +998,10 @@ function renderKpis(rows){
     </button>`).join("");
   $("#kpis").querySelectorAll(".kpi").forEach(b => b.onclick = () => {
     const k = b.dataset.k;
-    if(!k){ F.kpi = ""; F.status.clear(); }
-    else if(k === "overdue" || k === "attention"){ F.kpi = F.kpi === k ? "" : k; F.status.clear(); }
-    else { F.kpi = ""; F.status.clear(); if(k === "doing"){ F.status.add("doing"); F.status.add("plan"); } else F.status.add(k); }
-    resetPages(); buildFilters(); render();
+    if(!k){ FD.kpi = ""; FD.status.clear(); }
+    else if(k === "overdue" || k === "attention"){ FD.kpi = FD.kpi === k ? "" : k; FD.status.clear(); }
+    else { FD.kpi = ""; FD.status.clear(); if(k === "doing"){ FD.status.add("doing"); FD.status.add("plan"); } else FD.status.add(k); }
+    resetPages(); buildFilters(FD, "_d"); renderDash();
   });
   return s;
 }
@@ -995,7 +1062,7 @@ function renderDonut(rows){
       fill:g.color, style:"cursor:pointer"});
     hook(p, `<b>${esc(g.label)}</b><br>${fmt(g.n)} chi nhánh · ${pct1(g.n, s.total)}%`);
     p.addEventListener("click", () => {
-      F.kpi = ""; F.status.clear(); F.status.add(g.key); resetPages(); buildFilters(); render();
+      FD.kpi = ""; FD.status.clear(); FD.status.add(g.key); resetPages(); buildFilters(FD, "_d"); renderDash();
     });
     svg.appendChild(p);
     a0 = a1;
@@ -1076,15 +1143,15 @@ function renderBarDim(rows){
       if(dim === "buocNhom"){
         const mau = rows.find(r => buocNhomOf(r) === d.key);
         const k = mau ? buocNhomKey(mau) : "";
-        F.buoc = F.buoc === k ? "" : k; $("#fBuoc").value = F.buoc;
+        FD.buoc = FD.buoc === k ? "" : k; $("#fBuoc_d").value = FD.buoc;
       }else{
         if(String(d.key).startsWith("(")) return;
-        const sel = {khuVuc:"#fKhuVuc", tinh:"#fTinh", qlvk:"#fQlvk", dauMoi:"#fUnit"}[dim];
+        const sel = {khuVuc:"#fKhuVuc_d", tinh:"#fTinh_d", qlvk:"#fQlvk_d", dauMoi:"#fUnit_d"}[dim];
         const fk = dim === "dauMoi" ? "nguoiTH" : dim;
-        F[fk] = F[fk] === d.key ? "" : d.key;
-        $(sel).value = F[fk];
+        FD[fk] = FD[fk] === d.key ? "" : d.key;
+        $(sel).value = FD[fk];
       }
-      resetPages(); render();
+      resetPages(); renderDash();
     });
     svg.appendChild(g);
   });
@@ -1111,7 +1178,7 @@ function renderBarHien(rows){
     const rect = svgEl("rect", {x:LW, y, width:Math.max(d.n/max*plotW, 2), height:H, rx:4, fill:c, style:"cursor:pointer"});
     hook(rect, `<b>${esc(d.k)}</b><br>${fmt(d.n)} chi nhánh · ${pct1(d.n, rows.length)}%`);
     rect.addEventListener("click", () => {
-      F.hienTrang = F.hienTrang === d.k ? "" : d.k; $("#fHien").value = F.hienTrang; resetPages(); render();
+      FD.hienTrang = FD.hienTrang === d.k ? "" : d.k; $("#fHien_d").value = FD.hienTrang; resetPages(); renderDash();
     });
     const v = svgEl("text", {x:W-8, y:y+H/2+4, "text-anchor":"end", fill:"var(--ink)",
       style:"font:600 12.5px system-ui;font-variant-numeric:tabular-nums"});
@@ -1250,7 +1317,7 @@ function renderBarBuoc(rows){
     g.appendChild(v);
     g.addEventListener("click", () => {
       const k = stepKeyFromLabel(d.k);
-      F.buoc = F.buoc === k ? "" : k; $("#fBuoc").value = F.buoc; resetPages(); render();
+      FD.buoc = FD.buoc === k ? "" : k; $("#fBuoc_d").value = FD.buoc; resetPages(); renderDash();
     });
     svg.appendChild(g);
   });
@@ -1491,7 +1558,7 @@ function renderTable(tblSel, pgSel, rows, cols, sortKey, pageKey){
   tbl.querySelectorAll("th").forEach(th => th.onclick = () => {
     const k = th.dataset.k;
     if(st.k === k) st.dir *= -1; else { st.k = k; st.dir = 1; }
-    render();
+    renderOne(curF());
   });
   tbl.querySelectorAll("tbody tr[data-i]").forEach(tr => tr.onclick = () => openDrawer(+tr.dataset.i));
   if(!$(pgSel)) return;
@@ -1504,7 +1571,7 @@ function renderTable(tblSel, pgSel, rows, cols, sortKey, pageKey){
       <button class="btn" data-p="${pages}" ${PG[pageKey]===pages?"disabled":""}>»</button>
     </span>` : "";
   $(pgSel).querySelectorAll("button[data-p]").forEach(b => b.onclick = () => {
-    PG[pageKey] = Math.min(Math.max(1, +b.dataset.p), pages); render();
+    PG[pageKey] = Math.min(Math.max(1, +b.dataset.p), pages); renderOne(curF());
   });
 }
 
@@ -1711,7 +1778,7 @@ async function fetchTasks(silent){
     setTokState(`Đã lấy ${fmt(MXMETA.n)} chi nhánh có task, lúc ${MXMETA.when}.`
       + (cach >= 0 ? ` Bước con lấy được bằng cách #${cach + 1}.` : "")
       + (nThieu ? ` Còn ${nThieu} đơn chưa chắc bước đang dừng.` : ""));
-    setBadge(); buildFilters(); render();
+    setBadge(); buildAll(); render();
   }catch(e){
     const msg = e.message === "401"
       ? "Token bị từ chối (hết hạn hoặc sai). Lấy token mới rồi dán lại."
@@ -1829,7 +1896,8 @@ const EXPORT_COLS = [
   ["Link ảnh/minh chứng", r => r.anh], ["Link task", r => r.tasks.join(" | ")],
   ["Ghi chú bảo trì", r => r.note]
 ];
-function currentRows(){ return applyFilters(scope()); }
+const rowsOf = f => applyFilters(scope(f), f);
+function currentRows(){ return rowsOf(curF()); }   // export/CSV/Excel theo TRANG ĐANG XEM
 function toCsv(rows){
   const q = v => `"${String(v == null ? "" : v).replace(/"/g,'""')}"`;
   return "﻿" + [EXPORT_COLS.map(c => q(c[0])).join(",")]
@@ -1905,7 +1973,7 @@ async function refresh(silent){
     if(!rows.length) throw new Error("Sheet không có dòng dữ liệu nào");
     ALL = rows;
     source = {live:true, at:new Date().toLocaleString("vi-VN"), err:""};
-    setBadge(); setNotice(""); buildFilters(); render(); selfTest();
+    setBadge(); setNotice(""); buildAll(); render(); selfTest();
     fetchQlkv();          // 29 sheet QLVK, chạy nền, xong thì tự vẽ lại
   }catch(err){
     source.live = false; source.err = err.message; setBadge();
@@ -1933,8 +2001,13 @@ function setNotice(msg){
 }
 
 /* ---------------------- 16. RENDER TỔNG ------------------------ */
-function render(){
-  const rows = currentRows();
+/* Hai trang dựng độc lập từ bộ lọc riêng. Luôn dựng cả hai để đổi trang
+   là thao tác ẩn/hiện thuần, không có trạng thái cũ sót lại. */
+let SUB = {dash:"", data:""};
+function paintSub(){ $("#subtitle").textContent = SUB[PAGE] || ""; }
+
+function renderDash(){
+  const rows = rowsOf(FD);
   renderKpis(rows);
   renderProgress(rows);
   renderDonut(rows);
@@ -1945,50 +2018,87 @@ function render(){
   renderBarTuoi(rows);
   renderTuXL(rows);
   renderInsights(rows);
+  const s = calculateStatusSummary(rows);
+  SUB.dash = `Tổng quan · ${fmt(s.total)} CN trong bộ lọc · ${pct1(s.done, s.base)}% hoàn thành · cập nhật ${source.at}`;
+  paintSub();
+  window.__rowsDash = rows;
+}
+
+function renderData(){
+  const rows = rowsOf(FT);
   const act = rows.filter(r => isOpen(r)).filter(r => priorityOf(r).key !== "low");
   $("#cAct").textContent = fmt(act.length);
   $("#cAll").textContent = fmt(rows.length);
   renderTable("#tblAct", "#pgAct", act, COLS_ACT, "act", "act");
   renderTable("#tblAll", "#pgAll", rows, COLS, "all", "all");
   const s = calculateStatusSummary(rows);
-  $("#subtitle").textContent = `Theo dõi hiện trạng toàn bộ chi nhánh Hasaki · ${fmt(s.total)} CN trong bộ lọc · `
-    + `${pct1(s.done, s.base)}% hoàn thành · cập nhật ${source.at}`;
+  SUB.data = `Dữ liệu chi tiết · ${fmt(s.total)} CN trong bộ lọc · ${fmt(act.length)} CN cần xử lý · cập nhật ${source.at}`;
+  paintSub();
   window.__rows = rows;
+  window.__rowsData = rows;
+}
+
+function renderOne(f){ f === FD ? renderDash() : renderData(); }
+function render(){ renderDash(); renderData(); }
+
+function goPage(pg){
+  PAGE = (pg === "data") ? "data" : "dash";
+  $("#segPage").querySelectorAll("button").forEach(b =>
+    b.setAttribute("aria-pressed", b.dataset.p === PAGE));
+  $("#pgDash").hidden = PAGE !== "dash";
+  $("#pgData").hidden = PAGE !== "data";
+  paintSub();
+  try{ localStorage.setItem("mx_page", PAGE); }catch(e){}
 }
 
 /* ----------------------- 17. SỰ KIỆN --------------------------- */
-function bindSel(id, key){
-  $(id).addEventListener("change", e => { F[key] = e.target.value; resetPages(); render(); });
+function bindPage(f, suf){
+  const G  = id => $("#" + id + suf);
+  const rr = () => { resetPages(); renderOne(f); };
+  const bindSel = (id, key) => G(id).addEventListener("change", e => { f[key] = e.target.value; rr(); });
+  bindSel("fKhuVuc","khuVuc"); bindSel("fTinh","tinh"); bindSel("fQlvk","qlvk");
+  bindSel("fUnit","nguoiTH");  bindSel("fHien","hienTrang"); bindSel("fPri","pri");
+  bindSel("fBuoc","buoc");     bindSel("fTuXL","tuXL");
+  bindSel("fFrom","from");     bindSel("fTo","to");
+  let qt; G("q").addEventListener("input", e => {
+    clearTimeout(qt); qt = setTimeout(() => { f.q = e.target.value; rr(); }, 180);
+  });
+  G("fClosed").onclick = e => {
+    f.closed = !f.closed; e.currentTarget.setAttribute("aria-pressed", f.closed);
+    resetPages(); buildFilters(f, suf); renderOne(f);
+  };
+  G("btnReset").onclick = () => {
+    Object.assign(f, {q:"", khuVuc:"", tinh:"", qlvk:"", nguoiTH:"", hienTrang:"", pri:"",
+                      buoc:"", tuXL:"", from:"", to:"", kpi:"", closed:false});
+    f.status.clear();
+    /* phải xoá CẢ 5 dropdown động: fillSelect giữ lại giá trị cũ nếu vẫn còn trong
+       danh sách, nên không xoá ở đây thì buildFilters sẽ nạp ngược lại vào f. */
+    ["q","fFrom","fTo","fPri","fBuoc","fTuXL",
+     "fKhuVuc","fTinh","fQlvk","fUnit","fHien"].forEach(id => G(id).value = "");
+    G("fClosed").setAttribute("aria-pressed","false");
+    resetPages(); buildFilters(f, suf); renderOne(f);
+  };
 }
-bindSel("#fKhuVuc","khuVuc"); bindSel("#fTinh","tinh"); bindSel("#fQlvk","qlvk");
-bindSel("#fUnit","nguoiTH"); bindSel("#fHien","hienTrang"); bindSel("#fPri","pri"); bindSel("#fBuoc","buoc");
-bindSel("#fTuXL","tuXL");
-bindSel("#fFrom","from"); bindSel("#fTo","to");
-let qt; $("#q").addEventListener("input", e => {
-  clearTimeout(qt); qt = setTimeout(() => { F.q = e.target.value; resetPages(); render(); }, 180);
+bindPage(FD, "_d");
+bindPage(FT, "_t");
+
+$("#segPage").querySelectorAll("button").forEach(b => b.onclick = () => {
+  goPage(b.dataset.p);
+  scrollTo({top:0, behavior:"smooth"});
 });
-$("#fClosed").onclick = e => {
-  F.closed = !F.closed; e.currentTarget.setAttribute("aria-pressed", F.closed);
-  resetPages(); buildFilters(); render();
-};
-$("#btnReset").onclick = () => {
-  Object.assign(F, {q:"", khuVuc:"", tinh:"", qlvk:"", nguoiTH:"", hienTrang:"", pri:"", buoc:"", tuXL:"", from:"", to:"", kpi:"", closed:false});
-  F.status.clear();
-  $("#q").value = ""; $("#fFrom").value = ""; $("#fTo").value = ""; $("#fPri").value = ""; $("#fBuoc").value = "";
-  $("#fTuXL").value = ""; $("#fClosed").setAttribute("aria-pressed","false");
-  resetPages(); buildFilters(); render();
-};
+try{ const pg0 = localStorage.getItem("mx_page"); if(pg0) goPage(pg0); }catch(e){}
+
 $("#segDim").querySelectorAll("button").forEach(b => b.onclick = () => {
   dim = b.dataset.d;
   $("#segDim").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b));
   $("#dimName").textContent = {khuVuc:"khu vực", tinh:"tỉnh/thành", qlvk:"QLVK",
     dauMoi:"đầu mối xử lý", buocNhom:"bước task đang treo"}[dim];
-  renderBarDim(currentRows());
+  renderBarDim(rowsOf(FD));
 });
 $("#segTime").querySelectorAll("button").forEach(b => b.onclick = () => {
   timeMode = b.dataset.t;
   $("#segTime").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b));
-  renderBarTime(currentRows());
+  renderBarTime(rowsOf(FD));
 });
 /* Bấm tay = kéo cả hai. Hai việc độc lập: Sheet hỏng thì task vẫn được làm mới. */
 $("#btnRefresh").onclick = async () => { await refresh(false); await fetchTasks(false); };
@@ -2020,7 +2130,7 @@ $("#tokSave").onclick = () => {
 $("#tokClear").onclick = () => {
   lsDel(TOK_KEY); lsDel(CACHE_KEY); MXT = {}; MXMETA = {};
   setTokState("Đã xoá token và dữ liệu task khỏi máy này.");
-  buildFilters(); render();
+  buildAll(); render();
 };
 /* Ghi dữ liệu task đang có ngược vào chính file HTML rồi tải về.
    Nhờ vậy dữ liệu đi theo file: gửi cho người không có token vẫn xem được,
@@ -2135,7 +2245,7 @@ ALL = SNAPSHOT.map((r,i) => ({...r, i,
   ngay: r.ngay || "", ngayText: r.ngayText || "",
   anhUrl: /^https?:\/\//.test(r.anh || "") ? r.anh : "", tasks: r.tasks || []}));
 danhDauMa(ALL); ganDauMoi(ALL);
-setBadge(); buildFilters(); render(); selfTest(); setTokState(getToken()
+setBadge(); buildAll(); render(); selfTest(); setTokState(getToken()
   ? (MXMETA.when ? `Dữ liệu task đang dùng lại bản lấy lúc ${MXMETA.when}. Bấm "Làm mới" để cập nhật.`
                  : "Đã có token, chưa có dữ liệu task — sẽ lấy lần đầu ngay bây giờ.")
   : "Chưa có token — cột Ngày tạo task và Bước hiện tại đang để trống.");
