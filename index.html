@@ -222,6 +222,7 @@ td.cn b{display:block}
   <select id="fKv"><option value="">Khu vực: tất cả</option></select>
   <select id="fQl"><option value="">QLVK: tất cả</option></select>
   <select id="fDm"><option value="">Đầu mối: tất cả</option></select>
+  <select id="fStep"><option value="">Bước: tất cả</option></select>
   <select id="fBv"><option value="*">Bảo vệ: tất cả</option><option value="co">Có bảo vệ tự vệ sinh</option><option value="khong">Không có bảo vệ</option><option value="">Chưa khai</option></select>
   <select id="fPr"><option value="">Ưu tiên: tất cả</option><option value="c">Critical</option><option value="h">Cao</option><option value="n">Thường</option></select>
   <input type="search" id="fQ" placeholder="Tìm chi nhánh / mã CN / tỉnh…">
@@ -329,7 +330,13 @@ const CFG = {
   TIMEOUT_MS: 15000,
   STUCK_DAYS: 7,
   CAMPAIGN_START: "2026-09-01",  // đơn WSHR tạo TRƯỚC ngày này là việc cũ, không dùng để suy bước
-  INSPECT_START: "2026-09-22"    // anh Huy chốt 24/09: đợt cửa hàng kiểm tra hàng loạt bắt đầu 22/09 — Ngày thực hiện trước mốc này là lần làm cũ
+  INSPECT_START: "2026-09-22",
+  // các sheet riêng của từng QLVK trong file (dữ liệu cập nhật hằng ngày nằm ở đây)
+  QLVK_SHEETS: ["Huỳnh Thị Mỹ Linh #18236","Du Trúc Phương #232389","Hà Trần Thiên Huyên #21315","Nông Thị Đỗ Quyên #240355","Lê Trung Thiên Nghi #221374",
+    "Hướng Phù Dung #220524","Nguyễn Lê Hoài Phương#19442","Huỳnh Tuyết Mai #22410","Nguyễn Quế Châu #230285","Nguyễn Nhật Lệ #21228","Nguyễn Thanh Hoa #221619",
+    "Nguyễn Thị Mỹ Phương #19075","Nguyễn Thị Đào #22156","Nguyễn Thị Kim Tuyền #220418","Nguyễn Thị Quỳnh Như #220473","Phan Kỳ Duyên #221585",
+    "Phạm Thị Tường Vi #18075","Phạm Diệp Thủy Trúc #21883","Trần Thị Bảo Trâm #19120","Trần Hồng Hạnh #222346","Trần Thị Thuỳ Trang #20477",
+    "Trịnh Thị Cẩm Vân #221840","Trương Thị Mỹ Duyên #232129","Võ Thị Thu Hà #221345"]    // anh Huy chốt 24/09: đợt cửa hàng kiểm tra hàng loạt bắt đầu 22/09 — Ngày thực hiện trước mốc này là lần làm cũ
 };
 const C = { stt:0, ma:1, shopId:2, tinh:4, tp:5, quan:6, shop:7, ten:8, kv:10, qlvk:11, loi:12, kvkt:13,
   ht:14, kq:15, tt:16, anh:17, link:18, huong:19, ntd:22, vhxn:23, btnote:24, uutien:25, ngay:26, bvcd:27, nccdp:28, chiphi:29 };
@@ -767,10 +774,12 @@ function gvizCell(c){
   if(typeof v === "boolean") return v ? "TRUE" : "FALSE";
   return String(v);
 }
-function loadLive(sheetId, sheetParam){
+let JSONP_N = 0;
+function loadLive(sheetId, sheetParam, minRows){
+  if(minRows == null) minRows = 50;
   sheetId = sheetId || CFG.SHEET_ID; sheetParam = sheetParam || `sheet=${encodeURIComponent(CFG.SHEET_NAME)}`;
   return new Promise((res, rej) => {
-    const cb = "__mxwf" + Date.now();
+    const cb = "__mxwf" + Date.now() + "_" + (++JSONP_N);
     const s = document.createElement("script");
     const to = setTimeout(() => { done(); rej(new Error("hết thời gian chờ")); }, CFG.TIMEOUT_MS);
     function done(){ clearTimeout(to); try{ delete window[cb]; }catch(e){ window[cb] = undefined; } s.remove(); }
@@ -781,7 +790,7 @@ function loadLive(sheetId, sheetParam){
         const rows = resp.table.rows.map(r => (r.c || []).map(gvizCell));
         let h = rows.findIndex(r => na(r[0]) === "stt");
         const data = h >= 0 ? rows.slice(h+1) : rows;
-        if(data.length < 50) throw new Error("dữ liệu quá ít (" + data.length + " dòng)");
+        if(data.length < minRows) throw new Error("dữ liệu quá ít (" + data.length + " dòng)");
         res({hdr: h >= 0 ? rows[h] : (resp.table.cols || []).map(c => c.label || ""), data});
       }catch(e){ rej(e); }
     };
@@ -792,9 +801,30 @@ function loadLive(sheetId, sheetParam){
 }
 async function reload(){
   $("#bSheet").innerHTML = "Sheet: đang nạp…";
+  /* Từ 24/09 dữ liệu cập nhật nằm ở các sheet riêng của từng QLVK (sheet “Báo cáo mưa dột” chỉ còn vài dòng).
+     → Đọc tất cả sheet QLVK + sheet chính, ghép theo mã CN; dòng ở sheet QLVK được ưu tiên. */
   try{
-    const g = await loadLive();
-    GRID = g.data; HDR = g.hdr; SRC = {kind:"live", at:new Date().toLocaleString("vi-VN")};
+    const main = await loadLive(CFG.SHEET_ID, `sheet=${encodeURIComponent(CFG.SHEET_NAME)}`, 0).catch(() => ({hdr:[], data:[]}));
+    const names = [...new Set([...CFG.QLVK_SHEETS, ...main.data.map(r => String(r[C.qlvk] || "").trim()).filter(x => /#\s*\d+/.test(x))])];
+    const res = await Promise.all(names.map(n => loadLive(CFG.SHEET_ID, `sheet=${encodeURIComponent(n)}`, 1).then(g => ({n, g})).catch(() => null)));
+    const ok = res.filter(Boolean);
+    const snapBy = new Map(); SNAP.rows.forEach(r => { const k = String(r[C.ma] || r[C.stt] || "").trim() || "TEN:" + String(r[C.ten] || "").trim(); if(!snapBy.has(k)) snapBy.set(k, r); });
+    const keyOf = r => String(r[C.ma] || r[C.stt] || "").trim() || "TEN:" + String(r[C.ten] || "").trim();
+    const out = [], seen = new Map();
+    ok.forEach(({n, g}) => g.data.forEach(q => {
+      if(!q[8]) return;
+      const r = q.slice(0, 19); while(r.length < 30) r.push("");
+      r[22] = q[19] || ""; r[23] = q[20] || ""; r[24] = q[21] || ""; r[25] = q[22] || ""; r[26] = q[23] || ""; r[27] = q[24] || ""; r[28] = q[25] || ""; r[29] = q[26] || "";
+      if(!r[C.qlvk]) r[C.qlvk] = n;
+      const s = snapBy.get(keyOf(r)); if(s){ r[19] = s[19] || ""; r[9] = r[9] || s[9] || ""; }   // “Hướng xử lý tự động” chỉ có ở sheet chính
+      const k = keyOf(r) + "|" + String(r[C.ten]).trim();
+      if(seen.has(k)) return; seen.set(k, 1); out.push(r);
+    }));
+    const have = new Set(out.map(r => keyOf(r) + "|" + String(r[C.ten]).trim()));
+    main.data.forEach(r => { if(r[8] && !have.has(keyOf(r) + "|" + String(r[C.ten]).trim())) out.push(r); });
+    if(out.length < 50) throw new Error(`chỉ đọc được ${out.length} dòng (${ok.length}/${names.length} sheet QLVK)`);
+    GRID = out; HDR = main.hdr.length ? main.hdr : HDR;
+    SRC = {kind:"live", at:new Date().toLocaleString("vi-VN"), note:`${ok.length}/${names.length} sheet QLVK + sheet chính`};
   }catch(e){
     SRC = {kind:"snap", at:SNAP.at, err:e.message};
   }
@@ -822,7 +852,7 @@ function recompute(){
 function paintBadges(){
   $("#bToday").textContent = fmtD(TODAY);
   $("#bSheet").innerHTML = SRC.kind === "live"
-    ? `Sheet: <b>trực tiếp</b> · ${esc(SRC.at)}`
+    ? `Sheet: <b>trực tiếp</b> · ${esc(SRC.at)}${SRC.note ? ` <span title="${esc(SRC.note)}">(${esc(SRC.note)})</span>` : ""}`
     : `Sheet: <b>bản lưu ${esc(fmtD(SRC.at))}</b>${SRC.err ? ` <span title="${esc(SRC.err)}">(không kéo được bản mới)</span>` : ""}`;
   const m = SAVED && SAVED.meta;
   $("#bTask").innerHTML = (typeof LIVE_META !== "undefined" && LIVE_META) ? `Task WSHR: <b>trực tiếp ${LIVE_META.n} CN</b> · ${esc(LIVE_META.when)}` : m ? `Task WSHR: <b>snapshot</b> · ${esc(m.when || m.at || "")}` : "Task WSHR: <b>chưa có</b>";
@@ -843,6 +873,13 @@ function buildFilterOptions(){
   const dm = countBy(ALL, a => a.dmKey);
   fillSel($("#fDm"), "Đầu mối", DM_ORDER.filter(k => dm.get(k)).map(k => [k, DM[k].label, dm.get(k)]));
   F.kv = $("#fKv").value; F.ql = $("#fQl").value; F.dm = $("#fDm").value;
+  // bộ lọc bước: theo tên bước thực tế, sắp theo thứ tự quy trình
+  const ORDER = ["Cửa hàng chưa xác định người làm","Bảo vệ thực hiện","Cửa hàng tự tìm NCC","Vận hành bảo trì tìm NCC","Bảo trì nhận việc","NCC khảo sát & báo giá","Duyệt báo giá","Bảo trì thực hiện","NCC thi công","Nghiệm thu","Hoàn thành","Không áp dụng"];
+  const sc = countBy(ALL, a => a.step), no = new Map(ALL.map(a => [a.step, a.khongAD ? 99 : a.stepNo ?? a.stepK]));
+  const steps = [...sc.keys()].sort((x,y) => (no.get(x) - no.get(y)) || (ORDER.indexOf(x) - ORDER.indexOf(y)));
+  const el = $("#fStep");
+  el.innerHTML = `<option value="">Bước: tất cả</option>` + steps.map(s => `<option value="${esc(s)}">${no.get(s) < 99 && s !== "Hoàn thành" ? no.get(s) + ". " : ""}${esc(s)} (${sc.get(s)})</option>`).join("");
+  el.value = F.stepName && sc.has(F.stepName) ? F.stepName : "";
 }
 function base(){
   const q = na(F.q);
@@ -854,6 +891,7 @@ function withChips(list){
   return list.filter(a => (F.step == null || a.stepK === F.step) && (!F.stepName || a.step === F.stepName) && (F.btype == null || a.blocker_type === F.btype) && (!F.chk || chkBucket(a) === F.chk));
 }
 function paintChips(){
+  if($("#fStep")) $("#fStep").value = F.stepName || "";
   const c = [];
   if(F.step != null) c.push(`<span class="chip">Bước: ${esc(STEPS[F.step-1].name)}<button data-x="step">✕</button></span>`);
   if(F.stepName) c.push(`<span class="chip">Bước: ${esc(F.stepName)}<button data-x="stepName">✕</button></span>`);
@@ -1489,9 +1527,10 @@ function go(p){ PAGE = p; LS.set("mxwf_page", p); PG_ALL = 0; render(); window.s
 document.querySelectorAll("#tabs button").forEach(b => b.onclick = () => { if(b.dataset.p !== PAGE){ F.step = F.step; } go(b.dataset.p); });
 [["#fKv","kv"],["#fQl","ql"],["#fDm","dm"],["#fPr","pr"],["#fBv","bv"]].forEach(([id,k]) => $(id).onchange = e => { F[k] = e.target.value; PG_ALL = 0; render(); });
 let qT; $("#fQ").oninput = e => { clearTimeout(qT); qT = setTimeout(() => { F.q = e.target.value; PG_ALL = 0; render(); }, 150); };
+$("#fStep").onchange = e => { F.stepName = e.target.value || null; F.step = null; PG_ALL = 0; render(); };
 $("#fState").onchange = e => { F.state = e.target.value; PG_ALL = 0; render(); };
 $("#chips").onclick = e => { const x = e.target.dataset.x; if(x){ F[x] = null; render(); } };
-$("#btnClr").onclick = () => { ["#fKv","#fQl","#fDm","#fPr","#fQ","#fState"].forEach(id => $(id).value = ""); $("#fBv").value = "*"; Object.assign(F, {kv:"",ql:"",dm:"",pr:"",q:"",step:null,stepName:null,btype:null,chk:null,state:"",bv:"*"}); SORT = {blk:null, all:null}; render(); };
+$("#btnClr").onclick = () => { ["#fKv","#fQl","#fDm","#fPr","#fQ","#fState","#fStep"].forEach(id => $(id).value = ""); $("#fBv").value = "*"; Object.assign(F, {kv:"",ql:"",dm:"",pr:"",q:"",step:null,stepName:null,btype:null,chk:null,state:"",bv:"*"}); SORT = {blk:null, all:null}; render(); };
 $("#btnReload").onclick = reload;
 $("#btnCsv").onclick = csv;
 $("#dwX").onclick = closeDrawer; $("#ov").onclick = closeDrawer;
