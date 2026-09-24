@@ -177,6 +177,15 @@ td.cn b{display:block}
 .slain{width:52px;border:1px solid var(--border);border-radius:6px;padding:2px 4px;text-align:right;background:var(--card)}
 .chkhead{padding:8px 10px;border-radius:8px;background:var(--goodsoft);margin-bottom:8px;font-size:13px}
 .chkhead.never{background:var(--critsoft)}
+.wpanel{margin:0 20px 10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--card);font-size:13px}
+.wpanel input{border:1px solid var(--border);border-radius:8px;padding:6px 8px;background:var(--card)}
+.dgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:980px){.dgrid{grid-template-columns:1fr}}
+.dcol{border:1px solid var(--border);border-radius:10px;padding:10px 12px;background:var(--surface)}
+.dcol h3{margin:0 0 6px;font-size:14px}
+.dnum{margin-bottom:6px}
+.dgrp{font-size:13px;margin:6px 0;line-height:1.55}
+.cnl{text-decoration:none}
 @media print{nav.tabs,.filters,.btn,#dw,#ov{display:none!important}section.page[hidden]{display:block}}
 </style>
 </head>
@@ -191,9 +200,16 @@ td.cn b{display:block}
     <span class="badge" id="bTask">Task WSHR: —</span>
     <span class="badge">Hôm nay: <b id="bToday"></b></span>
     <button class="btn" id="btnReload" title="Kéo lại Google Sheet">⟳ Làm mới</button>
+    <button class="btn" id="btnWshr" title="Cập nhật task ở cột Link Task từ WSHR">🔄 Task WSHR</button>
     <button class="btn" id="btnCsv" title="Xuất danh sách đang xem">⬇ CSV</button>
   </div>
 </header>
+<div id="wPanel" class="wpanel" hidden>
+  <b>Cập nhật task từ WSHR</b> — lấy các task ở cột “Link Task Kiểm tra vệ sinh mái nhà/Chi nhánh”, đọc trạng thái, bước đang dừng, người xử lý.
+  <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap"><input type="password" id="wTok" placeholder="Dán token WSHR (Bearer …) — chỉ lưu trên trình duyệt này" style="flex:1;min-width:260px"><button class="btn pri" id="wSave">Cập nhật</button><button class="btn" id="wDel">Xoá token</button></div>
+  <div class="sm" id="wMsg" style="margin-top:4px"></div>
+  <div class="sm">Đã lưu token rồi thì chỉ cần bấm “Cập nhật” (để trống ô). Cần mở trong mạng/máy đăng nhập được WSHR.</div>
+</div>
 <nav class="tabs" id="tabs">
   <button data-p="ov" class="on">🧭 Tổng quan</button>
   <button data-p="today">📅 Hôm nay</button>
@@ -206,6 +222,7 @@ td.cn b{display:block}
   <select id="fKv"><option value="">Khu vực: tất cả</option></select>
   <select id="fQl"><option value="">QLVK: tất cả</option></select>
   <select id="fDm"><option value="">Đầu mối: tất cả</option></select>
+  <select id="fBv"><option value="*">Bảo vệ: tất cả</option><option value="co">Có bảo vệ tự vệ sinh</option><option value="khong">Không có bảo vệ</option><option value="">Chưa khai</option></select>
   <select id="fPr"><option value="">Ưu tiên: tất cả</option><option value="c">Critical</option><option value="h">Cao</option><option value="n">Thường</option></select>
   <input type="search" id="fQ" placeholder="Tìm chi nhánh / mã CN / tỉnh…">
   <div class="chips" id="chips"></div>
@@ -214,27 +231,18 @@ td.cn b{display:block}
 <main>
 <section class="page" id="p_ov">
   <div class="q6" id="q6"></div>
-  <div class="grid2">
-    <div class="card">
-      <h2>Chi nhánh đang ở bước nào?</h2>
-      <p class="hint">Mỗi chi nhánh đếm đúng 1 lần ở bước hiện tại. Bấm một bước để lọc danh sách.</p>
-      <div class="bars" id="chStep"></div>
-    </div>
-    <div class="card">
-      <h2>Toàn hệ thống đang vướng ở đâu?</h2>
-      <p class="hint">Chỉ đếm chi nhánh chưa hoàn thành và đang chờ một bên khác. Bấm một nguyên nhân để xem danh sách.</p>
-      <div class="bars" id="chBlk"></div>
-    </div>
+  <div class="card">
+    <h2>Chi nhánh đang ở bước nào?</h2>
+    <p class="hint">Mỗi chi nhánh đếm đúng 1 lần ở bước hiện tại. Bấm một bước để lọc danh sách.</p>
+    <div class="bars" id="chStep"></div>
   </div>
   <div class="card">
-    <h2>Cửa hàng đã từng được kiểm tra chưa? Lần cuối khi nào?</h2>
-    <p class="hint">Gộp 3 nguồn: Sheet (ngày làm lần cuối, kết quả, trạng thái đã chốt) · task WSHR đã đóng · NCC Công Phú T6/2026. Bấm một nhóm để xem danh sách.</p>
+    <h2>Đã thực hiện chưa? Bao nhiêu ngày rồi?</h2>
+    <p class="hint">Theo cột “Ngày thực hiện”, tính trong đợt kiểm tra hàng loạt từ 22/09/2026: ngày từ 22/09 = đã thực hiện (tính số ngày tới hôm nay) · ngày sắp tới = hẹn · không có ngày hoặc ngày trước 22/09 (lần làm cũ) = chưa thực hiện. Bấm một nhóm để xem danh sách.</p>
     <div class="bars" id="chChk"></div>
-  </div>
-  <div class="card">
-    <h2>Nghẽn ở đâu: Bước × Nguyên nhân</h2>
-    <p class="hint">Số chi nhánh đang vướng theo từng cặp bước – nguyên nhân. Bấm ô để lọc.</p>
-    <div class="tblwrap"><table class="mx" id="mx"></table></div>
+    <h2 style="margin-top:16px">Cửa hàng có bảo vệ tự vệ sinh không?</h2>
+    <p class="hint">Theo cột “Bảo vệ chủ động vệ sinh (Có/Không)”. CN “Không” bỏ qua bước 1 và đi thẳng sang Cửa hàng tự tìm NCC.</p>
+    <div class="bars" id="chBv"></div>
   </div>
   <div class="card">
     <h2>🔴 Cần quản lý can thiệp – 8 trường hợp đầu</h2>
@@ -248,6 +256,11 @@ td.cn b{display:block}
   </div>
 </section>
 <section class="page" id="p_today" hidden>
+  <div class="card">
+    <h2>Hôm qua, hôm nay đã làm được gì? Ngày mai làm gì?</h2>
+    <p class="hint">Bấm tên chi nhánh để xem timeline. Nút “Sao chép” tạo sẵn đoạn báo cáo ngày để gửi.</p>
+    <div id="tdDaily"></div>
+  </div>
   <div class="q6" id="tdKpi"></div>
   <div class="card">
     <h2>Ai đang giữ việc?</h2>
@@ -285,7 +298,7 @@ td.cn b{display:block}
   <div class="card">
     <div class="toolbar">
       <div><h2>Tất cả chi nhánh</h2><p class="hint" style="margin:0">Bấm một dòng để xem timeline.</p></div>
-      <select id="fState" class="btn"><option value="">Mọi tình trạng</option><option value="open">Chưa hoàn thành</option><option value="blk">Đang vướng</option><option value="run">Đang làm, không vướng</option><option value="done">Hoàn thành</option><option value="late">Trễ hạn</option><option value="never">Chưa từng kiểm tra</option><option value="lech">Lệch Sheet ↔ WSHR</option></select>
+      <select id="fState" class="btn"><option value="">Mọi tình trạng</option><option value="open">Chưa hoàn thành</option><option value="blk">Đang vướng</option><option value="run">Đang làm, không vướng</option><option value="done">Hoàn thành</option><option value="late">Trễ hạn</option><option value="never">Chưa thực hiện</option><option value="lech">Lệch Sheet ↔ WSHR</option></select>
     </div>
     <div class="tblwrap"><table id="tAll"></table></div>
     <div class="pager" id="pgAll"></div>
@@ -314,7 +327,9 @@ const CFG = {
   NCC_SHEET_ID: "19sfMQbis8zXtlqhg4TilId2sE9X-YG-DznawShLarkQ",   // chỉ đọc 3 cột NCC Công Phú / Thiên Danh / Wasaco
   NCC_GID: "999639473",
   TIMEOUT_MS: 15000,
-  STUCK_DAYS: 7
+  STUCK_DAYS: 7,
+  CAMPAIGN_START: "2026-09-01",  // đơn WSHR tạo TRƯỚC ngày này là việc cũ, không dùng để suy bước
+  INSPECT_START: "2026-09-22"    // anh Huy chốt 24/09: đợt cửa hàng kiểm tra hàng loạt bắt đầu 22/09 — Ngày thực hiện trước mốc này là lần làm cũ
 };
 const C = { stt:0, ma:1, shopId:2, tinh:4, tp:5, quan:6, shop:7, ten:8, kv:10, qlvk:11, loi:12, kvkt:13,
   ht:14, kq:15, tt:16, anh:17, link:18, huong:19, ntd:22, vhxn:23, btnote:24, uutien:25, ngay:26, bvcd:27, nccdp:28, chiphi:29 };
@@ -325,7 +340,7 @@ let SLA = Object.assign({}, SLA_DEFAULT);
 function setSla(o){ SLA = Object.assign({}, SLA_DEFAULT, o || {}); }
 
 const STEPS = [
-  {k:1, name:"Bảo vệ xử lý",               who:"Cửa hàng + Bảo vệ",
+  {k:1, name:"Bảo vệ thực hiện",            who:"Cửa hàng + Bảo vệ",
    src:"Bảo vệ lên kiểm tra, vệ sinh, cập nhật ảnh (cột Hiện trạng, Kết quả vệ sinh)",
    fail:"Bảo vệ không lên được / không xử lý được", sol:"Cửa hàng chuyển sang tự tìm NCC địa phương", back:2},
   {k:2, name:"Cửa hàng tự tìm NCC",         who:"Cửa hàng (QLVK)",
@@ -340,7 +355,7 @@ const STEPS = [
   {k:5, name:"Duyệt báo giá",               who:"Vận hành bảo trì / Quản lý",
    src:"WSHR B4 / B4.3, ghi chú “chờ xác nhận phương án”",
    fail:"Quá hạn chưa duyệt", sol:"Báo quản lý duyệt ngay (đừng để NCC chờ)", back:5},
-  {k:6, name:"Thi công",                    who:"NCC hoặc Bảo trì",
+  {k:6, name:"NCC thi công",                who:"NCC hoặc Bảo trì",
    src:"WSHR B4.4 Triển khai, ghi chú “chờ NCC/Bảo trì đến xử lý”",
    fail:"Trễ deadline thi công", sol:"Trễ ≤2 ngày: nhắc NCC, chốt ngày mới. Trễ >2 ngày: đổi NCC (quay lại bước 3) hoặc Bảo trì vệ sinh tạm để chống tràn; báo quản lý", back:3},
   {k:7, name:"Nghiệm thu",                  who:"Cửa hàng · QLVK",
@@ -362,6 +377,7 @@ function na(s){ return String(s == null ? "" : s).toLowerCase().replace(/đ/g,"d
 const pad = n => String(n).padStart(2,"0");
 function isoToday(){ const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
 let TODAY = isoToday();
+const isoTodayRef = () => TODAY;
 function dayDiff(a, b){ return Math.round((Date.parse(a+"T00:00:00Z") - Date.parse(b+"T00:00:00Z"))/86400000); }
 function addDays(iso, n){ const d = new Date(iso+"T00:00:00Z"); d.setUTCDate(d.getUTCDate()+n); return d.toISOString().slice(0,10); }
 function fmtD(iso){ if(!iso) return ""; const [y,m,d] = iso.split("-"); return `${d}/${m}/${y}`; }
@@ -459,8 +475,9 @@ function suggest(a){
   }
   return "";
 }
+/* Task của CN = CHỈ lấy ở cột “Link Task  Kiểm tra vệ sinh mái nhà/Chi nhánh” (anh Huy chốt 24/09). */
 function linkIds(r){
-  const s = [r.link, r.uutien, r.anh].join(" ");
+  const s = String(r.link || "");
   return [...new Set((s.match(/task_id=(\d+)/g) || []).map(x => x.slice(8)))];
 }
 
@@ -470,19 +487,44 @@ function analyze(r, task, ncc){
   const dmKey = dauMoiKey(r.ntd, r.huong);
   const d26 = parseDate(r.ngay);
   const noteTxt = d26.text;
-  const t = task || null;
+  const t0 = task || null;
+  // link ở cột Link Task trỏ vào bước con của một đơn CŨ (tạo trước đợt này) → không dùng đơn đó để suy bước/ngày
+  const tOld = !!(t0 && t0.tao && t0.tao < CFG.CAMPAIGN_START);
+  const t = tOld ? null : t0;
   const tOpenStep = t && t.buocChac && OPEN_TT.has(na(t.buocTt)) ? wshrStep(t.buoc) : null;
   const tDone = t && na(t.tt) === "hoan tat";
-  const done = tt === "hoan tat" || tt === "khong phat sinh";
+  /* Đợt hiện tại mới triển khai hàng loạt cửa hàng KIỂM TRA (anh Huy 24/09): chưa có Ngày thực hiện = chưa kiểm tra,
+     kể cả khi Sheet đã ghi Hoàn tất / Không phát sinh → CN vẫn đang ở bước 1. */
+  const d26y = parseDate(r.ngay);
+  const sheetDone = tt === "hoan tat" || tt === "khong phat sinh";
+  const done = sheetDone && !!d26y.iso && d26y.iso >= CFG.INSPECT_START && d26y.iso <= isoTodayRef();
   const khongAD = tt === "khong ap dung";
   const surveyed = (ht && ht !== "chua cap nhat") || (kq && !["chua cap nhat","chua thuc hien"].includes(kq));
   const cleaned = !!kq && !["chua cap nhat","chua thuc hien"].includes(kq);
-  const selfBt = dmKey === "bt";                                   // đội Bảo trì tự làm → không qua báo giá NCC
-  const a = { r, t, dmKey, dmLabel: DM[dmKey].label, done, khongAD, selfBt, ev:[], flags:[], ncc: ncc || null };
+  const selfBt = dmKey === "bt";
+  /* Bảo vệ chủ động vệ sinh (Có/Không) — quyết định CN có đi qua bước 1 hay không */
+  const bvRaw = na(r.bvcd);
+  const baoVe = bvRaw.startsWith("co") ? "co" : bvRaw.startsWith("khong") ? "khong" : "";
+  /* Ngày thực hiện: có ngày ≤ hôm nay = đã thực hiện (bao nhiêu ngày trước); ngày tương lai = hẹn thực hiện; không có ngày = chưa thực hiện */
+  const d26x = parseDate(r.ngay);
+  const thucHien = !d26x.iso ? {st:"none", d:null, days:null, note:d26x.text}
+    : d26x.iso > TODAY ? {st:"plan", d:d26x.iso, days:dayDiff(d26x.iso, TODAY)}
+    : d26x.iso < CFG.INSPECT_START ? {st:"none", d:null, days:null, prev:d26x.iso, prevDays:dayDiff(TODAY, d26x.iso)}   // làm trước đợt → chưa làm trong đợt này
+    : {st:"done", d:d26x.iso, days:dayDiff(TODAY, d26x.iso)};                                   // đội Bảo trì tự làm → không qua báo giá NCC
+  const nccRaw = na(r.nccdp);
+  const nccDp = nccRaw.startsWith("co") ? "co" : nccRaw.startsWith("khong") ? "khong" : "";
+  const btLam = na(r.vhxn).startsWith("bao tri");                  // Vận hành xác nhận “Bảo trì thực hiện”
+  const a = { r, t, tOld: tOld ? t0 : null, nccDp, btLam, dmKey, dmLabel: DM[dmKey].label, done, khongAD, selfBt, baoVe, thucHien, ev:[], flags:[], ncc: ncc || null };
+  if(tOld) a.flags.push(`Link Task trỏ vào đơn WSHR cũ ${t0.id} (tạo ${fmtD(t0.tao)}, đang ở ${t0.buoc || t0.tt}) — trước đợt rà soát nên KHÔNG dùng để suy bước`);
+  if(sheetDone && !done) a.flags.push(`Sheet ghi “${r.tt}” nhưng cột Ngày thực hiện ${thucHien.st === "plan" ? "là ngày sắp tới" : "chưa có ngày"} → tính là CHƯA kiểm tra, CN vẫn ở bước 1`);
 
   if(!done && !khongAD){
     let base;
-    if(!surveyed) base = {s:1, type:"Chưa khảo sát", why:"Bảo vệ/cửa hàng chưa cập nhật hiện trạng"};
+    if(sheetDone) base = {s:1, type:"Chưa khảo sát", why: thucHien.prev ? `Lần làm gần nhất ${fmtD(thucHien.prev)} — trước đợt kiểm tra (từ ${fmtD(CFG.INSPECT_START)})` : thucHien.st === "plan" ? `Hẹn kiểm tra ngày ${fmtD(thucHien.d)}` : `Chưa có ngày thực hiện (Sheet ghi “${r.tt}”)`};
+    else if(!surveyed && baoVe === "khong") base = (selfBt || btLam) ? {s:3, type:"Chờ nhân sự", why:"CN không có bảo vệ tự vệ sinh → Bảo trì thực hiện"}
+      : (nccDp === "khong" || dmKey === "vhncc") ? {s:3, type:"Chờ nhà thầu", why:"Không có bảo vệ, không có NCC địa phương → Vận hành bảo trì tìm NCC"}
+      : {s:2, type:"Chờ nhà thầu", why:"CN không có bảo vệ tự vệ sinh → cửa hàng phải tìm NCC"};
+    else if(!surveyed) base = {s:1, type:"Chưa khảo sát", why:"Bảo vệ/cửa hàng chưa cập nhật hiện trạng"};
     else if(tt === "cho van hanh duyet" || (dmKey === "cho" && cleaned)) base = {s:3, type:"Chờ phê duyệt", why:"Chờ Vận hành xác nhận chuyển cho BT/NCC"};
     else if(tt === "cho bao tri/ncc"){
       if(dmKey === "chncc") base = {s:2, type:"Chờ nhà thầu", why:"Cửa hàng đang tìm NCC"};
@@ -491,12 +533,14 @@ function analyze(r, task, ncc){
     }
     else if(tt === "dang xu ly") base = dmKey === "bv" || dmKey === "none" ? {s:1, type:null, why:"Bảo vệ đang xử lý"} : dmKey === "chncc" ? {s:2, type:null, why:"Cửa hàng đang xử lý"} : {s:6, type:null, why:"Đang thi công"};
     else if(!cleaned) base = {s:1, type:"Khác", why: kq === "chua thuc hien" ? "Kết quả vệ sinh ghi “Chưa thực hiện”" : "Chưa cập nhật kết quả vệ sinh/kiểm tra"};
-    else base = {s:3, type:"Khác", why:"Đã có kết quả nhưng chưa cập nhật Trạng thái báo cáo"};
+    else if(thucHien.st !== "done") base = {s:1, type:"Chưa khảo sát", why:"Chưa có ngày thực hiện"};
+    else base = {s:3, type:"Khác", why:"Đã kiểm tra nhưng chưa cập nhật Trạng thái báo cáo"};
     a.ev.push({src:"Sheet", w:1, ...base, raw:`Trạng thái: ${r.tt || "(trống)"} · Kết quả: ${r.kq || "(trống)"} · Đầu mối: ${DM[dmKey].label}`});
     const ns = noteStep(noteTxt, dmKey);
     if(ns && ns.s) a.ev.push({src:"Ghi chú tiến độ", w:2, s:ns.s, type:ns.type, why:noteTxt, raw:`“${noteTxt}”`});
-    if(tOpenStep) a.ev.push({src:"Task WSHR", w:3, ...tOpenStep, raw:`${t.buoc} (${t.buocTt})`});
-    if(tDone){
+    // Sheet đã chốt nhưng lần làm trước đợt kiểm tra → task WSHR của lần đó không đẩy CN sang bước sau
+    if(tOpenStep && !sheetDone) a.ev.push({src:"Task WSHR", w:3, ...tOpenStep, raw:`${t.buoc} (${t.buocTt})`});
+    if(tDone && !sheetDone){
       a.lechWshrDong = true;
       a.ev.push({src:"Task WSHR", w:3, s:7, type:"Khác", why:`Task WSHR đã Hoàn tất${t.dong ? " ngày "+fmtD(t.dong) : ""} nhưng Sheet chưa chốt`, raw:`Task ${t.id} Hoàn tất`});
       a.lech = true;
@@ -508,41 +552,77 @@ function analyze(r, task, ncc){
     let typ = win.type, why = win.why;
     if(!typ){ const o = a.ev.find(e => e !== win && e.s === win.s && e.type); if(o){ typ = o.type; why = o.why; } }
     a.blocker_type = typ || null; a.blocker = typ ? why : null; a.blocked = !!typ;
+    // bước 1 chưa kiểm tra = việc đang triển khai hàng loạt, chưa phải "vướng"
+    if(a.stepK === 1 && typ === "Chưa khảo sát"){ a.pending = true; a.blocked = false; }
   } else {
     a.stepK = 8; a.blocker_type = null; a.blocker = null; a.blocked = false;
     if(t && tOpenStep){ a.lech = true; a.flags.push(`Sheet đã chốt “${r.tt}” nhưng task WSHR còn mở ở ${t.buoc}`); }
   }
+  // Bảo vệ chủ động vệ sinh = Có và chưa thực hiện trong đợt → bảo vệ là người làm, CN ở bước 1 “Bảo vệ thực hiện”
+  // (trừ khi đang có task WSHR mở trong đợt — tức Bảo trì/NCC đã thực sự nhận việc)
+  if(!done && !khongAD && baoVe === "co" && thucHien.st !== "done" && !tOpenStep){
+    if(a.stepK !== 1) a.ev.push({src:"Bảo vệ chủ động", w:4, s:1, type:"Chưa khảo sát", why:"Bảo vệ chủ động vệ sinh = Có", raw:`Cột Bảo vệ chủ động vệ sinh: ${r.bvcd} → bảo vệ thực hiện (thay cho bước ${a.stepK})`, win:false});
+    a.ev.forEach(e => e.win = false); a.ev[a.ev.length-1].win = a.stepK !== 1 ? true : a.ev[a.ev.length-1].win;
+    a.stepK = 1; a.pending = true; a.blocked = false; a.blocker_type = "Chưa khảo sát";
+    a.blocker = thucHien.st === "plan" ? `Bảo vệ hẹn thực hiện ${fmtD(thucHien.d)}` : thucHien.prev ? `Bảo vệ chưa làm trong đợt (lần trước ${fmtD(thucHien.prev)})` : "Chờ bảo vệ thực hiện";
+  }
+  /* CN chưa thực hiện trong đợt: KHÔNG có bước “cửa hàng kiểm tra” chung — xếp ngay vào bước của người sẽ làm
+     theo quy trình: Bảo vệ → (không có bảo vệ) Cửa hàng tự tìm NCC → VHBT tìm NCC / Bảo trì thực hiện. */
+  const bvTheoSheet = baoVe === "co" || (baoVe === "" && dmKey === "bv");
+  if(a.pending && a.stepK === 1 && !bvTheoSheet){
+    const byBtP = selfBt || btLam;
+    let k = 0, who = "";
+    if(byBtP){ k = 6; who = "Bảo trì"; }
+    else if(dmKey === "chncc" || nccDp === "co" || (baoVe === "khong" && dmKey === "bv" && nccDp !== "khong")){ k = 2; who = "Cửa hàng (tự tìm NCC)"; }
+    else if(dmKey === "vhncc" || dmKey === "nccx" || nccDp === "khong"){ k = 3; who = "Vận hành bảo trì (tìm NCC)"; }
+    if(k){ a.stepK = k; a.blocker = `Chờ ${who} thực hiện${thucHien.prev ? ` · lần trước ${fmtD(thucHien.prev)}` : ""}`; a.assigned = true; }
+    else { a.unassigned = true; a.blocker = "Chưa xác định ai làm (Bảo vệ chưa khai, Vận hành chưa xác nhận)"; }
+  }
+  // Bảo trì tự làm: Vận hành đã giao Bảo trì → đang ở bước “Bảo trì thực hiện” (không có bước tìm NCC riêng)
+  if(!done && !khongAD && (selfBt || btLam) && a.stepK === 3 && !a.pending){
+    a.stepK = 6;
+    if(a.blocker_type === "Chờ nhân sự" || a.blocker_type === "Chờ nhà thầu"){ a.blocker_type = "Chờ sửa chữa"; a.blocker = "Chờ Bảo trì đến thực hiện"; }
+  }
   const S = STEPS[a.stepK-1];
-  a.step = S.name;
-  a.current_status = done ? (tt === "khong phat sinh" ? "Hoàn thành – không phát sinh" : "Hoàn thành") : khongAD ? "Không áp dụng" : a.blocked ? "Đang vướng" : "Đang thực hiện";
+  // CN do Bảo trì tự làm (đầu mối Bảo trì hoặc Vận hành xác nhận “Bảo trì thực hiện”): đổi tên bước cho đúng người làm
+  const byBt0 = selfBt || btLam;
+  const nameOf = k => k === 1 && a.unassigned ? "Cửa hàng chưa xác định người làm" : k === 1 ? "Bảo vệ thực hiện" : byBt0 && k === 3 ? "Bảo trì nhận việc" : byBt0 && k === 6 ? "Bảo trì thực hiện" : STEPS[k-1].name;
+  a.step = khongAD ? "Không áp dụng" : nameOf(a.stepK);
+  a.stepNo = a.unassigned ? 0 : a.stepK;          // bước 0 = cửa hàng chưa xác định ai làm
+  a.current_status = done ? (tt === "khong phat sinh" ? "Hoàn thành – không phát sinh" : "Hoàn thành") : khongAD ? "Không áp dụng" : a.pending ? (thucHien.st === "plan" ? "Hẹn thực hiện" : "Chưa thực hiện") : a.blocked ? "Đang vướng" : "Đang thực hiện";
 
   /* ---- timeline: bước nào đã qua / bỏ qua ---- */
   const reached = a.stepK;
   const skipK = new Set();
   if(dmKey === "vhncc" || dmKey === "bt" || dmKey === "nccx") skipK.add(2);   // không qua nấc cửa hàng tự tìm NCC
-  if(selfBt){ skipK.add(4); skipK.add(5); }                                  // Bảo trì tự làm: không có báo giá
+  if((baoVe === "khong" || a.pending) && a.stepK !== 1) skipK.add(1);                       // không có bảo vệ tự làm
+  if((nccDp === "khong" || btLam) && a.stepK !== 2) skipK.add(2);            // không có NCC địa phương / Vận hành đã giao Bảo trì
+  if((selfBt || btLam) && a.stepK !== 4 && a.stepK !== 5){ skipK.add(4); skipK.add(5); if(a.stepK !== 3) skipK.add(3); }   // WSHR đang ở báo giá thì không bỏ qua                                  // Bảo trì tự làm: không có báo giá
   const selfDone = done && dmKey === "bv";                                    // bảo vệ xử lý xong → bỏ các bước sau
   a.timeline = STEPS.map(s => {
     let st;
-    if(selfDone && s.k >= 2 && s.k <= 7) st = "skip";
+    if(khongAD) st = "skip";
+    else if(selfDone && s.k >= 2 && s.k <= 7) st = "skip";
     else if(done && dmKey === "chncc" && s.k === 3) st = "skip";
     else if(s.k < reached) st = skipK.has(s.k) ? "skip" : "done";
     else if(s.k === reached) st = (done || khongAD) ? "done" : "cur";
     else st = skipK.has(s.k) ? "skip" : (done ? "skip" : "todo");
     if(done && s.k === 8) st = "done";
-    return {k:s.k, name:s.name, st};
+    return {k:s.k, name:nameOf(s.k), st};
   });
   const appl = a.timeline.filter(x => x.st !== "skip");
-  a.progress = done ? 100 : Math.round(100 * appl.filter(x => x.st === "done").length / appl.length);
+  a.progress = (khongAD || a.pending) ? 0 : done ? 100 : Math.round(100 * appl.filter(x => x.st === "done").length / appl.length);
 
   /* ---- người phụ trách ---- */
   const ql = validQl(r.qlvk) ? qlName(r.qlvk) : null;
   a.qlvk = ql;
-  const unitByStep = {1:"Cửa hàng + Bảo vệ", 2:"Cửa hàng", 3: selfBt ? "Bảo trì" : "Vận hành bảo trì", 4:"NCC (VHBT theo dõi)", 5:"Vận hành bảo trì", 6: selfBt ? "Bảo trì" : "NCC", 7:"Cửa hàng"};
+  const byBt = selfBt || btLam;
+  const unitByStep = {1: baoVe === "khong" ? (byBt ? "Bảo trì" : "Cửa hàng") : "Bảo vệ (cửa hàng)", 2:"Cửa hàng", 3: byBt ? "Bảo trì" : "Vận hành bảo trì", 4:"NCC (VHBT theo dõi)", 5:"Vận hành bảo trì", 6: byBt ? "Bảo trì" : "NCC", 7: byBt ? "Bảo trì (cửa hàng nghiệm thu)" : "Cửa hàng"};
   a.owner_unit = done ? DM[dmKey].label : (unitByStep[a.stepK] || null);
   if(!done && a.stepK === 7 && a.blocker_type === "Khác" && !a.lechWshrDong) a.owner_unit = "Vận hành bảo trì (chứng từ)";
   a.owner_person = ql;
-  a.noOwner = !done && !khongAD && !a.owner_unit && !a.owner_person;
+  if(a.unassigned) a.owner_unit = null;
+  a.noOwner = !done && !khongAD && (a.unassigned || (!a.owner_unit && !a.owner_person));
 
   /* ---- ngày bắt đầu bước hiện tại ---- */
   const dStart = parseDate(r.xStart), dQuote = parseDate(r.xQuote), dDl = parseDate(r.xDl);
@@ -564,14 +644,12 @@ function analyze(r, task, ncc){
   let stepStart = null, stepStartSrc = "";
   if(!done && dStart.iso){ stepStart = dStart.iso; stepStartSrc = "cột ngày bắt đầu bước (Sheet)"; }
   else if(a.stepK === 6 && a.quoteDate){ stepStart = a.quoteDate; stepStartSrc = "ngày nhận báo giá (Sheet)"; }
-  else if(a.stepK === 3 && t && t.tao){ stepStart = t.tao; stepStartSrc = "ngày tạo task WSHR (tạm)"; }
-  else if(a.stepK === 7 && a.lechWshrDong && t.dong){ stepStart = t.dong; stepStartSrc = "ngày đóng task WSHR (tạm)"; }
+  // KHÔNG lấy mốc/hạn từ WSHR (anh Huy bỏ 24/09) — chỉ tính hạn khi Sheet có ngày
   a.stepStart = stepStart; a.stepStartSrc = stepStartSrc;
   a.stepDue = (!done && !khongAD && stepStart && slaDays != null) ? addDays(stepStart, slaDays) : null;
   let dl = null, dlSrc = "";
   const win = a.ev.find(e => e.win);
   if(!done && dDl.iso){ dl = dDl.iso; dlSrc = "deadline trên Sheet"; }
-  else if(!done && t && t.buocHan && win && win.src === "Task WSHR" && tOpenStep){ dl = t.buocHan; dlSrc = "hạn bước WSHR"; }
   else if(a.stepDue){ dl = a.stepDue; dlSrc = `hạn quy trình ${slaDays} ngày từ ${fmtD(stepStart)} (${stepStartSrc})`; }
   a.dlText = dDl.text || "";
   a.deadline = dl; a.deadlineSrc = dlSrc;
@@ -598,8 +676,9 @@ function analyze(r, task, ncc){
   a.suggest = suggest(a);
   a.lastDone = d26.iso || null;
   a.sinceLastDone = a.lastDone ? dayDiff(TODAY, a.lastDone) : null;
-  a.completed_date = done ? ((tDone && t.dong) ? t.dong : (d26.iso || null)) : null;
-  a.completedSrc = done ? ((tDone && t.dong) ? "ngày đóng task WSHR" : (d26.iso ? "ngày làm lần cuối trên Sheet" : "")) : "";
+  // hoàn thành trong đợt = Ngày thực hiện trên Sheet (≥ 22/09); ngày đóng task WSHR chỉ để tham khảo
+  a.completed_date = done ? d26.iso : null;
+  a.completedSrc = done ? "Ngày thực hiện trên Sheet" : "";
 
   /* ---- lịch sử kiểm tra ---- */
   const H = [];
@@ -610,13 +689,12 @@ function analyze(r, task, ncc){
   else if(t && t.tao) H.push({d:t.tao, label:`Task WSHR ${t.id} mở ngày này (${t.tt})`, open:true});
   if(ncc && ncc.cp) H.push({d:"2026-06", label:`NCC Công Phú T6/2026: ${ncc.cp}`, month:true});
   a.history = H;
-  const key = h => h.month ? h.d + "-00" : h.d;
-  const dated = H.filter(h => h.d && !h.open).map(key).sort();
-  a.everChecked = H.some(h => !h.open);
-  a.lastCheck = dated.length ? dated[dated.length-1] : null;             // "2026-06-00" = chỉ biết tháng
-  a.lastCheckMonthOnly = !!(a.lastCheck && a.lastCheck.endsWith("-00"));
-  a.lastCheckSrc = a.lastCheck ? (H.find(h => h.d && key(h) === a.lastCheck) || {}).label : (a.everChecked ? H.find(h => !h.open).label : "");
-  a.daysSinceCheck = a.lastCheck && !a.lastCheckMonthOnly ? dayDiff(TODAY, a.lastCheck) : null;
+  /* Đã thực hiện hay chưa: CHỈ theo cột Ngày thực hiện (anh Huy chốt 24/09). WSHR / Công Phú chỉ để tham khảo trong khung chi tiết. */
+  a.everChecked = thucHien.st === "done";
+  a.lastCheck = thucHien.st === "done" ? thucHien.d : null;
+  a.lastCheckMonthOnly = false;
+  a.lastCheckSrc = a.lastCheck ? "cột Ngày thực hiện" : "";
+  a.daysSinceCheck = thucHien.st === "done" ? thucHien.days : null;
 
   a.prio = done || khongAD ? "" : crit ? "c" : (a.overdue > 0 || a.slaLate > 0 || kq === "can bao tri/ncc xu ly" || (a.stuckDays||0) >= CFG.STUCK_DAYS) ? "h" : "n";
   return a;
@@ -643,11 +721,16 @@ function buildAll(grid, MXT, hdr, NCC){
   NCC = NCC || {};
   return rowsFromGrid(grid).map(r => {
     const key = r.ma || r.stt;
-    const t = r.dupMa ? null : (MXT[key] || MXT[r.ten] || null);
+    const ids = linkIds(r);
+    let t = r.dupMa ? null : (MXT[key] || MXT[r.ten] || null);
+    // chỉ nhận task nếu nó là task (hoặc bước con của task) ở cột Link Task
+    if(t && !t.live && !ids.some(x => +x >= +t.id && +x <= +t.id + 40)) t = null;
     const n = r.dupMa ? null : (NCC[key] || NCC["TEN:" + r.ten] || null);
     const ncc = n ? {cp:n[0] || "", td:n[1] || "", wa:n[2] || ""} : null;
     const a = analyze(r, t, ncc);
-    a.taskIds = linkIds(r);
+    a.taskIds = ids;
+    a.taskList = t && t.tasks ? t.tasks : null;            // có khi đã cập nhật trực tiếp từ WSHR
+    a.nTask = a.taskList ? a.taskList.length : ids.length;
     if(r.dupMa) a.flags.push(`Mã ${r.ma} bị gán cho nhiều chi nhánh — không ghép task WSHR/NCC để tránh nhầm`);
     return a;
   });
@@ -668,7 +751,7 @@ let NCC = window.MX_NCC_SNAP || {}, NCC_SRC = "bản lưu trong file";
 let SLA_USER = LS.get("mxwf_sla", {}); setSla(SLA_USER);
 let GRID = SNAP.rows, HDR = SNAP.hdr || [], SRC = {kind:"snap", at:SNAP.at};
 let ALL = [];
-const F = { kv:"", ql:"", dm:"", pr:"", q:"", step:null, btype:null, chk:null, state:"" };
+const F = { kv:"", ql:"", dm:"", pr:"", q:"", step:null, btype:null, chk:null, state:"", bv:"*" };
 let PAGE = LS.get("mxwf_page","ov");
 const CRIT = Object.assign({overdue:true, stuck:true, noOwner:true, noNext:true, critical:true, risk:true, stuckDays:CFG.STUCK_DAYS}, LS.get("mxwf_crit", {}));
 CFG.STUCK_DAYS = CRIT.stuckDays;
@@ -727,7 +810,7 @@ async function reload(){
 }
 function recompute(){
   TODAY = isoToday();
-  ALL = buildAll(GRID, MXT, HDR, NCC);
+  ALL = buildAll(GRID, Object.assign({}, MXT, LIVE), HDR, NCC);
   window.__ALL = ALL;
   // chỉ ghi ảnh chụp ngày khi có dữ liệu Sheet trực tiếp (bản lưu trong file là dữ liệu cũ, ghi vào sẽ so sai)
   if(SRC.kind === "live") PREV = saveDaily();
@@ -742,7 +825,7 @@ function paintBadges(){
     ? `Sheet: <b>trực tiếp</b> · ${esc(SRC.at)}`
     : `Sheet: <b>bản lưu ${esc(fmtD(SRC.at))}</b>${SRC.err ? ` <span title="${esc(SRC.err)}">(không kéo được bản mới)</span>` : ""}`;
   const m = SAVED && SAVED.meta;
-  $("#bTask").innerHTML = m ? `Task WSHR: <b>${Object.keys(MXT).length} CN</b> · chụp ${esc(m.when || m.at || "")}` : "Task WSHR: <b>chưa có snapshot</b>";
+  $("#bTask").innerHTML = (typeof LIVE_META !== "undefined" && LIVE_META) ? `Task WSHR: <b>trực tiếp ${LIVE_META.n} CN</b> · ${esc(LIVE_META.when)}` : m ? `Task WSHR: <b>snapshot</b> · ${esc(m.when || m.at || "")}` : "Task WSHR: <b>chưa có</b>";
 }
 
 /* ---------- lọc ---------- */
@@ -764,15 +847,16 @@ function buildFilterOptions(){
 function base(){
   const q = na(F.q);
   return ALL.filter(a => (!F.kv || (a.r.kv || "(trống)") === F.kv) && (!F.ql || (a.qlvk || "(chưa gán)") === F.ql) &&
-    (!F.dm || a.dmKey === F.dm) && (!F.pr || a.prio === F.pr) &&
+    (!F.dm || a.dmKey === F.dm) && (!F.pr || a.prio === F.pr) && (F.bv == null || F.bv === "*" || a.baoVe === F.bv) &&
     (!q || na([a.r.ten, a.r.ma, a.r.stt, a.r.shop, a.r.tinh, a.r.tp, a.r.quan, a.qlvk].join(" ")).includes(q)));
 }
 function withChips(list){
-  return list.filter(a => (F.step == null || a.stepK === F.step) && (F.btype == null || a.blocker_type === F.btype) && (!F.chk || chkBucket(a) === F.chk));
+  return list.filter(a => (F.step == null || a.stepK === F.step) && (!F.stepName || a.step === F.stepName) && (F.btype == null || a.blocker_type === F.btype) && (!F.chk || chkBucket(a) === F.chk));
 }
 function paintChips(){
   const c = [];
   if(F.step != null) c.push(`<span class="chip">Bước: ${esc(STEPS[F.step-1].name)}<button data-x="step">✕</button></span>`);
+  if(F.stepName) c.push(`<span class="chip">Bước: ${esc(F.stepName)}<button data-x="stepName">✕</button></span>`);
   if(F.btype != null) c.push(`<span class="chip">Vướng: ${esc(F.btype)}<button data-x="btype">✕</button></span>`);
   if(F.chk) c.push(`<span class="chip">Kiểm tra: ${esc(CHK_BUCKETS.find(x => x.k === F.chk).l)}<button data-x="chk">✕</button></span>`);
   $("#chips").innerHTML = c.join("");
@@ -783,14 +867,17 @@ const prioHtml = p => p === "c" ? '<span class="pr c"><span class="dot"></span>C
 const dDate = (iso, src) => iso ? `${fmtD(iso)}${src ? `<span class="sm">${esc(src)}</span>` : ""}` : ND;
 function odHtml(a){ return a.overdue > 0 ? `<span class="od">Quá ${a.overdue} ngày</span>` : (a.deadline ? '<span class="sm">còn hạn</span>' : ""); }
 function blkHtml(a){
+  if(a.khongAD) return '<span class="sm">—</span>';
   if(a.done) return '<span class="bk none">✓ Không</span>';
+  if(a.pending) return `<span class="bk">${esc(a.current_status)}</span><span class="sm">${esc(a.blocker || "")}</span>`;
   if(!a.blocked) return '<span class="bk none">Không vướng</span>';
   return `<span class="bk${a.critical ? " crit" : ""}">${a.critical ? "⚠ " : ""}${esc(a.blocker_type)}</span><span class="sm">${esc(a.blocker || "")}</span>`;
 }
 function ownerHtml(a){
   const u = a.owner_unit, p = a.owner_person;
   if(!u && !p) return ND;
-  return `${u ? esc(u) : ND}${p ? `<span class="sm">QLVK: ${esc(p)}</span>` : '<span class="sm nd">chưa có QLVK</span>'}`;
+  const w = a.t && a.t.nguoiBuoc && !a.done && !a.tOld ? `<span class="sm">Người xử lý (WSHR): <b>${esc(a.t.nguoiBuoc)}</b></span>` : "";
+  return `${u ? esc(u) : ND}${w}${p ? `<span class="sm">QLVK: ${esc(p)}</span>` : '<span class="sm nd">chưa có QLVK</span>'}`;
 }
 function nextHtml(a){
   if(a.done) return '<span class="sm">—</span>';
@@ -798,7 +885,7 @@ function nextHtml(a){
   return main + (!a.next_action && a.suggest ? `<span class="sug">Gợi ý theo quy trình: ${esc(a.suggest)}</span>` : "");
 }
 const cnHtml = a => `<b>${esc(a.r.ten)}</b><span class="sm">${esc([a.r.ma || a.r.stt, a.r.tinh].filter(Boolean).join(" · "))}</span>`;
-const stepHtml = a => `<span class="st">${a.stepK}. ${esc(a.step)}</span>${a.lastDone ? `<span class="sm">làm lần cuối ${fmtD(a.lastDone)}${a.sinceLastDone > 0 ? ` · ${a.sinceLastDone} ngày trước` : ""}</span>` : ""}`;
+const stepHtml = a => `<span class="st">${a.khongAD ? "" : (a.stepNo ?? a.stepK) + ". "}${esc(a.step)}</span>${a.lastDone ? `<span class="sm">làm lần cuối ${fmtD(a.lastDone)}${a.sinceLastDone > 0 ? ` · ${a.sinceLastDone} ngày trước` : ""}</span>` : ""}`;
 const dlHtml = a => a.deadline ? dDate(a.deadline, a.deadlineSrc) + (a.overdue > 0 ? `<span class="od" style="display:block">Quá ${a.overdue} ngày</span>` : "") : (a.dlText ? `${esc(a.dlText)}<span class="sm">ô deadline ghi chữ</span>` : ND);
 const stuckHtml = a => a.stuckDays != null ? `${a.stuckDays}<span class="sm">từ ${fmtD(a.since)}</span>` : ND;
 function pbar(p){ return `<span class="pbar${p === 100 ? " full" : ""}"><i style="width:${p}%"></i></span>${p}%`; }
@@ -815,7 +902,7 @@ function mgrWhy(a){
   if(CRIT.overdue && a.overdue > 0) w.push(`Trễ hạn ${a.overdue} ngày`);
   if(CRIT.stuck && a.stuckDays != null && a.blocked && a.stuckDays >= CRIT.stuckDays) w.push(`Vướng ${a.stuckDays} ngày`);
   if(CRIT.noOwner && a.noOwner) w.push("Không có người phụ trách");
-  if(CRIT.noNext && !a.next_action) w.push("Không có next action");
+  if(CRIT.noNext && !a.next_action && !a.pending) w.push("Không có next action");
   if(CRIT.critical && a.critical) w.push("Blocker Critical");
   if(CRIT.risk && a.riskOps) w.push("Nguy cơ ảnh hưởng hoạt động");
   return w;
@@ -854,26 +941,26 @@ function currentList(){
 
 /* ---------- lịch sử kiểm tra: nhóm ---------- */
 const CHK_BUCKETS = [
-  {k:"never", l:"Chưa từng được kiểm tra"},
-  {k:"d7",    l:"Kiểm tra ≤ 7 ngày trước"},
-  {k:"d30",   l:"8 – 30 ngày trước"},
-  {k:"old",   l:"Hơn 30 ngày trước"},
-  {k:"t6",    l:"Chỉ có lần NCC Công Phú T6/2026"},
-  {k:"nodate",l:"Đã kiểm tra, không ghi ngày"}
+  {k:"never", l:"Chưa thực hiện trong đợt (không có ngày, hoặc ngày trước 22/09)"},
+  {k:"plan",  l:"Hẹn thực hiện (ngày sắp tới)"},
+  {k:"d7",    l:"Đã thực hiện ≤ 7 ngày trước"},
+  {k:"d30",   l:"Đã thực hiện 8 – 30 ngày trước"},
+  {k:"old",   l:"Đã thực hiện hơn 30 ngày trước"}
 ];
 function chkBucket(a){
-  if(!a.everChecked) return "never";
-  if(!a.lastCheck) return "nodate";
-  if(a.lastCheckMonthOnly) return "t6";
-  const d = a.daysSinceCheck;
-  return d <= 7 ? "d7" : d <= 30 ? "d30" : "old";
+  const t = a.thucHien;
+  if(t.st === "none") return "never";
+  if(t.st === "plan") return "plan";
+  return t.days <= 7 ? "d7" : t.days <= 30 ? "d30" : "old";
 }
 function chkHtml(a){
-  if(!a.everChecked) return '<span class="od">Chưa từng</span>';
-  if(!a.lastCheck) return `Đã kiểm tra<span class="sm">không ghi ngày</span>`;
-  if(a.lastCheckMonthOnly) return `T6/2026<span class="sm">NCC Công Phú</span>`;
-  return `${fmtD(a.lastCheck)}<span class="sm">${a.daysSinceCheck} ngày trước</span>`;
+  const t = a.thucHien;
+  if(t.st === "done") return `Đã thực hiện<span class="sm">${fmtD(t.d)} · ${t.days ? t.days + " ngày trước" : "hôm nay"}</span>`;
+  if(t.st === "plan") return `Hẹn ${fmtD(t.d)}<span class="sm">còn ${t.days} ngày</span>`;
+  return `<span class="od">Chưa thực hiện</span>${t.prev ? `<span class="sm">lần trước ${fmtD(t.prev)} (trước đợt ${fmtD(CFG.INSPECT_START)})</span>` : ""}`;
 }
+const BV_LB = {co:"Có bảo vệ", khong:"Không có bảo vệ", "":"Chưa khai"};
+const bvHtml = a => a.baoVe === "co" ? "✓ Có" : a.baoVe === "khong" ? "✗ Không" : '<span class="nd">Chưa khai</span>';
 function stepDueHtml(a){
   if(a.done || a.khongAD) return '<span class="sm">—</span>';
   if(!a.stepDue) return `${a.slaDays != null ? `Hạn bước ${a.slaDays} ngày` : ""}<span class="sm nd">chưa có ngày bắt đầu bước</span>`;
@@ -889,53 +976,51 @@ function renderOv(b, open){
   const late = open.filter(a => a.overdue > 0);
   const withSince = blk.filter(a => a.stuckDays != null);
   const maxStuck = withSince.reduce((m,a) => Math.max(m, a.stuckDays), 0);
-  const busiest = [...countBy(open, a => a.stepK)].sort((x,y) => y[1]-x[1])[0];
+  const busiest = [...countBy(open, a => a.step)].sort((x,y) => y[1]-x[1])[0];
   const topB = [...countBy(blk, a => a.blocker_type)].sort((x,y) => y[1]-x[1])[0];
   const noNext = open.filter(a => !a.next_action).length;
   const never = b.filter(a => !a.everChecked).length;
   const q = [
     {n:"1 · Chi nhánh nào đang làm?", v:open.length, d:`/ ${b.length} CN chưa hoàn thành`, go:"all", st:"open"},
-    {n:"2 · Đang dồn ở bước nào?", v:busiest ? busiest[1] : 0, d:busiest ? `CN ở “${STEPS[busiest[0]-1].name}”` : "—", go:"all", step: busiest && busiest[0]},
+    {n:"2 · Đang dồn ở bước nào?", v:busiest ? busiest[1] : 0, d:busiest ? `CN ở “${busiest[0]}”` : "—", go:"all", stepName: busiest && busiest[0]},
     {n:"3 · Đang vướng gì nhiều nhất?", v:topB ? topB[1] : 0, d:topB ? `CN “${topB[0]}” · tổng ${blk.length} CN vướng` : "Không có", go:"blk", btype: topB && topB[0]},
     {n:"4 · Trễ hạn bước?", v:late.length, d:`CN đã quá hạn → cần leo thang · vướng lâu nhất ${withSince.length ? maxStuck + " ngày" : "—"}`, go:"all", st:"late"},
     {n:"5 · Ai đang chịu trách nhiệm?", v:open.filter(a => a.owner_unit).length, d:`CN có đầu mối · ${open.filter(a => a.noOwner).length} CN không có`, go:"mgr"},
-    {n:"6 · Đã từng kiểm tra?", v:b.length - never, d:`/ ${b.length} CN · ${never} CN chưa từng`, go:"all", st:"never"}
+    {n:"6 · Đã thực hiện chưa?", v:b.length - never, d:`/ ${b.length} CN có ngày thực hiện · ${never} CN chưa`, go:"all", st:"never"}
   ];
   $("#q6").innerHTML = q.map((x,i) => `<div class="q" data-i="${i}"><div class="qn">${esc(x.n)}</div><div class="qv">${esc(x.v)}</div><div class="qd">${esc(x.d)}</div></div>`).join("");
-  $("#q6").querySelectorAll(".q").forEach(el => el.onclick = () => { const x = q[+el.dataset.i]; F.step = x.step || null; F.btype = x.btype || null; F.chk = null; if(x.st){ F.state = x.st; $("#fState").value = x.st; } go(x.go); });
-  // --- biểu đồ bước
-  const sc = countBy(b, a => a.stepK);
-  const maxS = Math.max(1, ...STEPS.filter(s => s.k < 8).map(s => sc.get(s.k) || 0));
-  const maxAll = Math.max(1, ...STEPS.map(s => sc.get(s.k) || 0));
-  $("#chStep").innerHTML = STEPS.map(s => {
-    const n = sc.get(s.k) || 0, blkN = b.filter(a => a.stepK === s.k && a.blocked).length, lateN = b.filter(a => a.stepK === s.k && a.overdue > 0).length;
-    const w = s.k === 8 ? (100 * n / maxAll) : (100 * n / maxS);
-    return `<div class="bar${n ? "" : " zero"}${s.k === 8 ? " done flowsep" : ""}${F.step === s.k ? " sel" : ""}" data-k="${s.k}" data-n="${n}" data-b="${blkN}" data-l="${lateN}">
-      <div class="lb">${s.k === 8 ? "✓ " : s.k + ". "}${esc(s.name)}${s.k < 8 ? ` <small>· hạn ${s.k === 6 ? SLA[6] + "/" + SLA[6.1] : SLA[s.k]}n</small>` : ""}</div>
+  $("#q6").querySelectorAll(".q").forEach(el => el.onclick = () => { const x = q[+el.dataset.i]; F.step = x.step || null; F.stepName = x.stepName || null; F.btype = x.btype || null; F.chk = null; if(x.st){ F.state = x.st; $("#fState").value = x.st; } go(x.go); });
+  // --- biểu đồ bước: đếm theo TÊN bước thực tế (tách Bảo vệ / Cửa hàng ở bước 1, Bảo trì / NCC ở bước 6)
+  const ROWS = [
+    {k:0, n:"Cửa hàng chưa xác định người làm", who:"Bảo vệ chưa khai & Vận hành chưa xác nhận ai làm — cần QLVK bổ sung"},
+    {k:1, n:"Bảo vệ thực hiện", who:"Bảo vệ tự lên kiểm tra, vệ sinh"},
+    {k:2, n:"Cửa hàng tự tìm NCC"}, {k:3, n:"Vận hành bảo trì tìm NCC"}, {k:3, n:"Bảo trì nhận việc"},
+    {k:4, n:"NCC khảo sát & báo giá"}, {k:5, n:"Duyệt báo giá"},
+    {k:6, n:"Bảo trì thực hiện", who:"Đội Bảo trì tự làm"}, {k:6, n:"NCC thi công", who:"NCC làm"},
+    {k:7, n:"Nghiệm thu"}, {k:8, n:"Hoàn thành"}
+  ];
+  const act = b.filter(a => !a.khongAD);
+  const sc = countBy(act, a => a.step);
+  act.forEach(a => { if(!ROWS.some(x => x.n === a.step)) ROWS.splice(ROWS.findIndex(x => x.k > a.stepK), 0, {k:a.stepK, n:a.step}); });
+  const rows = ROWS.filter(x => (sc.get(x.n) || 0) > 0 || !["Bảo trì nhận việc"].includes(x.n));
+  const maxS = Math.max(1, ...rows.filter(x => x.k < 8).map(x => sc.get(x.n) || 0));
+  const maxAll = Math.max(1, ...rows.map(x => sc.get(x.n) || 0));
+  const nKad = b.length - act.length;
+  $("#chStep").innerHTML = rows.map((x, idx) => {
+    const L = act.filter(a => a.step === x.n);
+    const n = L.length, blkN = L.filter(a => a.blocked).length, lateN = L.filter(a => a.overdue > 0).length, pend = L.filter(a => a.pending).length;
+    const w = x.k === 8 ? (100 * n / maxAll) : (100 * n / maxS);
+    return `<div class="bar${n ? "" : " zero"}${x.k === 8 ? " done flowsep" : ""}${F.stepName === x.n ? " sel" : ""}" data-i="${idx}">
+      <div class="lb">${x.k === 8 ? "✓ " : x.k + ". "}${esc(x.n)}${x.k > 0 && x.k < 8 ? ` <small>· hạn ${x.k === 6 ? (x.n === "NCC thi công" ? SLA[6] + "/" + SLA[6.1] : SLA[6]) : SLA[x.k]}n</small>` : ""}</div>
       <div class="tr"><div class="fl" style="width:${n ? Math.max(1.5, w) : 0}%"></div></div>
       <div class="vv">${n}<small> CN</small>${lateN ? `<span class="late">${lateN} trễ</span>` : ""}</div></div>`;
-  }).join("");
+  }).join("") + (nKad ? `<p class="hint" style="margin:8px 0 0">Không tính ${nKad} CN “Không áp dụng”.</p>` : "");
   $("#chStep").querySelectorAll(".bar").forEach(el => {
-    const k = +el.dataset.k, S = STEPS[k-1];
-    el.onmousemove = e => showTip(e, `<b>${esc(S.name)}</b><br>${el.dataset.n} chi nhánh${k < 8 ? `, ${el.dataset.b} đang vướng, ${el.dataset.l} trễ hạn` : ""}${S.sol ? `<br><span style="color:var(--muted)">Trễ hạn → ${esc(S.sol)}</span>` : ""}`);
+    const x = rows[+el.dataset.i], S = STEPS[Math.max(0, x.k-1)] && x.k > 0 ? STEPS[x.k-1] : {sol:"QLVK xác nhận Bảo vệ có làm được không / Vận hành xác nhận giao ai"};
+    const L = act.filter(a => a.step === x.n);
+    el.onmousemove = e => showTip(e, `<b>${esc(x.n)}</b>${x.who ? `<br><span style="color:var(--muted)">${esc(x.who)}</span>` : ""}<br>${L.length} chi nhánh${x.k < 8 ? ` · ${L.filter(a => a.pending).length} chưa làm · ${L.filter(a => a.overdue > 0).length} trễ hạn` : ""}${S.sol ? `<br><span style="color:var(--muted)">Trễ hạn → ${esc(S.sol)}</span>` : ""}`);
     el.onmouseleave = hideTip;
-    el.onclick = () => { F.step = F.step === k ? null : k; F.btype = null; go("all"); };
-  });
-  // --- biểu đồ nguyên nhân
-  const bc = countBy(blk, a => a.blocker_type);
-  const types = BLOCKER_TYPES.slice().sort((x,y) => (bc.get(y)||0) - (bc.get(x)||0) || BLOCKER_TYPES.indexOf(x) - BLOCKER_TYPES.indexOf(y));
-  const maxB = Math.max(1, ...bc.values());
-  $("#chBlk").innerHTML = types.map(t => {
-    const n = bc.get(t) || 0, od = blk.filter(a => a.blocker_type === t && a.overdue > 0).length;
-    return `<div class="bar${n ? "" : " zero"}${F.btype === t ? " sel" : ""}" data-t="${esc(t)}" data-n="${n}" data-od="${od}">
-      <div class="lb">${esc(t)}</div><div class="tr"><div class="fl" style="width:${n ? Math.max(1.5, 100*n/maxB) : 0}%"></div></div>
-      <div class="vv">${n}<small> CN</small>${od ? `<span class="late">${od} trễ</span>` : ""}</div></div>`;
-  }).join("") + `<p class="hint" style="margin:8px 0 0">Loại có 0 CN là loại trong danh mục chuẩn nhưng dữ liệu hiện chưa có ca nào — không phải lỗi đếm.</p>`;
-  $("#chBlk").querySelectorAll(".bar").forEach(el => {
-    const t = el.dataset.t;
-    el.onmousemove = e => showTip(e, `<b>${esc(t)}</b><br>${el.dataset.n} chi nhánh đang vướng${+el.dataset.n ? `, ${el.dataset.od} đã trễ hạn` : ""}`);
-    el.onmouseleave = hideTip;
-    el.onclick = () => { if(!+el.dataset.n) return; F.btype = F.btype === t ? null : t; F.step = null; go("blk"); };
+    el.onclick = () => { if(!L.length) return; F.stepName = F.stepName === x.n ? null : x.n; F.step = null; F.btype = null; go("all"); };
   });
   // --- lịch sử kiểm tra
   const cc = countBy(b, chkBucket);
@@ -944,15 +1029,11 @@ function renderOv(b, open){
     return `<div class="bar${n ? "" : " zero"}${F.chk === x.k ? " sel" : ""}${x.k === "never" ? " crit" : ""}" data-c="${x.k}" data-n="${n}">
       <div class="lb">${x.k === "never" ? "⚠ " : ""}${esc(x.l)}</div><div class="tr"><div class="fl" style="width:${n ? Math.max(1.5, 100*n/maxC) : 0}%"></div></div>
       <div class="vv">${n}<small> CN</small></div></div>`; }).join("");
+  const bvc = countBy(b, a => a.baoVe), maxBv = Math.max(1, ...bvc.values());
+  $("#chBv").innerHTML = ["co","khong",""].map(k => { const n = bvc.get(k) || 0, o = b.filter(a => a.baoVe === k && !a.done && !a.khongAD).length;
+    return `<div class="bar${n ? "" : " zero"}${F.bv === k ? " sel" : ""}" data-bv="${k}"><div class="lb">${esc(BV_LB[k])}</div><div class="tr"><div class="fl" style="width:${n ? Math.max(1.5, 100*n/maxBv) : 0}%"></div></div><div class="vv">${n}<small> CN</small>${o ? `<span class="late">${o} chưa xong</span>` : ""}</div></div>`; }).join("");
+  $("#chBv").querySelectorAll(".bar").forEach(el => el.onclick = () => { F.bv = F.bv === el.dataset.bv ? "*" : el.dataset.bv; $("#fBv").value = F.bv; F.chk = null; go("all"); });
   $("#chChk").querySelectorAll(".bar").forEach(el => { el.onclick = () => { if(!+el.dataset.n) return; F.chk = F.chk === el.dataset.c ? null : el.dataset.c; F.step = null; F.btype = null; F.state = ""; $("#fState").value = ""; go("all"); }; });
-  // --- ma trận
-  const usedT = types.filter(t => bc.get(t));
-  const usedS = STEPS.filter(s => s.k < 8 && blk.some(a => a.stepK === s.k));
-  $("#mx").innerHTML = usedT.length ? `<thead><tr><th>Bước \\ Nguyên nhân</th>${usedT.map(t => `<th>${esc(t)}</th>`).join("")}<th>Tổng</th></tr></thead><tbody>` +
-    usedS.map(s => `<tr><td>${s.k}. ${esc(s.name)}</td>${usedT.map(t => { const n = blk.filter(a => a.stepK === s.k && a.blocker_type === t).length;
-      return n ? `<td class="c" data-k="${s.k}" data-t="${esc(t)}" style="background:color-mix(in srgb, var(--s1) ${Math.round(8 + 50*n/maxB)}%, transparent)">${n}</td>` : '<td class="z">·</td>'; }).join("")}
-      <td><b>${blk.filter(a => a.stepK === s.k).length}</b></td></tr>`).join("") + "</tbody>" : '<tbody><tr><td class="empty">Không có chi nhánh nào đang vướng trong bộ lọc hiện tại.</td></tr></tbody>';
-  $("#mx").querySelectorAll("td.c").forEach(td => td.onclick = () => { F.step = +td.dataset.k; F.btype = td.dataset.t; go("blk"); });
   // --- xem trước quản lý
   const mg = sortDefault(b.filter(a => mgrWhy(a).length));
   $("#mgrPrev").innerHTML = mg.length ? mgrRows(mg.slice(0, 8)) + (mg.length > 8 ? `<p class="hint" style="margin:10px 0 0"><a href="#" id="seeMgr">Xem tất cả ${mg.length} chi nhánh →</a></p>` : "") : '<div class="empty">Không có trường hợp nào cần can thiệp.</div>';
@@ -965,8 +1046,8 @@ function renderOv(b, open){
   const lech = b.filter(a => a.lech).length, dup = b.filter(a => a.r.dupMa).length;
   const colTxt = k => XCOL[k] >= 0 ? `cột “${esc(XHDR[k])}”` : "<b>Sheet chưa có cột</b>";
   $("#dq").innerHTML = `<div class="tblwrap"><table><thead><tr><th>Trên ${open.length} CN chưa hoàn thành</th><th class="num">Có dữ liệu</th><th class="num">Tỷ lệ</th><th>Hệ quả khi thiếu</th></tr></thead><tbody>
-    <tr><td>Có ngày bắt đầu bước hiện tại (${colTxt("start")}; tạm dùng ngày tạo/đóng task WSHR cho bước 3 và 7)</td><td class="num">${hasStart}</td><td class="num">${pct(hasStart)}</td><td>Không đo được hạn bước (1/2/2/2/1/5/1 ngày)</td></tr>
-    <tr><td>Có deadline (${colTxt("dl")}, hạn bước WSHR, hoặc hạn quy trình)</td><td class="num">${hasDl}</td><td class="num">${pct(hasDl)}</td><td>Không biết trễ hay chưa → không leo thang được</td></tr>
+    <tr><td>Có ngày bắt đầu bước hiện tại (${colTxt("start")})</td><td class="num">${hasStart}</td><td class="num">${pct(hasStart)}</td><td>Không đo được hạn bước (1/2/2/2/1/5/1 ngày)</td></tr>
+    <tr><td>Có deadline (${colTxt("dl")}, hoặc hạn quy trình từ ngày bắt đầu bước — không dùng hạn WSHR)</td><td class="num">${hasDl}</td><td class="num">${pct(hasDl)}</td><td>Không biết trễ hay chưa → không leo thang được</td></tr>
     <tr><td>Ngày nhận báo giá (${colTxt("quote")})</td><td class="num">${open.filter(a => a.quoteDate).length}</td><td class="num">${pct(open.filter(a => a.quoteDate).length)}</td><td>Hạn thi công không tính từ ngày có báo giá</td></tr>
     <tr><td>Có task WSHR ghép được</td><td class="num">${hasT}</td><td class="num">${pct(hasT)}</td><td>Bước chỉ suy từ Sheet + ghi chú</td></tr>
     <tr><td>Có ghi chú việc tiếp theo</td><td class="num">${hasNext}</td><td class="num">${pct(hasNext)}</td><td>Next action = Chưa xác định (kèm gợi ý mờ)</td></tr>
@@ -999,8 +1080,29 @@ function bindRows(root){
   root.querySelectorAll("[data-i]").forEach(el => { if(el.tagName === "TH") return; el.onclick = () => openDrawer(+el.dataset.i); });
 }
 
+function taskCntHtml(a){
+  if(!a.nTask) return '<span class="nd">0</span><span class="sm">chưa gắn task</span>';
+  if(a.taskList){ const o = a.taskList.filter(x => x.open).length; return `<b>${a.nTask}</b><span class="sm">${o} mở · ${a.nTask - o} đóng</span>`; }
+  const t = a.t, known = t ? `${t.id}: ${esc(t.tt)}${t.tt !== "Hoàn tất" && t.buoc ? " · " + esc(t.buoc.split(" ")[0]) : ""}` : "";
+  const rest = a.nTask - (t ? 1 : 0);
+  return `<b>${a.nTask}</b><span class="sm">${known}${rest > 0 ? `${known ? "<br>" : ""}+${rest} task chưa đọc trạng thái` : ""}</span>`;
+}
+const COL_TASK = {h:"Số task", num:true, f:taskCntHtml, v:a => a.nTask};
+/* Ngày tạo task: lấy từ thông tin task WSHR (cập nhật trực tiếp nếu có, không thì snapshot trong file) */
+function taoList(a){
+  if(a.taskList) return a.taskList.filter(x => x.tao).map(x => ({id:x.id, tao:x.tao}));
+  return a.t && a.t.tao ? [{id:a.t.id, tao:a.t.tao}] : [];
+}
+function taoHtml(a){
+  const L = taoList(a).sort((x,y) => x.tao < y.tao ? -1 : 1);
+  if(!L.length) return a.nTask ? '<span class="nd">Chưa đọc</span><span class="sm">bấm 🔄 Task WSHR</span>' : '<span class="sm">—</span>';
+  const f = L[0], n = dayDiff(TODAY, f.tao);
+  return `${fmtD(f.tao)}<span class="sm">${n ? n + " ngày trước" : "hôm nay"}${L.length > 1 ? ` · ${L.length} task, mới nhất ${fmtD(L[L.length-1].tao)}` : ""}</span>`;
+}
+const COL_TAO = {h:"Ngày tạo task", f:taoHtml, v:a => (taoList(a).map(x => x.tao).sort()[0]) || null};
 const COLS_BLK = [
-  {h:"Chi nhánh", cls:"cn", f:a => cnHtml(a) + `<span class="sm">KT lần cuối: ${a.lastCheck ? (a.lastCheckMonthOnly ? "T6/2026" : fmtD(a.lastCheck)) : (a.everChecked ? "không ghi ngày" : "chưa từng")}</span>`, v:a => a.r.ten},
+  {h:"Chi nhánh", cls:"cn", f:a => cnHtml(a) + `<span class="sm">Bảo vệ: ${esc(BV_LB[a.baoVe])} · ${a.thucHien.st === "done" ? "thực hiện " + fmtD(a.thucHien.d) : a.thucHien.st === "plan" ? "hẹn " + fmtD(a.thucHien.d) : "chưa thực hiện"}</span>`, v:a => a.r.ten},
+  COL_TASK, COL_TAO,
   {h:"Bước hiện tại", f:stepHtml, v:a => a.stepK},
   {h:"Vướng mắc", f:blkHtml, v:a => a.blocker_type},
   {h:"Số ngày vướng", num:true, f:stuckHtml, v:a => a.stuckDays},
@@ -1040,19 +1142,21 @@ function renderMgr(list){
 const COLS_ALL = [
   {h:"Chi nhánh", cls:"cn", f:cnHtml, v:a => a.r.ten},
   {h:"Khu vực", f:a => esc(a.r.kv) + `<span class="sm">${esc(a.qlvk || "")}</span>`, v:a => a.r.kv},
+  COL_TASK, COL_TAO,
   {h:"Bước hiện tại", f:stepHtml, v:a => a.stepK},
   {h:"Tình trạng", f:a => `${esc(a.current_status)}<span class="sm">Sheet: ${esc(a.r.tt || "(trống)")}</span>`, v:a => a.current_status},
-  {h:"Tiến độ", num:true, f:a => pbar(a.progress), v:a => a.progress},
+  {h:"Tiến độ", num:true, f:a => a.khongAD ? '<span class="sm">—</span>' : pbar(a.progress), v:a => a.khongAD ? null : a.progress},
   {h:"Vướng", f:blkHtml, v:a => a.blocker_type},
   {h:"Người phụ trách", f:ownerHtml, v:a => a.owner_unit},
   {h:"Deadline", f:a => a.done ? (a.completed_date ? `Xong ${fmtD(a.completed_date)}<span class="sm">${esc(a.completedSrc)}</span>` : '<span class="sm">Xong · chưa có ngày</span>') : dlHtml(a), v:a => a.deadline || a.completed_date},
-  {h:"Kiểm tra lần cuối", f:chkHtml, v:a => a.lastCheck || (a.everChecked ? "0" : null)},
+  {h:"Bảo vệ", f:bvHtml, v:a => a.baoVe || null},
+  {h:"Thực hiện", f:chkHtml, v:a => a.thucHien.d},
   {h:"Next Action / nếu trễ", f:a => nextHtml(a) + escHtml(a), v:a => a.next_action}
 ];
 function renderAll(list){
   const st = F.state;
   let l = list.filter(a => (!F.chk || chkBucket(a) === F.chk) && (!st || (st === "open" && !a.done && !a.khongAD) || (st === "blk" && a.blocked) || (st === "run" && !a.done && !a.khongAD && !a.blocked) ||
-    (st === "done" && a.done) || (st === "lech" && a.lech) || (st === "late" && a.overdue > 0) || (st === "never" && !a.everChecked)));
+    (st === "done" && a.done) || (st === "lech" && a.lech) || (st === "late" && a.overdue > 0) || (st === "never" && a.thucHien.st === "none")));
   l = SORT.all ? applySort(l, COLS_ALL, "all") : l.slice().sort((x,y) => (x.done - y.done) || (y.overdue - x.overdue) || (x.stepK - y.stepK) || x.r.ten.localeCompare(y.r.ten,"vi"));
   const pages = Math.max(1, Math.ceil(l.length / PAGE_SIZE)); PG_ALL = Math.min(PG_ALL, pages-1);
   $("#tAll").innerHTML = tableHtml(COLS_ALL, l.slice(PG_ALL*PAGE_SIZE, (PG_ALL+1)*PAGE_SIZE), "all");
@@ -1079,9 +1183,9 @@ function renderWf(){
     <li>Bước 4 quá hạn: quay lại bước 3 tìm NCC khác. Dữ liệu chưa ghi số lần đổi NCC — nếu muốn chặn “vòng lặp”, thêm cột <b>Số lần đổi NCC</b>.</li>
   </ul></div>
   <div class="dsec"><h4>Mốc tính hạn</h4><ul>
-    <li><b>Ngày bắt đầu bước</b>: cột “Ngày bắt đầu bước” trên Sheet (${XCOL.start >= 0 ? `đã nhận: “${esc(XHDR.start)}”` : "<b>chưa có</b>"}). Tạm thời: bước 3 lấy ngày tạo task WSHR (lúc giao VHBT), bước 7 lấy ngày đóng task WSHR. Các bước khác chưa có mốc → không đo hạn, không đoán.</li>
+    <li><b>Ngày bắt đầu bước</b>: cột “Ngày bắt đầu bước” trên Sheet (${XCOL.start >= 0 ? `đã nhận: “${esc(XHDR.start)}”` : "<b>chưa có</b>"}). Không dùng ngày/hạn của WSHR. Chưa có mốc trên Sheet → không đo hạn, không đoán.</li>
     <li><b>Thi công</b> tính từ “Ngày nhận báo giá” (${XCOL.quote >= 0 ? `đã nhận: “${esc(XHDR.quote)}”` : "<b>chưa có</b>"}) nếu có.</li>
-    <li><b>Deadline</b> ưu tiên: cột Deadline trên Sheet (${XCOL.dl >= 0 ? `đã nhận: “${esc(XHDR.dl)}”` : "<b>chưa có</b>"}) → hạn bước WSHR → hạn quy trình.</li>
+    <li><b>Deadline</b> ưu tiên: cột Deadline trên Sheet (${XCOL.dl >= 0 ? `đã nhận: “${esc(XHDR.dl)}”` : "<b>chưa có</b>"}) → hạn quy trình (ngày bắt đầu bước + số ngày). Hạn bước WSHR bỏ qua.</li>
     <li><b>Ngày thực hiện</b> = ngày làm lần cuối, chỉ dùng cho “đã từng kiểm tra / lần cuối khi nào”.</li>
   </ul></div>
   <div class="dsec"><h4>Đã từng kiểm tra? Lần cuối khi nào?</h4><ul>
@@ -1118,8 +1222,10 @@ function openDrawer(i){
     return `<li class="${cls}"><div class="ic">${icon[s.st] || s.k}</div><div><div class="nm">${esc(s.name)}${s.st === "cur" ? `<span class="here">← ĐANG Ở ĐÂY</span>` : ""}</div>${ex ? `<div class="ex">${ex}</div>` : ""}${box}</div></li>`;
   }).join("");
   const done = a.done ? `<div class="flag" style="background:var(--goodsoft)">✓ Đã hoàn thành${a.completed_date ? ` · ${fmtD(a.completed_date)} (${esc(a.completedSrc)})` : " · chưa có ngày hoàn thành trong dữ liệu"}</div>` : "";
-  const hist = `<div class="chkhead ${a.everChecked ? "" : "never"}">${a.everChecked ? `Đã từng kiểm tra · lần cuối: <b>${a.lastCheck ? (a.lastCheckMonthOnly ? "T6/2026" : fmtD(a.lastCheck) + ` (${a.daysSinceCheck} ngày trước)`) : "không ghi ngày"}</b>` : "⚠ Chưa từng được kiểm tra (không nguồn nào ghi nhận)"}</div>` +
-    (a.history.length ? a.history.map(h => `<div class="ev${h.open ? "" : " win"}"><b>${h.d ? (h.month ? "T6/2026" : fmtD(h.d)) : "—"}</b> · ${esc(h.label)}</div>`).join("") : "");
+  const th = a.thucHien;
+  const hist = `<div class="chkhead ${th.st === "none" ? "never" : ""}">${th.st === "done" ? `✓ Đã thực hiện ngày <b>${fmtD(th.d)}</b> · ${th.days ? th.days + " ngày trước" : "hôm nay"}` : th.st === "plan" ? `Hẹn thực hiện ngày <b>${fmtD(th.d)}</b> · còn ${th.days} ngày` : "⚠ Chưa thực hiện (cột Ngày thực hiện chưa có ngày)"}` +
+    ` · Bảo vệ chủ động vệ sinh: <b>${esc(a.r.bvcd || "chưa khai")}</b></div>` +
+    (a.history.length ? `<div class="sm" style="margin:6px 0 4px">Nguồn khác (tham khảo):</div>` + a.history.filter(h => !/^Sheet/.test(h.label)).map(h => `<div class="ev"><b>${h.d ? (h.month ? "T6/2026" : fmtD(h.d)) : "—"}</b> · ${esc(h.label)}</div>`).join("") : "");
   const n = a.ncc;
   const nccBox = n && (n.td || n.wa || n.cp) ? `<div class="dsec"><h4>NCC khung đã ghi nhận tại CN này</h4><dl class="kv">
       ${n.td ? `<dt>Thiên Danh</dt><dd>Có thể thực hiện</dd>` : ""}${n.wa ? `<dt>Wasaco Anh Phương</dt><dd>Có thể thực hiện</dd>` : ""}${n.cp ? `<dt>Công Phú (T6)</dt><dd>${esc(n.cp)}</dd>` : ""}</dl></div>` : "";
@@ -1135,11 +1241,11 @@ function openDrawer(i){
     <div class="dsec"><h4>Lịch sử kiểm tra</h4>${hist}</div>
     ${nccBox}
     <div class="dsec"><h4>Căn cứ suy ra bước</h4>${evs}</div>
-    <div class="dsec"><h4>Task WSHR</h4>${t ? `<dl class="kv"><dt>Đơn</dt><dd><a href="https://work.hasaki.vn/tasks?task_id=${t.id}" target="_blank" rel="noopener">${t.id}</a> · ${esc(t.tt)}</dd>
+    <div class="dsec"><h4>Task WSHR (${a.nTask}) · từ cột Link Task</h4>${a.taskList ? `<div class="tblwrap" style="margin-bottom:8px"><table><thead><tr><th>Task</th><th>Trạng thái</th><th>Bước</th><th>Người xử lý</th><th>Tạo / đóng</th></tr></thead><tbody>${a.taskList.map(x => `<tr><td><a href="https://work.hasaki.vn/tasks?task_id=${x.id}" target="_blank" rel="noopener">${x.id}</a></td><td>${esc(x.tt)}</td><td>${esc(x.buoc || "—")}<span class="sm">${esc(x.buocTt || "")}${x.buocHan ? " · hạn " + fmtD(x.buocHan) : ""}</span></td><td>${esc(x.nguoiBuoc || "—")}</td><td>${fmtD(x.tao)}${x.dong ? " → " + fmtD(x.dong) : ""}</td></tr>`).join("")}</tbody></table></div>` : ""}${t ? `<dl class="kv"><dt>Đơn</dt><dd><a href="https://work.hasaki.vn/tasks?task_id=${t.id}" target="_blank" rel="noopener">${t.id}</a> · ${esc(t.tt)}</dd>
       <dt>Bước</dt><dd>${esc(t.buoc || "—")} (${esc(t.buocTt || "")})${t.buocChac ? "" : " · <i>chưa chắc</i>"}</dd>
       <dt>Ngày tạo</dt><dd>${t.tao ? fmtD(t.tao) : "—"}</dd><dt>Hạn bước</dt><dd>${t.buocHan ? fmtD(t.buocHan) : "—"}</dd>
       <dt>Ngày đóng</dt><dd>${t.dong ? fmtD(t.dong) : "—"}</dd></dl>` : `<div class="ev">Chưa ghép được task WSHR${links ? "" : " (Sheet không có link task)"}.</div>`}
-      ${links ? `<div style="font-size:12px;margin-top:6px">Link trong Sheet: ${links}</div>` : ""}</div>
+      ${links ? `<div style="font-size:12px;margin-top:6px">${a.nTask} task của CN: ${links}</div>` : ""}</div>
     <div class="dsec"><h4>Dữ liệu gốc trên Sheet</h4><dl class="kv">${kv.filter(x => x[1]).map(([k,v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl></div>`;
   $("#dw").classList.add("on"); $("#ov").classList.add("on"); $("#dw").setAttribute("aria-hidden","false");
 }
@@ -1148,10 +1254,10 @@ function closeDrawer(){ $("#dw").classList.remove("on"); $("#ov").classList.remo
 /* ============================ CSV ============================ */
 function csv(){
   const L = window.__view || [];
-  const H = ["Mã CN","Chi nhánh","Tỉnh","Khu vực","QLVK","Bước hiện tại","Trạng thái","% hoàn thành","Loại vướng","Vướng mắc","Vướng từ","Số ngày vướng","Đơn vị phụ trách",
+  const H = ["Mã CN","Chi nhánh","Tỉnh","Khu vực","QLVK","Số task","Mã task (cột Link Task)","Ngày tạo task","Bảo vệ chủ động vệ sinh","Thực hiện","Ngày thực hiện","Số ngày","Bước hiện tại","Trạng thái","% hoàn thành","Loại vướng","Vướng mắc","Vướng từ","Số ngày vướng","Đơn vị phụ trách",
     "Bắt đầu bước","Hạn bước (ngày)","Hạn bước","Deadline","Nguồn deadline","Trễ (ngày)","Nếu trễ → giải pháp","Chuyển sang bước","Ưu tiên","Next action","Gợi ý theo quy trình",
     "Đã từng kiểm tra","Kiểm tra lần cuối","Nguồn lần cuối","Làm lần cuối (Sheet)","Ngày hoàn thành","Lý do cần can thiệp","Cảnh báo dữ liệu"];
-  const rows = L.map(a => [a.r.ma || a.r.stt, a.r.ten, a.r.tinh, a.r.kv, a.qlvk || "", `${a.stepK}. ${a.step}`, a.current_status, a.progress, a.blocker_type || "", a.blocker || "",
+  const rows = L.map(a => [a.r.ma || a.r.stt, a.r.ten, a.r.tinh, a.r.kv, a.qlvk || "", a.nTask, a.taskIds.join(" "), taoList(a).map(x => fmtD(x.tao)).join(" "), BV_LB[a.baoVe], ({done:"Đã thực hiện",plan:"Hẹn thực hiện",none:"Chưa thực hiện"})[a.thucHien.st], a.thucHien.d ? fmtD(a.thucHien.d) : "", a.thucHien.days ?? "", `${a.stepK}. ${a.step}`, a.current_status, a.progress, a.blocker_type || "", a.blocker || "",
     a.since ? fmtD(a.since) : "", a.stuckDays ?? "", a.owner_unit || "",
     a.stepStart ? fmtD(a.stepStart) : "", a.slaDays ?? "", a.stepDue ? fmtD(a.stepDue) : "", a.deadline ? fmtD(a.deadline) : "", a.deadlineSrc, a.overdue || "",
     a.escalate ? a.escalate.sol : "", a.escalate && a.escalate.back ? `${a.escalate.back}. ${a.escalate.backName}` : "", ({c:"Critical",h:"Cao",n:"Thường"})[a.prio] || "",
@@ -1176,7 +1282,67 @@ function saveDaily(){
   return prev ? {date:prev, snap:H[prev]} : null;
 }
 let PREV = null;
+/* ============================ BÁO CÁO NGÀY: HÔM QUA · HÔM NAY · NGÀY MAI ============================ */
+function whoDid(a){ return a.baoVe === "co" || (a.baoVe === "" && a.dmKey === "bv") ? "Bảo vệ" : (a.selfBt || a.btLam) ? "Bảo trì" : a.dmKey === "chncc" ? "Cửa hàng (NCC địa phương)" : a.dmKey === "vhncc" || a.dmKey === "nccx" ? "NCC (VHBT)" : "Cửa hàng"; }
+function allTasks(a){ return a.taskList || (a.t ? [a.t] : []); }
+function dayFacts(b, d){
+  const lam = b.filter(a => a.thucHien.st === "done" && a.thucHien.d === d);
+  const xong = b.filter(a => a.done && a.completed_date === d);
+  const tDong = [], tTao = [];
+  b.forEach(a => allTasks(a).forEach(x => { if(x.dong === d) tDong.push([a, x]); if(x.tao === d) tTao.push([a, x]); }));
+  return {lam, xong, tDong, tTao};
+}
+function groupWho(list){ const m = new Map(); list.forEach(a => { const k = whoDid(a); if(!m.has(k)) m.set(k, []); m.get(k).push(a); }); return [...m].sort((x,y) => y[1].length - x[1].length); }
+const cnLink = a => `<a href="#" class="cnl" data-i="${a.r.i}">${esc(a.r.ten)}</a>`;
+function dayCol(title, d, F){
+  const g = groupWho(F.lam);
+  return `<div class="dcol"><h3>${title} <span class="sm" style="display:inline">${fmtD(d)}</span></h3>
+    <div class="dnum"><b>${F.lam.length}</b> CN có thực hiện · <b>${F.xong.length}</b> CN hoàn thành</div>
+    ${g.length ? g.map(([k, L]) => `<div class="dgrp"><b>${esc(k)}</b> (${L.length}): ${L.map(cnLink).join(", ")}</div>`).join("") : '<div class="sm">Không có CN nào ghi Ngày thực hiện = ngày này.</div>'}
+    ${F.tDong.length ? `<div class="dgrp"><b>Task WSHR đóng</b> (${F.tDong.length}): ${F.tDong.map(([a,x]) => `${cnLink(a)} <span class="sm" style="display:inline">#${x.id}</span>`).join(", ")}</div>` : ""}
+    ${F.tTao.length ? `<div class="dgrp"><b>Task WSHR mới</b> (${F.tTao.length}): ${F.tTao.map(([a,x]) => `${cnLink(a)} <span class="sm" style="display:inline">#${x.id}</span>`).join(", ")}</div>` : ""}
+  </div>`;
+}
+function tomorrowPlan(b){
+  const tm = addDays(TODAY, 1), open = b.filter(a => !a.done && !a.khongAD);
+  const hen = open.filter(a => a.thucHien.st === "plan" && a.thucHien.d === tm);
+  const dl = open.filter(a => a.deadline === tm);
+  const tre = sortDefault(open.filter(a => a.overdue > 0 || a.critical));
+  const byOwner = new Map(); open.forEach(a => { const k = a.owner_unit || "(chưa xác định người làm)"; if(!byOwner.has(k)) byOwner.set(k, []); byOwner.get(k).push(a); });
+  return {tm, hen, dl, tre, byOwner:[...byOwner].sort((x,y) => y[1].length - x[1].length)};
+}
+function renderDaily(b){
+  const yd = addDays(TODAY, -1);
+  const Y = dayFacts(b, yd), T = dayFacts(b, TODAY), P = tomorrowPlan(b);
+  const nextOf = a => a.next_action || a.suggest || "";
+  $("#tdDaily").innerHTML = `<div class="dgrid">
+    ${dayCol("Hôm qua đã làm", yd, Y)}
+    ${dayCol("Hôm nay đã làm", TODAY, T)}
+    <div class="dcol"><h3>Ngày mai làm gì <span class="sm" style="display:inline">${fmtD(P.tm)}</span></h3>
+      <div class="dgrp"><b>Hẹn thực hiện ngày mai</b> (${P.hen.length}): ${P.hen.length ? P.hen.map(cnLink).join(", ") : '<span class="sm" style="display:inline">chưa có CN nào ghi ngày hẹn</span>'}</div>
+      <div class="dgrp"><b>Đến deadline ngày mai</b> (${P.dl.length}): ${P.dl.length ? P.dl.map(cnLink).join(", ") : '<span class="sm" style="display:inline">chưa có (Sheet chưa có cột Deadline)</span>'}</div>
+      <div class="dgrp"><b>Ưu tiên xử lý</b> (trễ hạn / đọng nước, tắc nghẽn — ${P.tre.length}): ${P.tre.slice(0,10).map(a => `${cnLink(a)} <span class="sm" style="display:inline">→ ${esc(nextOf(a))}</span>`).join("; ") || "—"}${P.tre.length > 10 ? ` … +${P.tre.length - 10}` : ""}</div>
+      <div class="dgrp"><b>Việc còn lại theo người làm:</b><ul style="margin:4px 0 0 18px;padding:0">${P.byOwner.map(([k, L]) => `<li><b>${esc(k)}</b>: ${L.length} CN${L.filter(a => a.pending).length ? ` (${L.filter(a => a.pending).length} chưa làm)` : ""}</li>`).join("")}</ul></div>
+    </div></div>
+    <div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button class="btn" id="btnCopyDaily">📋 Sao chép báo cáo ngày</button><span class="sm" id="cpMsg" style="display:inline"></span></div>
+    <div class="note" style="margin-top:8px">“Đã làm” đếm theo cột <b>Ngày thực hiện</b> (ngày làm lần cuối) và task WSHR đóng/tạo trong ngày. “Ngày mai” lấy CN có Ngày thực hiện là ngày mai (hẹn) và cột Deadline trên Sheet — Sheet chưa có cột kế hoạch nên phần kế hoạch còn mỏng; nếu muốn chính xác, thêm cột <b>Ngày dự kiến</b> hoặc dùng cột <b>Deadline</b>.</div>`;
+  $("#tdDaily").querySelectorAll(".cnl").forEach(x => x.onclick = e => { e.preventDefault(); openDrawer(+x.dataset.i); });
+  $("#btnCopyDaily").onclick = () => {
+    const line = (t, d, F) => [`${t} (${fmtD(d)}): ${F.lam.length} CN có thực hiện, ${F.xong.length} CN hoàn thành` + (F.tDong.length ? `, ${F.tDong.length} task WSHR đóng` : ""),
+      ...groupWho(F.lam).map(([k, L]) => `  - ${k} (${L.length}): ${L.map(a => a.r.ten).join(", ")}`)].join("\n");
+    const txt = [`BÁO CÁO VỆ SINH MÁI / MÁNG XỐI – ${fmtD(TODAY)}`,
+      line("Hôm qua", yd, Y), line("Hôm nay", TODAY, T),
+      `Ngày mai (${fmtD(P.tm)}):`,
+      `  - Hẹn thực hiện: ${P.hen.map(a => a.r.ten).join(", ") || "chưa có"}`,
+      `  - Ưu tiên xử lý (${P.tre.length}): ${P.tre.slice(0,10).map(a => `${a.r.ten} → ${nextOf(a)}`).join("; ") || "—"}`,
+      `  - Còn lại theo người làm: ${P.byOwner.map(([k, L]) => `${k} ${L.length}`).join(" · ")}`].join("\n");
+    const done = () => { $("#cpMsg").textContent = "Đã chép — dán vào Zalo/Chat."; };
+    try{ navigator.clipboard.writeText(txt).then(done, () => { prompt("Chép báo cáo:", txt); }); }catch(e){ prompt("Chép báo cáo:", txt); }
+  };
+}
+
 function renderToday(b){
+  renderDaily(b);
   const open = b.filter(a => !a.done && !a.khongAD);
   const key = a => a.r.ma || a.r.stt || a.r.ten;
   const dueToday = open.filter(a => a.deadline === TODAY);
@@ -1224,19 +1390,114 @@ function renderToday(b){
 }
 let TD_UNIT = null;
 
+/* ============================ CẬP NHẬT TASK TỪ WSHR ============================
+   Lấy task ở cột “Link Task Kiểm tra vệ sinh mái nhà/Chi nhánh”, gọi API WSHR bằng token người xem tự dán
+   (lưu trên trình duyệt của người đó, KHÔNG nằm trong file). Kết quả lưu localStorage.mxwf_live. */
+const WSHR_API = "https://wshr.hasaki.vn/api/hr/projects/task-input";
+const ST_VI = {0:"Chưa xử lý",1:"Đang xử lý",2:"Hoàn tất",4:"Đã huỷ",5:"Chờ duyệt",6:"Điều hướng WF"};
+const ST_OPEN = new Set([0,1,5,6]);
+let LIVE = (LS.get("mxwf_live", null) || {}).rows || {};
+let LIVE_META = (LS.get("mxwf_live", null) || {}).meta || null;
+let WBUSY = false;
+async function wGet(url, tok){
+  const r = await fetch(url, {headers:{Authorization:"Bearer " + tok}});
+  if(r.status === 401 || r.status === 403) throw new Error("401");
+  if(!r.ok) throw new Error("HTTP " + r.status);
+  return r.json();
+}
+async function wTask(id, tok){ const j = await wGet(`${WSHR_API}/${id}`, tok); return j && j.data ? j.data : null; }
+async function wPool(items, n, fn){
+  const q = items.slice(); let e401 = false;
+  await Promise.all(Array.from({length:Math.min(n, q.length || 1)}, async () => { for(;;){ const it = q.shift(); if(it === undefined) return;
+    try{ await fn(it); }catch(e){ if(e.message === "401") e401 = true; } } }));
+  if(e401) throw new Error("401");
+}
+function wHarvest(node, out, d){
+  if(!node || d > 6) return out;
+  if(Array.isArray(node)){ node.forEach(x => wHarvest(x, out, d+1)); return out; }
+  if(typeof node !== "object") return out;
+  if(node.id && typeof node.name === "string" && "status" in node) out.push(node);
+  for(const k in node) wHarvest(node[k], out, d+1);
+  return out;
+}
+async function wKids(id, tok){
+  try{                                                   // cách đã chạy thật trên WSHR: ?subtasks=1 (phải kiểm parent_id)
+    const j = await wGet(`${WSHR_API}/${id}?subtasks=1`, tok);
+    const all = wHarvest(j.data !== undefined ? j.data : j, [], 0);
+    const kids = all.filter(x => +x.parent_id === +id && +x.id !== +id);
+    const la = all.filter(x => +x.id !== +id && +x.parent_id !== +id).length;
+    if(kids.length && la <= kids.length) return kids;
+  }catch(e){ if(e.message === "401") throw e; }
+  try{ const t = await wTask(id + 1, tok); if(t && +t.parent_id === +id) return [t]; }catch(e){ if(e.message === "401") throw e; }   // phao: bước đầu = id+1
+  return [];
+}
+const staffOf = x => { const s = x && (x.staff || (x.current_step && x.current_step.staff)); return (s && s[0] && s[0].info && s[0].info.staff_name) || ""; };
+function wSay(msg){ const el = $("#wMsg"); if(el) el.textContent = msg; }
+async function fetchWshr(){
+  const tok = LS.get("mxwf_tok", "");
+  if(!tok){ wSay("Chưa có token. Dán token WSHR vào ô rồi bấm Cập nhật."); return; }
+  if(WBUSY) return; WBUSY = true;
+  try{
+    const want = ALL.map(a => ({key: a.r.ma || a.r.stt || a.r.ten, ids: a.taskIds.map(Number)})).filter(w => w.ids.length && !ALL.find(a => (a.r.ma || a.r.stt || a.r.ten) === w.key).r.dupMa);
+    const ids = [...new Set(want.flatMap(w => w.ids))];
+    wSay(`Đang lấy ${ids.length} task ở cột Link Task…`);
+    const rec = new Map();
+    await wPool(ids, 8, async id => { const d = await wTask(id, tok); if(d) rec.set(+d.id, d); });
+    const pids = [...new Set([...rec.values()].map(d => +d.parent_id).filter(p => p && !rec.has(p)))];
+    await wPool(pids, 8, async id => { const d = await wTask(id, tok); if(d) rec.set(+d.id, d); });
+    const roots = [...new Set(ids.map(id => { const d = rec.get(id); return d ? (d.parent_id ? +d.parent_id : +d.id) : null; }).filter(Boolean))];
+    wSay(`Đang lấy bước con của ${roots.length} đơn…`);
+    const kidsOf = new Map();
+    await wPool(roots, 8, async id => { const r = rec.get(id); if(r && r.current_step && r.current_step.name && !ST_OPEN.has(r.status)) return; kidsOf.set(id, await wKids(id, tok)); });
+    const rows = {};
+    want.forEach(w => {
+      const rs = [...new Set(w.ids.map(id => { const d = rec.get(id); return d ? (d.parent_id ? +d.parent_id : +d.id) : null; }).filter(Boolean))].map(id => rec.get(id)).filter(Boolean);
+      if(!rs.length) return;
+      const tasks = rs.map(root => {
+        const kids = kidsOf.get(+root.id) || [];
+        const mo = kids.filter(k => ST_OPEN.has(k.status));
+        const cs = root.current_step;
+        let buoc = "", buocTt = "", buocHan = "", buocChac = 0, nguoi = "";
+        if(mo.length){ const k = mo.reduce((a,b) => String(b.created_at||"") > String(a.created_at||"") ? b : a); buoc = k.name; buocTt = ST_VI[k.status]; buocHan = (k.date_end||"").slice(0,10); buocChac = 1; nguoi = staffOf(k); }
+        else if(cs && cs.name){ buoc = cs.name; buocTt = ST_VI[root.status]; buocHan = (root.date_end||"").slice(0,10); buocChac = 1; nguoi = staffOf(root); }
+        else if(kids.length){ const k = kids.reduce((a,b) => String(b.finished_at||b.created_at||"") > String(a.finished_at||a.created_at||"") ? b : a); buoc = k.name; buocTt = ST_VI[k.status]; buocHan = (k.date_end||"").slice(0,10); buocChac = ST_OPEN.has(root.status) ? 0 : 1; }
+        return {id:+root.id, tao:(root.created_at||"").slice(0,10), dong:(root.finished_at||"").slice(0,10), tt:ST_VI[root.status] || String(root.status),
+                buoc, buocTt, buocHan, buocChac, nguoiBuoc:nguoi, ten:(root.name||"").slice(0,120), open:ST_OPEN.has(root.status)};
+      });
+      // đại diện: đơn còn mở mới nhất, không có thì đơn mới nhất
+      const moi = tasks.filter(x => !x.tao || x.tao >= CFG.CAMPAIGN_START), pool = moi.length ? moi : tasks;   // ưu tiên đơn trong đợt rà soát
+      const rep = pool.filter(x => x.open).sort((a,b) => a.tao < b.tao ? 1 : -1)[0] || pool.slice().sort((a,b) => a.tao < b.tao ? 1 : -1)[0];
+      rows[w.key] = Object.assign({}, rep, {live:true, tasks});
+    });
+    LIVE = rows; LIVE_META = {when:new Date().toLocaleString("vi-VN"), n:Object.keys(rows).length, ids:ids.length};
+    LS.set("mxwf_live", {rows, meta:LIVE_META});
+    wSay(`Đã cập nhật ${LIVE_META.n} chi nhánh (${ids.length} link task) lúc ${LIVE_META.when}.`);
+    recompute();
+  }catch(e){
+    wSay(e.message === "401" ? "Token bị từ chối (hết hạn/sai). Dán token mới." : "Không gọi được WSHR: " + e.message + " (cần mạng nội bộ / đăng nhập WSHR).");
+  }finally{ WBUSY = false; }
+}
+function bindWshr(){
+  $("#btnWshr").onclick = () => { const p = $("#wPanel"); p.hidden = !p.hidden; };
+  $("#wSave").onclick = () => { const v = $("#wTok").value.trim().replace(/^Bearer\s+/i, ""); if(v) LS.set("mxwf_tok", v); $("#wTok").value = ""; fetchWshr(); };
+  $("#wDel").onclick = () => { LS.set("mxwf_tok", ""); wSay("Đã xoá token khỏi trình duyệt này."); };
+  wSay(LIVE_META ? `Lần cập nhật gần nhất: ${LIVE_META.when} (${LIVE_META.n} CN).` : "Chưa cập nhật trực tiếp — đang dùng snapshot task lưu trong file.");
+}
+
 /* ============================ SỰ KIỆN ============================ */
 function go(p){ PAGE = p; LS.set("mxwf_page", p); PG_ALL = 0; render(); window.scrollTo({top:0}); }
 document.querySelectorAll("#tabs button").forEach(b => b.onclick = () => { if(b.dataset.p !== PAGE){ F.step = F.step; } go(b.dataset.p); });
-[["#fKv","kv"],["#fQl","ql"],["#fDm","dm"],["#fPr","pr"]].forEach(([id,k]) => $(id).onchange = e => { F[k] = e.target.value; PG_ALL = 0; render(); });
+[["#fKv","kv"],["#fQl","ql"],["#fDm","dm"],["#fPr","pr"],["#fBv","bv"]].forEach(([id,k]) => $(id).onchange = e => { F[k] = e.target.value; PG_ALL = 0; render(); });
 let qT; $("#fQ").oninput = e => { clearTimeout(qT); qT = setTimeout(() => { F.q = e.target.value; PG_ALL = 0; render(); }, 150); };
 $("#fState").onchange = e => { F.state = e.target.value; PG_ALL = 0; render(); };
 $("#chips").onclick = e => { const x = e.target.dataset.x; if(x){ F[x] = null; render(); } };
-$("#btnClr").onclick = () => { ["#fKv","#fQl","#fDm","#fPr","#fQ","#fState"].forEach(id => $(id).value = ""); Object.assign(F, {kv:"",ql:"",dm:"",pr:"",q:"",step:null,btype:null,chk:null,state:""}); SORT = {blk:null, all:null}; render(); };
+$("#btnClr").onclick = () => { ["#fKv","#fQl","#fDm","#fPr","#fQ","#fState"].forEach(id => $(id).value = ""); $("#fBv").value = "*"; Object.assign(F, {kv:"",ql:"",dm:"",pr:"",q:"",step:null,stepName:null,btype:null,chk:null,state:"",bv:"*"}); SORT = {blk:null, all:null}; render(); };
 $("#btnReload").onclick = reload;
 $("#btnCsv").onclick = csv;
 $("#dwX").onclick = closeDrawer; $("#ov").onclick = closeDrawer;
 document.addEventListener("keydown", e => { if(e.key === "Escape") closeDrawer(); });
 
+bindWshr();
 recompute();   // vẽ ngay bằng bản lưu
 reload();      // rồi kéo bản mới
 
