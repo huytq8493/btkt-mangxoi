@@ -292,6 +292,12 @@ dl.kv dt{color:var(--ink2)} dl.kv dd{margin:0}
 .wkg .cnt{font-weight:700;font-size:18px;color:var(--s1ink)}
 .wkrisk{margin:0;padding-left:18px}.wkrisk li{margin:8px 0;font-size:13px}
 @media print{body.pwk .page.pr{display:none!important} body.pwk #p_wk{display:block!important;break-before:auto}}
+.nck{display:inline-flex;gap:5px;align-items:center;margin-top:4px;font-size:11.5px;color:var(--ink2);cursor:pointer;user-select:none;border:1px dashed var(--border);border-radius:6px;padding:1px 6px}
+.nck input{margin:0;cursor:pointer}.nck.on{border-style:solid;background:var(--neutralsoft);color:var(--ink);font-weight:600}
+.nctools{display:inline-flex;gap:8px;align-items:center;margin-left:6px}
+.tiles5{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:inherit}
+@media (max-width:1100px){.tiles5{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media print{.tiles5{grid-template-columns:repeat(5,minmax(0,1fr))}}
 .leaktag{display:inline-block;margin-top:3px;font-size:11.5px;font-weight:600;color:var(--crit)}
 .leakit{border:1px solid var(--line,#e5e7eb);border-radius:10px;padding:8px 10px;margin-top:8px}
 .leakit .lh{font-size:13px;display:flex;gap:4px;flex-wrap:wrap;align-items:center}
@@ -367,10 +373,13 @@ dl.kv dt{color:var(--ink2)} dl.kv dd{margin:0}
           <div class="card-h"><div><h2>Tóm tắt điều hành</h2><div class="hint" id="sumHint">Tự động tổng hợp theo bộ lọc đang chọn</div></div></div>
           <ul class="summary" id="summary"></ul>
         </div>
-        <div class="card c3 tile" data-go="run"><div class="lb"><i class="mk k-run"></i>Đang thực hiện</div><div class="v" id="tRun">–</div><div class="d" id="tRunD"></div></div>
-        <div class="card c3 tile" data-go="blk"><div class="lb"><i class="mk k-blk"></i>Đang vướng</div><div class="v" id="tBlk">–</div><div class="d" id="tBlkD"></div></div>
-        <div class="card c3 tile" data-go="wait"><div class="lb"><i class="mk k-wait"></i>Chưa có đơn vị thực hiện</div><div class="v" id="tWait">–</div><div class="d" id="tWaitD"></div></div>
-        <div class="card c3 tile" data-go="luoi"><div class="lb"><i class="mk" style="background:var(--crit)"></i>Cần gắn / thay lưới chống rác gấp</div><div class="v" id="tLuoi">–</div><div class="d" id="tLuoiD"></div></div>
+<div class="c12 tiles5">
+        <div class="card tile" data-go="run"><div class="lb"><i class="mk k-run"></i>Đang thực hiện</div><div class="v" id="tRun">–</div><div class="d" id="tRunD"></div></div>
+        <div class="card tile" data-go="blk"><div class="lb"><i class="mk k-blk"></i>Đang vướng</div><div class="v" id="tBlk">–</div><div class="d" id="tBlkD"></div></div>
+        <div class="card tile" data-go="wait"><div class="lb"><i class="mk k-wait"></i>Chưa có đơn vị thực hiện</div><div class="v" id="tWait">–</div><div class="d" id="tWaitD"></div></div>
+        <div class="card tile" data-go="luoi"><div class="lb"><i class="mk" style="background:var(--crit)"></i>Cần gắn / thay lưới chống rác gấp</div><div class="v" id="tLuoi">–</div><div class="d" id="tLuoiD"></div></div>
+        <div class="card tile" data-go="nc"><div class="lb"><i class="mk" style="background:var(--neutral)"></i>Không cần vệ sinh máng xối</div><div class="v" id="tNc">–</div><div class="d" id="tNcD"></div></div>
+        </div>
         <div class="card c7">
           <h2>Chi nhánh đang ở giai đoạn nào?</h2>
           <div class="hint">Mỗi chi nhánh đếm 1 lần ở giai đoạn hiện tại. Bấm một giai đoạn để xem danh sách.</div>
@@ -450,6 +459,15 @@ dl.kv dt{color:var(--ink2)} dl.kv dd{margin:0}
             <div class="c8"><div class="tblwrap" id="lkTbl" style="max-height:340px;overflow:auto"></div></div>
           </div>
           <div class="note">Nguồn: file “Task mưa dột từ T6.T10.xlsx” (task SKU “Khảo sát tình trạng cửa hàng sau mưa dột/chi nhánh”). Đã bỏ 4 task không phải dột mưa (đồng hồ nước, van nước rỉ). Bấm một dòng để xem chi tiết & ảnh hư hại.</div>
+        </div>
+        <div class="card c12" id="ncCard">
+          <div class="card-h"><div><h2>🏢 Cửa hàng không cần vệ sinh máng xối (thuê trong tòa nhà / chung cư / kiot / chung chủ)</h2><div class="hint" id="ncHint"></div></div></div>
+          <div class="grid" style="margin-top:4px;gap:20px">
+            <div class="c4"><div class="dsec" style="margin-top:0"><h4>Theo lý do</h4><div class="hb" id="ncWhy"></div></div></div>
+            <div class="c4"><div class="dsec" style="margin-top:0"><h4>Tình trạng trên dashboard</h4><div class="hb" id="ncSt"></div></div></div>
+            <div class="c4"><div class="dsec" style="margin-top:0"><h4>Theo khu vực</h4><div class="hb" id="ncKv"></div></div></div>
+          </div>
+          <div class="note">Đánh dấu bằng ô “Không cần VS” ở tab Danh sách chi nhánh / chi tiết CN. Nhóm này vẫn tính trong tổng số chi nhánh. Bấm một dòng để xem danh sách.</div>
         </div>
         <div class="card c12">
           <div class="card-h"><div><h2>📋 Task “Vệ sinh rà soát máng xối, lối thoát nước cửa hàng” (COS.SCH.109)</h2><div class="hint" id="schHint"></div></div></div>
@@ -1421,8 +1439,17 @@ const SCH_ST = {"Finished":"Hoàn tất", "Waiting Approve":"Chờ duyệt", "Pr
 const SCH_ORD = ["Finished","Waiting Approve","Processing","Pending","None"];
 const schBest = L => L.slice().sort((x, y) => SCH_ORD.indexOf(x.st) - SCH_ORD.indexOf(y.st))[0];
 const schLbl = st => SCH_ST[st] || st || "—";
+/* KHÔNG CẦN VỆ SINH MÁNG XỐI (anh Huy 06/10): CH thuê trong tòa nhà / chung cư / kiot / chung chủ phía trên → anh tự tick trên danh sách.
+   Lưu trên trình duyệt (localStorage mxbc_noclean) + danh sách cố định trong file (window.MX_NOCLEAN).
+   anh Huy 06/10 (lần 2): VẪN TÍNH vào tổng CN – chỉ thêm bộ lọc + tổng hợp riêng nhóm này. */
+const NC_REASONS = ["Thuê trong tòa nhà / TTTM", "Chung cư", "Kiot", "Chung chủ nhà phía trên", "Khác"];
+let ALLX = [], NCL = [];
+function ncStore(){ const v = LS.get("mxbc_noclean", null); return v && typeof v === "object" ? v : {}; }
+function ncMap(){ const m = new Map(); ((window.MX_NOCLEAN || {}).rows || []).forEach(x => m.set(shopKey(x[0]), {why:x[1] || "", by:"file"}));
+  Object.entries(ncStore()).forEach(([k, v]) => { if(v === null || v === false) m.delete(k); else m.set(k, {why:(v && v.why) || "", by:"local", at:v && v.at}); }); return m; }
+function ncSet(key, on, why){ const st = ncStore(); st[key] = on ? {why:why || "", at:new Date().toISOString().slice(0, 10)} : null; LS.set("mxbc_noclean", st); }
 let PREV = null;
-let WGAL = "done", WGAL_N = 36, LGAL = "all", GEO = "kv", GAL = "risk", GAL_N = 48, PG = 0, SORT_L = null;
+let DW_I = null, WGAL = "done", WGAL_N = 36, LGAL = "all", GEO = "kv", GAL = "risk", GAL_N = 48, PG = 0, SORT_L = null;
 const PG_SIZE = 40;
 let V = [];                              // danh sách sau bộ lọc
 
@@ -1504,8 +1531,10 @@ function recompute(){
   LK.forEach(v => v.sort((p, q) => q.d.localeCompare(p.d)));
   const SC = new Map(); ((window.MX_SCH_SNAP || {}).rows || []).forEach(x => { const k = shopKey(x[0]); if(!SC.has(k)) SC.set(k, []);
     SC.get(k).push({id:x[1], st:x[2], d0:x[3], d1:x[4], nv:x[5], cn:x[6]}); });
-  ALL.forEach(a => { a.sch = SC.get(shopKey(a.r.shop)) || null; if(a.sch) a.schSt = schBest(a.sch); a.leak = LK.get(shopKey(a.r.shop)) || null; a.limg = LI.get(shopKey(a.r.shop)) || null; a.mt = mtOf(a.r, I); a.ph = phaseOf(a); a.stt = statusOf(a); a.unit = unitOf(a); a.person = personOf(a); a.prio = prioOf(a); });
-  window.__ALL = ALL;
+  const NCM = ncMap();
+  ALL.forEach(a => { const nc = NCM.get(shopKey(a.r.shop)); a.noClean = !!nc; a.ncWhy = nc ? nc.why : ""; a.sch = SC.get(shopKey(a.r.shop)) || null; if(a.sch) a.schSt = schBest(a.sch); a.leak = LK.get(shopKey(a.r.shop)) || null; a.limg = LI.get(shopKey(a.r.shop)) || null; a.mt = mtOf(a.r, I); a.ph = phaseOf(a); a.stt = statusOf(a); a.unit = unitOf(a); a.person = personOf(a); a.prio = prioOf(a); });
+  ALLX = ALL; NCL = ALL.filter(a => a.noClean);   // vẫn tính trong tổng
+  window.__ALL = ALL; window.__ALLX = ALLX;
   const H = LS.get("mxbc_hist", {});
   if(SRC.kind === "live"){ const c = stCount(ALL); H[TODAY] = {n:ALL.length, ...c, luoi:ALL.filter(luoiUrg).length}; LS.set("mxbc_hist", H); }
   const pd = Object.keys(H).filter(d => d < TODAY).sort().pop();
@@ -1535,9 +1564,9 @@ function fillFilters(){
   const un = countBy(ALL, a => a.unit);
   fillSel($("#fUnit"), "Đơn vị thực hiện", UNIT_ORDER.filter(k => un.get(k)).map(k => [k, UNIT[k], un.get(k)]), F.unit); F.unit = $("#fUnit").value;
 }
-function base(){
+function base(src){
   const q = na(F.q);
-  return ALL.filter(a => (!F.kv || (a.r.kv || "(chưa rõ)") === F.kv) && (!F.tinh || (a.r.tinh || "(chưa rõ)") === F.tinh) && (!F.unit || a.unit === F.unit) &&
+  return (src || ALL).filter(a => (!F.kv || (a.r.kv || "(chưa rõ)") === F.kv) && (!F.tinh || (a.r.tinh || "(chưa rõ)") === F.tinh) && (!F.unit || a.unit === F.unit) &&
     (!q || na([a.r.ten, a.r.ma, a.r.stt, a.r.shop, a.r.tinh, a.r.kv, a.qlvk, a.asg && a.asg.nv].join(" ")).includes(q)));
 }
 function scopeText(){
@@ -1550,7 +1579,7 @@ function go(p){ PAGE = p; LS.set("mxbc_page", p); document.querySelectorAll(".ta
 function render(){
   V = base();
   $("#scope").textContent = `Đang xem ${nf(V.length)} / ${nf(ALL.length)} chi nhánh · ${scopeText()}`;
-  $("#subline").textContent = `${nf(ALL.length)} chi nhánh trong chương trình · số liệu tính đến ${fmtD(TODAY)}`;
+  $("#subline").textContent = `${nf(ALL.length)} chi nhánh trong chương trình${NCL.length ? ` · ${nf(NCL.length)} CN không cần vệ sinh (thuê trong tòa nhà/chung cư/kiot/chung chủ)` : ""} · số liệu tính đến ${fmtD(TODAY)}`;
   $("#nList").textContent = nf(V.length);
   const todoN = new Set(todoGroups(V).filter(g => g.main).flatMap(g => g.list.map(a => a.r.i))).size;
   $("#nTodo").textContent = nf(todoN);
@@ -1573,7 +1602,7 @@ function renderOv(){
   const p = pct(c.done, N);
   $("#heroPct").innerHTML = `${String(p).replace(".", ",")}<small>%</small>`;
   $("#heroOf").innerHTML = `<b>${nf(c.done)}</b> / ${nf(N)} chi nhánh đã hoàn thành${PREV && PREV.done != null ? deltaTxt(c.done, "done", true).replace(/^ · /, " · ") : ""}`;
-  $("#heroHint").textContent = `${scopeText()} · tính đến ${fmtD(TODAY)}`;
+  $("#heroHint").textContent = `${scopeText()} · tính đến ${fmtD(TODAY)}${V.some(a => a.noClean) ? ` · trong đó ${nf(V.filter(a => a.noClean).length)} CN không cần vệ sinh máng xối` : ""}`;
   $("#heroStack").innerHTML = N ? stackHtml(c, N) : "";
   $("#heroLegend").innerHTML = legendHtml(c, N);
   const tg = LS.get("mxbc_target", "");
@@ -1594,6 +1623,9 @@ function renderOv(){
   $("#tWaitD").innerHTML = `${nw.length} CN sheet NCC chưa chốt NCC · ${V.filter(a => a.ph === "p1" && !nccWait(a)).length} CH/VHBT đang tìm NCC · ${V.filter(a => a.ph === "p0").length} chưa chốt người làm${deltaTxt(c.wait, "wait", false)}`;
   const lu = V.filter(luoiUrg);
   $("#tLuoi").innerHTML = `${nf(lu.length)}<small>CN</small>`;
+  { const nc = V.filter(a => a.noClean);
+    $("#tNc").innerHTML = `${nf(nc.length)}<small>CN</small>`;
+    $("#tNcD").innerHTML = nc.length ? `${fmtP(pct(nc.length, N))} tổng CN · thuê trong tòa nhà/chung cư/kiot/chung chủ${nc.filter(a => !a.done).length ? ` · ${nc.filter(a => !a.done).length} CN chưa chốt hoàn thành` : ""}` : "Chưa đánh dấu – tick “Không cần VS” ở Danh sách chi nhánh"; }
   $("#tLuoiD").innerHTML = `${lu.filter(a => a.luoi.k === "none").length} chưa có lưới · ${lu.filter(a => a.luoi.k === "bad").length} lưới rỉ sét/hư hỏng${deltaTxt(lu.length, "luoi", false)}`;
   // summary
   $("#summary").innerHTML = summaryItems(V).map(s => `<li><span class="ic ${s.c}">${s.i}</span><span>${s.h}</span></li>`).join("");
@@ -1682,6 +1714,7 @@ function summaryItems(L){
   const nv = new Set(L.filter(a => a.unit === "bt").map(a => a.asg.nv).filter(Boolean)).size;
   const u = k => L.filter(a => a.unit === k);
   out.push({c:"g", i:"✓", h:`<b>Hoàn thành ${nf(c.done)}/${nf(N)} chi nhánh (${fmtP(pct(c.done, N))})</b>${PREV && PREV.done != null && L === V && !F.kv && !F.tinh && !F.unit && !F.q ? deltaTxt(c.done, "done", true) : ""}.`});
+  { const nc = L.filter(a => a.noClean); if(nc.length) out.push({c:"n", i:"🏢", h:`<b>${nf(nc.length)} CN không cần vệ sinh máng xối</b> (thuê trong tòa nhà/chung cư/kiot/chung chủ)${nc.filter(a => !a.done).length ? ` – ${nf(nc.filter(a => !a.done).length)} CN trong nhóm này chưa hoàn thành, có thể chốt “Không phát sinh” trên sheet` : ""}.`}); }
   out.push({c:"b", i:"▶", h:`<b>${nf(c.run)} CN đang thực hiện</b>: Bảo trì nội bộ ${u("bt").filter(a => a.stt === "run").length} CN (${nv} nhân viên), Bảo vệ cửa hàng tự vệ sinh ${u("bv").filter(a => a.stt === "run").length} CN${u("ncc").filter(a => a.stt === "run").length ? `, NCC ${u("ncc").filter(a => a.stt === "run").length} CN` : ""}${L.filter(a => a.ph === "p4").length ? ` – trong đó <b>${L.filter(a => a.ph === "p4").length} CN đang chờ nghiệm thu</b> trên WSHR` : ""}.`});
   if(c.blk){ const bt = countBy(L.filter(a => a.stt === "blk"), a => a.blocker_type || "Khác"); const top = [...bt].sort((x, y) => y[1] - x[1])[0];
     out.push({c:"o", i:"!", h:`<b>${nf(c.blk)} CN đang vướng</b>, chủ yếu “${esc(top[0])}” (${top[1]} CN).`}); }
@@ -1784,6 +1817,13 @@ function renderSt(){
       + (W.length > WGAL_N ? `<button class="btn" id="wgMore" style="grid-column:1/-1;justify-self:center">Xem thêm ${W.length - WGAL_N} CN</button>` : "") || `<div class="empty" style="grid-column:1/-1">${LIVE_META ? "Không có ảnh phù hợp." : "Chưa có dữ liệu task WSHR."}</div>`;
     $("#wgal").querySelectorAll(".gi").forEach(el => el.onclick = e => { if(e.target.closest("[data-lb-i]")) return; openDrawer(+el.dataset.i); });
     const wm = $("#wgMore"); if(wm) wm.onclick = () => { WGAL_N += 36; renderSt(); }; }
+  // không cần vệ sinh (anh Huy 06/10)
+  { const NC = V.filter(a => a.noClean);
+    $("#ncHint").textContent = NC.length ? `${nf(NC.length)}/${nf(V.length)} chi nhánh được đánh dấu không cần vệ sinh máng xối (vẫn tính trong tổng)` : "Chưa có chi nhánh nào được đánh dấu — tick ô “Không cần VS” ở tab Danh sách chi nhánh.";
+    barRows($("#ncWhy"), [...countBy(NC, a => a.ncWhy || "(chưa ghi lý do)")].sort((x, y) => y[1] - x[1]).map(([k, n]) => ({l:k, n, c:"var(--neutral)", dl:`Không cần vệ sinh · ${k}`, fn:a => a.noClean && (a.ncWhy || "(chưa ghi lý do)") === k})), NC.length);
+    barRows($("#ncSt"), ST_ORDER.map(k => ({l:ST[k].l, n:NC.filter(a => a.stt === k).length, c:{done:"var(--good)", run:"var(--s1)", blk:"var(--serious)", wait:"var(--neutral)"}[k], dl:`Không cần vệ sinh · ${ST[k].l}`, fn:a => a.noClean && a.stt === k})).filter(r => r.n), NC.length);
+    barRows($("#ncKv"), [...countBy(NC, a => a.r.kv || "(chưa rõ)")].sort((x, y) => y[1] - x[1]).map(([k, n]) => ({l:k, n, c:"var(--s1)", dl:`Không cần vệ sinh · ${k}`, fn:a => a.noClean && (a.r.kv || "(chưa rõ)") === k})), NC.length);
+    $("#ncCard").style.display = NC.length ? "" : "none"; }
   // task rà soát COS.SCH.109 (anh Huy 05/10)
   { const S = V.filter(a => a.sch);
     $("#schHint").textContent = `${nf(S.length)}/${nf(V.length)} chi nhánh có task “Vệ sinh rà soát máng xối, lối thoát nước cửa hàng” · ${nf(new Set(S.flatMap(a => a.sch.map(x => x.id))).size)} task cha (file Task-input 05/10/2026)`;
@@ -1890,13 +1930,21 @@ function copyText(t){ (navigator.clipboard ? navigator.clipboard.writeText(t) : 
 /* ============ DANH SÁCH ============ */
 const CHIPS = [
   ["", "Tất cả", a => true], ["done", "Hoàn thành", a => a.stt === "done"], ["run", "Đang thực hiện", a => a.stt === "run"], ["blk", "Đang vướng", a => a.stt === "blk"],
-  ["wait", "Chưa có đơn vị", a => a.stt === "wait"], ["luoi", "Lưới gấp", luoiUrg], ["cay", "Cây đọng rác máng", a => a.mt && a.mt.cayDong], ["bh", "Bảng hiệu cần sửa", a => a.mt && a.mt.bhBad], ["limg", "Có ảnh lưới", a => a.limg && a.limg.imgs.length], ["prio", "⭐ Ưu tiên 1–3", a => a.prio.lv > 0], ["p1", "Ưu tiên 1 · cây xanh + chưa có lưới", a => a.prio.lv === 1], ["clinic", "🏥 Có Clinic", isClinic], ["sch", "📋 Có task rà soát máng xối", a => a.sch], ["nosch", "Chưa có task rà soát", a => !a.sch], ["leak", "☔ Từng mưa dột (2025)", a => a.leak], ["wimg", "📷 Có ảnh báo cáo WSHR", a => wImgs(a).length], ["leakopen", "Từng dột – chưa xong đợt này", a => a.leak && !a.done]];
+  ["wait", "Chưa có đơn vị", a => a.stt === "wait"], ["luoi", "Lưới gấp", luoiUrg], ["cay", "Cây đọng rác máng", a => a.mt && a.mt.cayDong], ["bh", "Bảng hiệu cần sửa", a => a.mt && a.mt.bhBad], ["limg", "Có ảnh lưới", a => a.limg && a.limg.imgs.length], ["prio", "⭐ Ưu tiên 1–3", a => a.prio.lv > 0], ["p1", "Ưu tiên 1 · cây xanh + chưa có lưới", a => a.prio.lv === 1], ["clinic", "🏥 Có Clinic", isClinic], ["nc", "🏢 Không cần vệ sinh", a => a.noClean], ["sch", "📋 Có task rà soát máng xối", a => a.sch], ["nosch", "Chưa có task rà soát", a => !a.sch], ["leak", "☔ Từng mưa dột (2025)", a => a.leak], ["wimg", "📷 Có ảnh báo cáo WSHR", a => wImgs(a).length], ["leakopen", "Từng dột – chưa xong đợt này", a => a.leak && !a.done]];
 const leakTag = a => a.leak ? `<span class="leaktag" title="${esc(a.leak.map(x => fmtD(x.d) + " – " + x.mo).join("\n"))}">☔ Từng mưa dột ${a.leak.length > 1 ? a.leak.length + " lần" : ""} · gần nhất ${fmtD(a.leak[0].d)}</span>` : "";
 function leakBox(a){ if(!a.leak) return "";
   return `<div class="dsec"><h4>☔ Lịch sử mưa dột (task “Khảo sát tình trạng cửa hàng sau mưa dột” 09–10/2025) · ${a.leak.length} lần</h4>${a.leak.map(x => `<div class="leakit">
     <div class="lh"><b>${fmtD(x.d)}</b> · <a href="https://work.hasaki.vn/tasks?task_id=${esc(x.id)}" target="_blank" rel="noopener">${esc(x.code)}</a> · <span class="pill p-${x.st === "done" ? "ok" : "warn"}"><i></i>${x.st === "done" ? "Đã xử lý xong" : "Task chưa đóng"}</span>${x.kc ? ` <span class="sm" style="display:inline">· khẩn cấp: ${esc(x.kc)}</span>` : ""}${x.kho && !/^shop/i.test(x.kho) ? ` <span class="sm" style="display:inline">· kho ${esc(x.kho)}</span>` : ""}</div>
     <div class="lb2">${x.img ? `<button class="lbt" data-lb-ids="${esc(x.img)}" data-lb-cap="${esc(a.r.ten + " – ảnh mưa dột " + fmtD(x.d))}"><img data-lb-i="0" src="${esc(x.img)}" alt="Ảnh hư hại" loading="lazy" referrerpolicy="no-referrer" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'ph0',textContent:'Không tải được ảnh'}))"></button>` : ""}
     <dl class="kv"><dt>Mô tả</dt><dd>${esc(x.mo || "—")}</dd>${x.kq ? `<dt>Phương án B1</dt><dd>${esc(x.kq)}</dd>` : ""}${x.nn ? `<dt>Nguyên nhân</dt><dd>${esc(x.nn)}</dd>` : ""}${x.bp ? `<dt>Phòng ngừa</dt><dd>${esc(x.bp)}</dd>` : ""}</dl></div></div>`).join("")}</div>`; }
+const ncBox = a => `<label class="nck${a.noClean ? " on" : ""}" title="Cửa hàng thuê trong tòa nhà / chung cư / kiot / chung chủ phía trên – không cần vệ sinh máng xối"><input type="checkbox" data-nc="${esc(shopKey(a.r.shop))}"${a.noClean ? " checked" : ""}> Không cần VS${a.noClean && a.ncWhy ? ` · ${esc(a.ncWhy)}` : ""}</label>`;
+document.addEventListener("click", e => { if(e.target.closest(".nck")) e.stopPropagation(); }, true);
+document.addEventListener("change", e => { const cb = e.target.closest("input[data-nc]"); if(!cb) return; e.stopPropagation();
+  const key = cb.dataset.nc, on = cb.checked, a = ALLX.find(x => shopKey(x.r.shop) === key);
+  let why = ""; if(on){ const sel = document.querySelector(`select[data-ncwhy="${CSS.escape(key)}"]`); why = sel ? sel.value : ""; }
+  ncSet(key, on, why); recompute(); if(DW_I != null && a) openDrawer(a.r.i);
+  toast(on ? `Đã đánh dấu “${a ? a.r.ten : key}” không cần vệ sinh (${NCL.length} CN)` : `Đã bỏ đánh dấu “${a ? a.r.ten : key}” (${NCL.length} CN không cần vệ sinh)`); });
+document.addEventListener("change", e => { const sel = e.target.closest("select[data-ncwhy]"); if(!sel) return; const key = sel.dataset.ncwhy; if(ncMap().has(key)){ ncSet(key, true, sel.value); recompute(); } });
 function stPill(a){ return `<span class="pill p-${a.stt}"><i></i>${a.ph === "p4" ? "Chờ nghiệm thu" : ST[a.stt].l}</span>`; }
 const SKIP = {bv:["p1","p2"], bt:["p1","p2"]};
 const isSkip = (a, k) => (SKIP[a.unit] || []).includes(k) && PHI[a.ph] > PHI[k];
@@ -1907,7 +1955,7 @@ function mtPills(a){ if(!a.mt) return '<span class="nd">Chưa có báo cáo</spa
   if(a.mt.cayDong) p.push('<span class="pill p-crit"><i></i>Cây đọng rác máng</span>'); else if(a.mt.cayTruoc) p.push('<span class="pill p-warn"><i></i>Cây xanh trước CH</span>');
   return `<div style="display:flex;flex-direction:column;gap:4px;align-items:flex-start">${p.join("")}</div>`; }
 const COLS = [
-  {h:"Chi nhánh", f:a => `<div class="cn">${a.mt && a.mt.thumb ? `<img class="th" src="${thumbUrl(a.mt.thumb, 160)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'th',textContent:'Không tải được ảnh'}))">` : `<span class="th">${a.mt ? "Chưa có ảnh" : "—"}</span>`}<div><b>${esc(a.r.ten)}</b><span class="sm">${esc([a.r.ma || a.r.stt, a.r.tinh].filter(Boolean).join(" · "))}</span>${isClinic(a) ? '<span class="clitag">🏥 Có Clinic</span>' : ""}${leakTag(a)}</div></div>`, v:a => a.r.ten},
+  {h:"Chi nhánh", f:a => `<div class="cn">${a.mt && a.mt.thumb ? `<img class="th" src="${thumbUrl(a.mt.thumb, 160)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'th',textContent:'Không tải được ảnh'}))">` : `<span class="th">${a.mt ? "Chưa có ảnh" : "—"}</span>`}<div><b>${esc(a.r.ten)}</b><span class="sm">${esc([a.r.ma || a.r.stt, a.r.tinh].filter(Boolean).join(" · "))}</span>${isClinic(a) ? '<span class="clitag">🏥 Có Clinic</span>' : ""}${leakTag(a)}${ncBox(a)}</div></div>`, v:a => a.r.ten},
   {h:"Ưu tiên", f:a => a.prio.lv ? `${prioPill(a)}<span class="sm">${esc(a.prio.why.join(" · "))}</span>` : '<span class="nd">—</span>', v:a => -(a.prio.score || 0)},
   {h:"Đơn vị thực hiện", f:a => `<b>${esc(UNIT[a.unit])}</b><span class="sm">${esc(a.unit === "bt" ? a.asg.nv || "" : a.unit === "ncc" ? (a.asg.nccTd || "") : a.unit === "tim" ? "cột NCC Thực hiện trống" : a.qlvk || "")}</span>`, v:a => UNIT_ORDER.indexOf(a.unit)},
   {h:"Tiến độ", f:a => `${phSteps(a)}<span style="font-size:12.5px">${esc(PH[PHI[a.ph]].n)}</span>`, v:a => PHI[a.ph]},
@@ -1919,8 +1967,11 @@ const COLS = [
 function renderList(){
   const chipList = DRILL ? [["drill", DRILL.label, DRILL.fn], ...CHIPS] : CHIPS;
   if(F.st === "drill" && !DRILL) F.st = "";
-  $("#stChips").innerHTML = chipList.map(([k, l, fn]) => `<button class="chip${F.st === k ? " on" : ""}" data-k="${k}">${esc(l)} <b>${nf(V.filter(fn).length)}</b>${k === "drill" ? " ✕" : ""}</button>`).join("");
-  $("#stChips").querySelectorAll(".chip").forEach(el => el.onclick = () => { if(el.dataset.k === "drill" && F.st === "drill"){ DRILL = null; F.st = ""; } else F.st = el.dataset.k; PG = 0; renderList(); });
+  const VA = V;
+  $("#stChips").innerHTML = chipList.map(([k, l, fn]) => `<button class="chip${F.st === k ? " on" : ""}${k === "nc" ? " ncchip" : ""}" data-k="${k}">${esc(l)} <b>${nf(VA.filter(fn).length)}</b>${k === "drill" ? " ✕" : ""}</button>`).join("")
+    + `<span class="nctools">${F.st === "nc" && NCL.length ? '<button class="btn" id="ncCopy">📋 Sao chép DS không cần vệ sinh</button>' : ""}<span class="sm" style="display:inline">☑ Tick ô “Không cần VS” ở cột Chi nhánh để đánh dấu CN thuê trong tòa nhà/chung cư/kiot/chung chủ (vẫn tính trong tổng)</span></span>`;
+  $("#stChips").querySelectorAll(".chip").forEach(el => el.onclick = () => { if(el.dataset.k === "drill" && F.st === "drill"){ DRILL = null; F.st = ""; } else F.st = el.dataset.k; PG = 0; render(); });
+  { const b = $("#ncCopy"); if(b) b.onclick = () => copyText(`CỬA HÀNG KHÔNG CẦN VỆ SINH MÁNG XỐI (thuê trong tòa nhà/chung cư/kiot/chung chủ) – ${NCL.length} CN (${fmtD(TODAY)})\n` + NCL.map((a, i) => `${i + 1}. ${a.r.shop} | ${a.r.ten} | ${a.r.tinh || ""} | ${a.ncWhy || ""}`).join("\n")); }
   const fn = (chipList.find(c => c[0] === F.st) || CHIPS[0])[2];
   let L = V.filter(fn);
   if(SORT_L){ const c = COLS[SORT_L.i]; L = L.slice().sort((x, y) => { const a = c.v(x), b = c.v(y); return (a < b ? -1 : a > b ? 1 : 0) * SORT_L.d; }); }
@@ -1937,7 +1988,7 @@ function renderList(){
 
 /* ============ CHI TIẾT CHI NHÁNH ============ */
 function openDrawer(i){
-  const a = ALL.find(x => x.r.i === i); if(!a) return;
+  const a = ALLX.find(x => x.r.i === i); if(!a) return; DW_I = i;
   const r = a.r, ci = PHI[a.ph];
   $("#dwT").textContent = r.ten;
   $("#dwS").textContent = [r.ma || r.stt, r.shop, r.tinh, r.kv].filter(Boolean).join(" · ");
@@ -1949,7 +2000,7 @@ function openDrawer(i){
   const lwBox = lw ? `<div class="dsec"><h4>Lưới chống rác</h4><div>${luoiPill(a)}</div><dl class="kv" style="margin-top:8px"><dt>Việc cần làm</dt><dd><b>${esc(lw.act)}</b></dd><dt>Căn cứ</dt><dd>${esc(lw.why)}</dd>
       ${lw.bt ? `<dt>Bảo trì thực hiện</dt><dd>${esc(lw.bt.nv || "")}${lw.bt.tt ? " · " + esc(lw.bt.tt) : ""}${lw.bt.cau ? " · cầu chặn rác: " + esc(lw.bt.cau) : ""}</dd>` : ""}
       ${lw.td ? `<dt>Sheet NCC thực hiện</dt><dd>${lw.td.ncc ? "<b>NCC " + esc(lw.td.ncc) + "</b> · " : ""}${esc(lw.td.tt || "")}${lw.td.luoi ? " · lưới: " + esc(lw.td.luoi) : ""}${lw.td.cau ? " · cầu chặn rác: " + esc(lw.td.cau) : ""}</dd>` : ""}</dl></div>` : "";
-  $("#dwB").innerHTML = `<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">${stPill(a)}<span class="pill p-na"><i></i>${esc(UNIT[a.unit])}</span>${luoiUrg(a) ? '<span class="pill p-crit"><i></i>Lưới gấp</span>' : ""}${a.leak ? `<span class="pill p-crit"><i></i>☔ Từng mưa dột ${a.leak.length} lần</span>` : ""}${isClinic(a) ? '<span class="pill p-run"><i></i>🏥 Có Clinic</span>' : ""}${a.prio.lv ? `${prioPill(a)}<span class="sm" style="display:inline">${esc(a.prio.why.join(" · "))}${a.prio.act ? " → <b>" + esc(a.prio.act) + "</b>" : ""}</span>`.replace("&lt;b&gt;", "<b>") : ""}</div>${steps}
+  $("#dwB").innerHTML = `<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">${stPill(a)}<span class="pill p-na"><i></i>${esc(UNIT[a.unit])}</span>${luoiUrg(a) ? '<span class="pill p-crit"><i></i>Lưới gấp</span>' : ""}${a.leak ? `<span class="pill p-crit"><i></i>☔ Từng mưa dột ${a.leak.length} lần</span>` : ""}${isClinic(a) ? '<span class="pill p-run"><i></i>🏥 Có Clinic</span>' : ""}${a.noClean ? `<span class="pill p-na"><i></i>🏢 Không cần vệ sinh${a.ncWhy ? " · " + esc(a.ncWhy) : ""}</span>` : ""}${a.prio.lv ? `${prioPill(a)}<span class="sm" style="display:inline">${esc(a.prio.why.join(" · "))}${a.prio.act ? " → <b>" + esc(a.prio.act) + "</b>" : ""}</span>`.replace("&lt;b&gt;", "<b>") : ""}</div>${steps}
     <div class="dsec"><h4>Tiến độ</h4><dl class="kv">
       <dt>Đơn vị thực hiện</dt><dd><b>${esc(UNIT[a.unit])}</b> · ${esc(a.person)}</dd>
       <dt>Bước chi tiết</dt><dd>${esc(a.step)}${a.current_status ? ` <span class="sm">${esc(a.current_status)}</span>` : ""}</dd>
@@ -1960,6 +2011,7 @@ function openDrawer(i){
       <dt>QLVK</dt><dd>${esc(a.qlvk || "—")}</dd>
       <dt>Link task</dt><dd>${a.taskIds.length ? a.taskIds.map(id => `<a href="https://work.hasaki.vn/tasks?task_id=${id}" target="_blank" rel="noopener">${id}</a>`).join(" · ") + ` <span class="sm">link theo ${esc(r.linkSrc || "sheet")}</span>` : '<span class="nd">Chưa có link task</span>'}</dd>
     </dl>${a.flags.map(f => `<div class="flag">⚠ ${esc(f)}</div>`).join("")}</div>
+    <div class="dsec"><h4>🏢 Không cần vệ sinh máng xối</h4><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">${ncBox(a)}<select data-ncwhy="${esc(shopKey(a.r.shop))}" style="border:1px solid var(--border);border-radius:6px;padding:4px 6px;font:inherit;font-size:12.5px">${NC_REASONS.map(x => `<option${x === a.ncWhy ? " selected" : ""}>${x}</option>`).join("")}</select></div><div class="sm" style="margin-top:4px">Tick khi CH thuê trong tòa nhà / chung cư / kiot / chung chủ phía trên (vẫn tính trong tổng CN, có bộ lọc & tổng hợp riêng). Lưu trên trình duyệt này${a.noClean && ncMap().get(shopKey(a.r.shop)).by === "file" ? " (đã có trong danh sách cố định của file)" : ""}.</div></div>
     ${taskBox(a)}
     ${schBox(a)}
     ${wMediaBox(a)}
@@ -2015,7 +2067,7 @@ function taskBox(a){
   const src = a.taskList && a.taskList.some(x => x.live) || (a.t && a.t.live) ? "cập nhật trực tiếp " + (LIVE_META ? LIVE_META.when : "") : "bản lưu trong file";
   return `<div class="dsec"><h4>Task WSHR (${T.length || a.taskIds.length}) · ${esc(src)}</h4>${T.length ? `<div class="tblwrap"><table><thead><tr><th>Task</th><th>Trạng thái</th><th>Bước đang dừng</th><th>Người xử lý</th><th>Tạo → đóng</th></tr></thead><tbody>${T.map(x => `<tr style="cursor:default"><td><a href="https://work.hasaki.vn/tasks?task_id=${x.id}" target="_blank" rel="noopener">${x.id}</a></td><td>${esc(x.tt || "")}</td><td>${esc(x.buoc || "—")}<span class="sm">${esc(x.buocTt || "")}${x.buocHan ? " · hạn " + fmtD(x.buocHan) : ""}${x.buocChac === 0 ? " · chưa chắc" : ""}</span></td><td>${esc(x.nguoiBuoc || "—")}</td><td>${x.tao ? fmtD(x.tao) : "—"}${x.dong ? " → " + fmtD(x.dong) : ""}</td></tr>`).join("")}</tbody></table></div>` : `<div class="ev">Chưa đọc được trạng thái task — bấm “🔄 Task WSHR” ở đầu trang để cập nhật.</div>`}</div>`;
 }
-function closeDrawer(){ $("#dw").classList.remove("on"); $("#ov").classList.remove("on"); $("#dw").setAttribute("aria-hidden", "true"); }
+function closeDrawer(){ DW_I = null; $("#dw").classList.remove("on"); $("#ov").classList.remove("on"); $("#dw").setAttribute("aria-hidden", "true"); }
 
 /* ============ XUẤT / IN / SAO CHÉP ============ */
 function summaryText(){
@@ -2030,14 +2082,14 @@ function summaryText(){
 function exportXlsx(){
   const L = V, N = L.length, c = stCount(L);
   const sum = [["Chỉ tiêu", "Giá trị", "Ghi chú"],
-    ["Ngày báo cáo", fmtD(TODAY), SRC.kind === "live" ? "Dữ liệu trực tiếp " + SRC.at : "Bản lưu " + fmtD(SRC.at)], ["Phạm vi", scopeText(), ""], ["Tổng số chi nhánh", N, ""],
+    ["Ngày báo cáo", fmtD(TODAY), SRC.kind === "live" ? "Dữ liệu trực tiếp " + SRC.at : "Bản lưu " + fmtD(SRC.at)], ["Phạm vi", scopeText(), ""], ["Tổng số chi nhánh", N, ""], ["Không cần vệ sinh máng xối (thuê trong tòa nhà/chung cư/kiot/chung chủ)", L.filter(a => a.noClean).length, [...countBy(L.filter(a => a.noClean), a => a.ncWhy || "(chưa ghi lý do)")].map(([k, n]) => `${k}: ${n}`).join(" · ")],
     ...ST_ORDER.map(k => [ST[k].l, c[k], fmtP(pct(c[k], N))]), ["Cần gắn / thay lưới gấp", L.filter(luoiUrg).length, ""], ["Cây xanh đọng rác máng xối", L.filter(a => a.mt && a.mt.cayDong).length, ""],
     ["", "", ""], ["Giai đoạn", "Số CN", "%"], ...PH.map(p => { const n = L.filter(a => a.ph === p.k).length; return [p.n, n, fmtP(pct(n, N))]; }),
     ["", "", ""], ["Tóm tắt điều hành", "", ""], ...summaryItems(L).map(s => [s.h.replace(/<[^>]+>/g, "").replace(/&quot;/g, '"').replace(/&amp;/g, "&"), "", ""]),
     ["", "", ""], ["Rủi ro", "Số CN", "Hành động"], ...riskItems(L).map(r => [r.t.replace(/<[^>]+>/g, ""), r.n, r.a])];
-  const H = ["Mã CN", "Chi nhánh", "Tỉnh/TP", "Khu vực", "QLVK", "Đơn vị thực hiện", "Người thực hiện", "Giai đoạn", "Tình trạng", "Bước chi tiết", "Loại vướng", "Số ngày vướng", "Hoàn thành ngày", "Việc tiếp theo", "Hiện trạng lưới", "Việc lưới", "Bảng hiệu", "Cây xanh trước CH", "Cây đọng rác máng", "Loại hình", "Task", "Trạng thái task WSHR", "Bước WSHR đang dừng", "Người xử lý (WSHR)", "Mức ưu tiên", "Lý do ưu tiên", "Có Clinic", "Task rà soát máng xối (COS.SCH.109)", "Trạng thái task rà soát", "Số ảnh báo cáo WSHR", "Từng mưa dột 2025 (số task)", "Lần dột gần nhất", "Mô tả dột gần nhất"];
+  const H = ["Mã CN", "Chi nhánh", "Tỉnh/TP", "Khu vực", "QLVK", "Đơn vị thực hiện", "Người thực hiện", "Giai đoạn", "Tình trạng", "Bước chi tiết", "Loại vướng", "Số ngày vướng", "Hoàn thành ngày", "Việc tiếp theo", "Hiện trạng lưới", "Việc lưới", "Bảng hiệu", "Cây xanh trước CH", "Cây đọng rác máng", "Loại hình", "Task", "Trạng thái task WSHR", "Bước WSHR đang dừng", "Người xử lý (WSHR)", "Mức ưu tiên", "Lý do ưu tiên", "Không cần vệ sinh", "Có Clinic", "Task rà soát máng xối (COS.SCH.109)", "Trạng thái task rà soát", "Số ảnh báo cáo WSHR", "Từng mưa dột 2025 (số task)", "Lần dột gần nhất", "Mô tả dột gần nhất"];
   const rows = L.map(a => [a.r.ma || a.r.stt, a.r.ten, a.r.tinh, a.r.kv, a.qlvk || "", UNIT[a.unit], a.person, PH[PHI[a.ph]].n, ST[a.stt].l, a.step, a.blocker_type || "", a.stuckDays ?? "", a.completed_date ? fmtD(a.completed_date) : "", a.done ? "" : nextOf(a) || "",
-    a.luoi ? a.luoi.label : "", a.luoi ? a.luoi.act : "", a.mt ? mtStatus(a.mt).t : "Chưa có báo cáo", a.mt ? (a.mt.cayTruoc ? "Có" : "Không") : "", a.mt ? (a.mt.cayDong ? "Có" : "Không") : "", a.mt ? a.mt.lh : "", a.taskIds.join(" "), ...(t => t ? [t.tt || "", t.buoc || "", t.nguoiBuoc || ""] : ["", "", ""])(tasksOf(a).find(x => x.open) || tasksOf(a)[0]), a.prio.lv ? "Ưu tiên " + a.prio.lv : "", a.prio.why.join(", "), isClinic(a) ? "Có" : "", a.sch ? [...new Set(a.sch.map(x => x.id))].join(" ") : "", a.schSt ? schLbl(a.schSt.st) : "", wImgs(a).length || "", a.leak ? a.leak.length : "", a.leak ? fmtD(a.leak[0].d) : "", a.leak ? a.leak[0].mo : ""]);
+    a.luoi ? a.luoi.label : "", a.luoi ? a.luoi.act : "", a.mt ? mtStatus(a.mt).t : "Chưa có báo cáo", a.mt ? (a.mt.cayTruoc ? "Có" : "Không") : "", a.mt ? (a.mt.cayDong ? "Có" : "Không") : "", a.mt ? a.mt.lh : "", a.taskIds.join(" "), ...(t => t ? [t.tt || "", t.buoc || "", t.nguoiBuoc || ""] : ["", "", ""])(tasksOf(a).find(x => x.open) || tasksOf(a)[0]), a.prio.lv ? "Ưu tiên " + a.prio.lv : "", a.prio.why.join(", "), a.noClean ? ("Có" + (a.ncWhy ? " – " + a.ncWhy : "")) : "", isClinic(a) ? "Có" : "", a.sch ? [...new Set(a.sch.map(x => x.id))].join(" ") : "", a.schSt ? schLbl(a.schSt.st) : "", wImgs(a).length || "", a.leak ? a.leak.length : "", a.leak ? fmtD(a.leak[0].d) : "", a.leak ? a.leak[0].mo : ""]);
   const ur = [["Đơn vị thực hiện", "Số CN", "Hoàn thành", "Đang thực hiện", "Đang vướng", "Chưa có ĐV", "% hoàn thành"], ...UNIT_ORDER.map(k => { const U = L.filter(a => a.unit === k), s = stCount(U); return [UNIT[k], U.length, s.done, s.run, s.blk, s.wait, fmtP(pct(s.done, U.length))]; }).filter(x => x[1]),
     ["", "", "", "", "", "", ""], ["Nhân viên bảo trì", "Được giao", "Hoàn thành", "Còn lại", "Lưới gấp", "", "% hoàn thành"]];
   const m = new Map(); L.filter(a => a.unit === "bt").forEach(a => { const k = a.asg.nv || "(chưa ghi tên)"; if(!m.has(k)) m.set(k, []); m.get(k).push(a); });
@@ -2230,8 +2282,9 @@ function wkPlanGroups(L, D){
   if(sw.length) add("schw", "Duyệt task “Vệ sinh rà soát máng xối” đang chờ duyệt", "Người duyệt xác nhận kết quả QLCH đã báo", sw, `${new Set(sw.flatMap(a => a.sch.filter(x => x.st === "Waiting Approve").map(x => x.id))).size} task cha`);
   return {G, pri, priList: L.filter(a => a.prio.lv > 0 || luoiUrg(a))};
 }
+function wkEnsure(W){ W = W || wkList(); if(!WK || !W.includes(WK)) WK = W.length > 1 && dayDiff(TODAY, monOf(TODAY)) < 5 ? W[1] : W[0]; }
 function renderWk(){
-  const W = wkList(); if(!WK || !W.includes(WK)) WK = W.length > 1 && dayDiff(TODAY, monOf(TODAY)) < 5 ? W[1] : W[0];
+  const W = wkList(); wkEnsure(W);
   $("#wkSel").innerHTML = W.map(m => `<option value="${m}"${m === WK ? " selected" : ""}>Tuần ${fmtDM(m)}–${fmtD(addD(m, 6))}${m === monOf(TODAY) ? " (tuần này)" : m === addD(monOf(TODAY), -7) ? " (tuần rồi)" : ""}</option>`).join("");
   const L = V, N = L.length, D = wkData(L, WK), P = wkPlanGroups(L, D);
   $("#wkT1").textContent = `Kết quả tuần ${fmtDM(D.w0)}–${fmtD(D.w1)}`;
@@ -2261,6 +2314,7 @@ function renderWk(){
   $("#wkRisk").innerHTML = R.length ? R.map(r => `<li><b>${esc(r.t.replace(/<[^>]+>/g, ""))}</b><span class="sm">${esc(r.d.replace(/<[^>]+>/g, ""))} → <b>${esc(r.a)}</b></span></li>`).join("") : '<li class="sm">Không có vướng mắc lớn.</li>';
 }
 function wkText(){
+  wkEnsure();
   const L = V, N = L.length, D = wkData(L, WK), P = wkPlanGroups(L, D), goal = $("#wkGoal").value || $("#wkGoal").placeholder;
   const u = UNIT_ORDER.map(k => [UNIT[k], D.doneW.filter(a => a.unit === k).length]).filter(x => x[1]).map(x => `${x[0]}: ${x[1]}`).join(" · ");
   const g = [...countBy(D.doneW, a => a.r.kv || "?")].sort((x, y) => y[1] - x[1]).map(([k, n]) => `${k}: ${n}`).join(" · ");
@@ -2271,6 +2325,7 @@ function wkText(){
     g ? `• Theo khu vực: ${g}.` : "",
     `• Lũy kế: ${nf(D.doneNow)}/${nf(N)} CN hoàn thành (${fmtP(pct(D.doneNow, N))})${D.doneNoDate ? `, trong đó ${nf(D.doneNoDate)} CN đã báo Hoàn tất nhưng chưa ghi ngày` : ""}.`,
     `• Task WSHR: đóng ${nf(D.tClosed.length)} task, tạo mới ${nf(D.tOpened.length)} task.`,
+    L.some(a => a.noClean) ? `• CN không cần vệ sinh máng xối (thuê trong tòa nhà/chung cư/kiot/chung chủ): ${nf(L.filter(a => a.noClean).length)} CN${(n => n ? ` – trong đó ${nf(n)} CN chưa hoàn thành` : "")(L.filter(a => a.noClean && !a.done).length)}.` : "",
     D.schW.length ? `• Task “Vệ sinh rà soát máng xối, lối thoát nước”: giao ${nf(D.schW.length)} CN trong tuần, ${nf(D.schDoneW.length)} CN có task hoàn tất.` : "",
     "", `II. KẾ HOẠCH TUẦN ${fmtDM(D.n0)}–${fmtD(D.n1)}`,
     `• Mục tiêu: hoàn thành thêm ${goal} CN (còn ${nf(D.left.length)} CN chưa hoàn thành).`,
