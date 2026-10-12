@@ -2732,7 +2732,7 @@ function b2StepOf(a){
 /* ghi chú bước + trao đổi trên task WSHR đợt này (lấy khi bấm 🔄 Task WSHR) */
 function notesOf(a){ return tasksOf(a).filter(t => (!t.tao || t.tao >= CFG.CAMPAIGN_START) && t.nv === 2).flatMap(t => (t.notes || []).map(n => Object.assign({tid:t.id}, n))).sort((x, y) => String(x.at).localeCompare(String(y.at))); }
 function noteLastSig(a){ const N = notesOf(a); for(let i = N.length - 1; i >= 0; i--){ const g = NOTE_SIG(N[i].t); if(g) return {g, n:N[i]}; } return null; }
-function needAccessOf(a){ return noAccessRaw(a) && !a.b2Fix && !a.noteFix; }
+function needAccessOf(a){ return noAccessRaw(a) && !a.b2Fix && !a.noteFix && !a.schDone; }
 /* anh Huy 08/10: “cửa hàng tự xử lý là cũng sẽ định kỳ kiểm tra chứ không phải là không cần xử lý”
    → “Không cần xử lý” CHỈ còn CN tick thuê tòa nhà / chung cư / kiot / chung chủ.
    CN kiểm tra sạch / báo không phát sinh = Hoàn thành đợt này (kiểm tra định kỳ). */
@@ -2742,6 +2742,7 @@ function noneWhyOf(a){
 function doneHowOf(a){
   if(a.stg !== "done") return "";
   if(a.b2Fix || a.b2Done) return "Bảo trì xử lý xong (B2 task WSHR)";
+  if(a.schDone) return "Cửa hàng rà soát / vệ sinh máng xối xong (task COS.SCH.109)";
   if(a.taskDone) return "Task WSHR hoàn tất (nghiệm thu xong)";
   if(a.noteFix) return "Theo trao đổi trên task: " + a.noteSig.n.t.slice(0, 60);
   const kq = na(a.r.kq), tt = na(a.r.tt);
@@ -2848,7 +2849,11 @@ function recompute(){
   ALL.forEach(a => { const nc = NCM.get(shopKey(a.r.shop)); a.noClean = !!nc; a.ncWhy = nc ? nc.why : ""; a.sch = SC.get(shopKey(a.r.shop)) || null; if(a.sch) a.schSt = schBest(a.sch);
     a.leak = LK.get(shopKey(a.r.shop)) || null; a.leak26 = LK26.get(shopKey(a.r.shop)) || null; a.limg = LI.get(shopKey(a.r.shop)) || null; a.mt = mtOf(a.r, I);
     { const td = taskDoneOf(a); a.taskDone = !!td; if(td){ a.done = true; if(!a.completed_date && td.dong) a.completed_date = td.dong; a.completedSrc = `Task WSHR ${td.id} hoàn tất${td.dong ? " " + fmtD(td.dong) : ""}`; } }
+    /* anh Huy 12/10 (16 Hùng Vương): task “Vệ sinh rà soát máng xối, lối thoát nước cửa hàng” (COS.SCH.109) Hoàn tất → đã làm xong */
+    { const sd = a.done ? null : (a.sch || []).filter(s => s.st === "Finished").sort((x, y) => String(/^\d{4}-\d\d-\d\d/.test(y.d1) ? y.d1 : "").localeCompare(String(/^\d{4}-\d\d-\d\d/.test(x.d1) ? x.d1 : "")))[0];
+      a.schDone = !!sd; if(sd){ const d = /^\d{4}-\d\d-\d\d/.test(sd.d1 || "") ? sd.d1.slice(0, 10) : ""; a.done = true; if(!a.completed_date && d) a.completed_date = d; a.completedSrc = `Task rà soát máng xối (COS.SCH.109) ${sd.id} hoàn tất${d ? " " + fmtD(d) : ""}${sd.nv ? " · " + sd.nv : ""}`; } }
     { const b2 = a.done ? null : b2StepOf(a); a.b2Done = !!b2; if(b2){ a.done = true; if(!a.completed_date && b2.d) a.completed_date = b2.d; a.completedSrc = `Task WSHR ${b2.id}: B2 đã xử lý xong${b2.d ? " " + fmtD(b2.d) : ""}`; } }
+    { const p = wsProg(a); a.wsProg = p; if(p && (p.k > (a.stepK || 0) || a.nccDrop)) wsApply(a, p); }
     a.ph = phaseOf(a); a.stt = statusOf(a); a.unit = unitOf(a); a.person = personOf(a);
     a.treeHit = treeHitOf(a); a.b2Fix = noAccessRaw(a) && b2DoneOf(a); a.noteSig = noteLastSig(a); a.noteFix = noAccessRaw(a) && !a.b2Fix && !!a.noteSig && (a.noteSig.g === "done" || a.noteSig.g === "self"); a.needAccess = needAccessOf(a); a.noneWhy = noneWhyOf(a); a.stg = stageOf(a); a.doneHow = doneHowOf(a); a.evid = evidOf(a); a.prio = prioOf(a); });
   ALLX = ALL; NCL = ALL.filter(a => a.noClean);
@@ -3395,12 +3400,6 @@ document.addEventListener("keydown", e => { if(e.key === "Escape" && $("#zov").c
         if(LIVE_META && !LIVE_META.fromSheet && Object.keys(LIVE).length && (!WS_SHEET_META || +LIVE_META.ts > +(WS_SHEET_META.ts || 0))) await wsPost();
       }catch(e){} }
     return r; }; }
-GRID = buildGrid((window.MX_CHKT_SNAP || {}).rows);
-SRC = {kind:"snap", at:(LUOI_DATA && LUOI_DATA.at) || (window.MX_CHKT_SNAP || {}).at || SNAP.at};
-go(["ov", "unit", "st", "todo", "list", "wk"].includes(PAGE) ? PAGE : "ov");
-recompute();
-reload();
-
 /* anh Huy 08/10: “bổ sung thêm lịch sử mưa dột ở chi tiết của từng chi nhánh”
    → gộp task WSHR “Khảo sát tình trạng cửa hàng sau mưa dột” 2026 (export 08/10, MX_LEAK26) + 2025 (MX_LEAK_SNAP), mới nhất lên đầu */
 const leakN = a => (a.leak ? a.leak.length : 0) + (a.leak26 ? a.leak26.length : 0);
@@ -3419,6 +3418,45 @@ function leakBox(a){
     <dl class="kv">${kv.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")}</dl></div></div>`; };
   return `<details class="dsec" open><summary style="cursor:pointer;font-weight:600;font-size:13px">☔ Lịch sử mưa dột · ${L.length} lần (${yrs.join("–")})${nOpen ? ` · <span style="color:var(--serious)">${nOpen} task đang xử lý</span>` : ""}${nAgain ? ` · <span style="color:var(--crit)">${nAgain} lần tái phát</span>` : ""}</summary><div class="sm" style="margin:4px 0 2px">Task WSHR “Khảo sát tình trạng cửa hàng sau mưa dột” – năm 2026 theo export ngày ${fmtD((window.MX_LEAK26 || {}).at || "")}${L25.length ? ", năm 2025 theo bản lưu cũ" : ""} · bấm mã task để mở trên WSHR</div>${L.map(it).join("")}</details>`;
 }
+
+/* anh Huy 12/10 (635 Quốc Lộ 14): “task này đã tìm được nhà cung cấp rồi, đang chờ phê duyệt chi phí”
+   → tiến độ lấy theo BƯỚC ĐANG MỞ trên task WSHR đợt này (+ ô NCC/chi phí/ngày đến ở B4.2), không để cột “NCC Thực hiện” trống trên sheet kéo CN về “Chờ tìm NCC” */
+const WS_MAP = [[/B4\.3|phê duyệt chi phí/i, 5, "Chờ phê duyệt", "Đã có NCC – chờ duyệt chi phí & phương án (B4.3)", "Duyệt chi phí & phương án trên task WSHR (B4.3) để NCC đến xử lý"],
+  [/B4\.1\s*\(\*\)|nhận báo giá/i, 4, "Chờ báo giá", "Chờ NCC gửi báo giá (B4.1*)", "Nhắc NCC gửi báo giá, cập nhật task WSHR"],
+  [/B4\.1\.|liên hệ ncc khảo sát/i, 4, "Chờ báo giá", "Đã báo NCC khảo sát – chờ khảo sát / báo giá (B4.1)", "Nhắc NCC đến khảo sát & báo giá"],
+  [/B4\.4|triển khai/i, 6, "", "NCC / Bảo trì đang triển khai (B4.4)", "Theo dõi NCC xử lý đúng hẹn, cửa hàng chụp ảnh sau xử lý"],
+  [/B4\.[56]|chứng từ|PO\/Contract|B5\.|nghiệm thu/i, 7, "", "Đã xử lý – chờ chứng từ / nghiệm thu", "Cửa hàng nghiệm thu, nộp chứng từ & đóng task WSHR"]];
+function wsProg(a){
+  if(a.done) return null;
+  const T = tasksOf(a).filter(t => (!t.tao || t.tao >= CFG.CAMPAIGN_START) && t.open && t.buoc).sort((x, y) => String(y.tao || "").localeCompare(String(x.tao || "")));
+  for(const t of T){
+    const N = t.nv === 2 ? (t.notes || []) : [];
+    const g = re => { const n = N.filter(n => re.test(n.k || "")).pop(); return n ? String(n.t).replace(/^[^:]*:\s*/, "").trim() : ""; };
+    const ncc = g(/thông tin ncc/i), cp = g(/^chi phí/i), ngay = g(/ngày sẽ đến|thời gian dự kiến/i);
+    let m = WS_MAP.find(x => x[0].test(t.buoc || ""));
+    if(!m && ncc && /B4\.2/i.test(t.buoc || "")) m = [null, 5, "Chờ phê duyệt", "Đã có NCC (B4.2) – chờ duyệt chi phí & phương án", "Duyệt chi phí & phương án trên task WSHR để NCC đến xử lý"];
+    if(!m) continue;
+    const at = N.map(n => String(n.at || "")).sort().pop() || "";
+    return {t, k:m[1], type:m[2], why:m[3], next:m[4], ncc, cp, ngay, at:at.slice(0, 10)};
+  }
+  return null;
+}
+function wsApply(a, p){
+  const S = (typeof STEPS !== "undefined" ? STEPS : []).find(s => s.k === p.k);
+  const cp = +String(p.cp).replace(/[^\d]/g, "") || 0;
+  const info = [p.ncc && "NCC: " + p.ncc, cp && "chi phí " + cp.toLocaleString("vi-VN") + " đ", p.ngay && "hẹn đến " + fmtD(p.ngay.slice(0, 10))].filter(Boolean).join(" · ");
+  a.stepK = p.k; a.step = (S ? S.name : p.why) + " · task WSHR: " + p.t.buoc; a.nccDrop = false; a.pending = false;
+  a.blocked = !!p.type; a.blocker_type = p.type || ""; a.blocker = p.why + (info ? " · " + info : "");
+  a.current_status = p.type ? "Đang vướng" : "Đang thực hiện";
+  a.next_action = p.next + (p.ngay ? " (hẹn " + fmtD(p.ngay.slice(0, 10)) + ")" : "");
+  if(p.at){ a.since = p.at; a.stuckDays = dayDiff(TODAY, p.at); }
+}
+
+GRID = buildGrid((window.MX_CHKT_SNAP || {}).rows);
+SRC = {kind:"snap", at:(LUOI_DATA && LUOI_DATA.at) || (window.MX_CHKT_SNAP || {}).at || SNAP.at};
+go(["ov", "unit", "st", "todo", "list", "wk"].includes(PAGE) ? PAGE : "ov");
+recompute();
+reload();
 
 </script>
 </body>
