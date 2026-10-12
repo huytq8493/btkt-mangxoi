@@ -2403,6 +2403,25 @@ function wNotes(node, step, out, dep, ctx){
     else if(v && typeof v === "object" && !/^(staff|user|creator|avatar|parent|children|subtasks?)$/i.test(k)) wNotes(v, step, out, dep + 1, {at, by}); }
   return out;
 }
+/* anh Huy 12/10 (635 Quốc Lộ 14): dashboard hiện “Daikin vệ sinh định kỳ / Sửa chữa” trong khi task ghi Phương án + Ghi chú khác
+   → đọc đúng ô nhập của bước: data.configs {key: giá trị} + nhãn từ workflow_step_configs + người/giờ nhập từ data.logs; lý do huỷ ở data.note_failed */
+const WF_SKIP_T = /^(image|images|file|files|video|videos|staff_info|staff|attachment|upload|signature)$/i;
+function wStepNotes(d, step){
+  const out = []; if(!d || !d.data) return out;
+  const cf = d.data.configs || {}, lg = d.data.logs || {}, lab = {};
+  (d.workflow_step_configs || []).forEach(c => { if(c && c.key) lab[c.key] = c; });
+  for(const k in cf){ let v = cf[k]; const c = lab[k] || {};
+    if(!c.label || WF_SKIP_T.test(c.type || "")) continue;
+    if(Array.isArray(v)) v = v.filter(x => typeof x === "string").join(", ");
+    if(typeof v !== "string" && typeof v !== "number") continue;
+    v = String(v).replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+    if(!v || /^(không|khong|no|0|-)$/i.test(v) || /^[\[{]/.test(v) || /^https?:\/\/\S+$/.test(v) || MIMG.test(v)) continue;
+    const l = lg[k] || {};
+    out.push({s:step, k:c.label, at:String(l.time || d.finished_at || d.updated_at || "").replace(" ", "T").slice(0, 16), by:String(l.staff_name || "").slice(0, 60), t:(c.label + ": " + v).slice(0, 300)}); }
+  let nf = d.data.note_failed; if(typeof nf === "string"){ try{ nf = JSON.parse(nf); }catch(e){ nf = [{note_failed:nf}]; } }
+  (Array.isArray(nf) ? nf : []).forEach(x => { const t = String(x && (x.note_failed || x.note) || "").trim(); if(t) out.push({s:step, k:"Lý do huỷ", at:String(x.created_at || d.updated_at || "").replace(" ", "T").slice(0, 16), by:String(x.staff_name || "").slice(0, 60), t:("Lý do huỷ bước: " + t).slice(0, 300)}); });
+  return out;
+}
 const WCMT_EP = [id => `${WSHR_API}/${id}/comments`, id => `${WSHR_API}/comments?task_id=${id}`, id => `https://wshr.hasaki.vn/api/hr/projects/comments?task_id=${id}`,
   id => `https://wshr.hasaki.vn/api/hr/projects/task-comments?task_id=${id}`, id => `https://wshr.hasaki.vn/api/hr/comments?task_id=${id}`, id => `${WSHR_API}/${id}/activities`, id => `${WSHR_API}/${id}?comments=1`];
 const cmtList = j => { const d = j && j.data !== undefined ? j.data : j; return Array.isArray(d) ? d : d && Array.isArray(d.data) ? d.data : d && Array.isArray(d.items) ? d.items : d && Array.isArray(d.comments) ? d.comments : null; };
@@ -2454,11 +2473,11 @@ async function fetchWshr(){
           .concat(kids.map(k => { const d = rec.get(+k.id) || k; const m1 = wCfgMedia(d), m2 = wCfgMedia(k); return {s:k.name || "Bước", t:k.finished_at || k.created_at || "", i:[...m1.i, ...m2.i], v:[...m1.v, ...m2.v]}; }).sort((x, y) => String(x.t).localeCompare(String(y.t))))
           .filter(g => g.i.length || g.v.length);
         { const seen = new Set(); media.forEach(g => { g.i = g.i.filter(u => { const k = u.replace(/[?&](exp|expires|sig|signature|token|X-Amz-[A-Za-z-]+)=[^&#]*/gi, "").replace(/[?&]+$/, ""); if(seen.has(k)) return false; seen.add(k); return true; }); }); }
-        const notes = [...wNotes(root, "Yêu cầu", [], 0).slice(0, 2), ...kids.flatMap(k => wNotes(rec.get(+k.id) || k, k.name || "Bước", [], 0)), ...(cmtOf.get(+root.id) || [])];
+        const notes = [...kids.flatMap(k => wStepNotes(rec.get(+k.id), k.name || "Bước")), ...(cmtOf.get(+root.id) || []).map(n => Object.assign({k:"Trao đổi"}, n))];
         { const seen = new Set(); for(let i = notes.length - 1; i >= 0; i--){ const key = notes[i].t; if(seen.has(key)) notes.splice(i, 1); else seen.add(key); } }
         notes.sort((x, y) => String(x.at).localeCompare(String(y.at)));
         const b2k = kids.filter(k => +k.status === 2 && /^\s*b2\b|tiep nhan va xu ly/.test(na(k.name || ""))).sort((x, y) => String(y.finished_at || "").localeCompare(String(x.finished_at || "")))[0];
-        return {b2:b2k ? {d:String(b2k.finished_at || b2k.updated_at || "").slice(0, 10)} : null, notes:notes.slice(-8), media:media.filter(g => g.i.length || g.v.length).map(g => ({s:g.s, t:String(g.t).slice(0, 10), i:g.i, v:g.v})), id:+root.id, tao:(root.created_at||"").slice(0,10), dong:(root.finished_at||"").slice(0,10), tt:ST_VI[root.status] || String(root.status),
+        return {nv:2, b2:b2k ? {d:String(b2k.finished_at || b2k.updated_at || "").slice(0, 10)} : null, notes:notes.slice(-12), media:media.filter(g => g.i.length || g.v.length).map(g => ({s:g.s, t:String(g.t).slice(0, 10), i:g.i, v:g.v})), id:+root.id, tao:(root.created_at||"").slice(0,10), dong:(root.finished_at||"").slice(0,10), tt:ST_VI[root.status] || String(root.status),
                 buoc, buocTt, buocHan, buocChac, nguoiBuoc:nguoi, ten:(root.name||"").slice(0,120), open:ST_OPEN.has(root.status)};
       });
       // đại diện: đơn còn mở mới nhất, không có thì đơn mới nhất
@@ -2614,7 +2633,7 @@ async function wDiag(){
     lines.push("", `BƯỚC CON: ${kids.length}`);
     for(const k of kids.slice(0, 10)){ let dd = null; try{ dd = await wTask(k.id, tok); }catch(e){} const mm = wCfgMedia(dd || k), ml = wCfgMedia(k);
       lines.push("", `- ${k.id} ${k.name} (status ${k.status}): chi tiết ${mm.i.length} ảnh · trong danh sách ${ml.i.length} ảnh`, "  Link trong CHI TIẾT:", ...wUrlPaths(dd || {}, "data", [], 0).slice(0, 40).map(x => "    " + x), "  Link trong DANH SÁCH bước con:", ...wUrlPaths(k, "kid", [], 0).slice(0, 40).map(x => "    " + x), "  Cấu trúc chi tiết: " + wShape(dd || k, 1).slice(0, 1500)); }
-    lines.push("", "GHI CHÚ TRONG DỮ LIỆU TASK & BƯỚC:", ...[...wNotes(d, "task", [], 0), ...(await Promise.all(kids.slice(0, 10).map(async k => { try{ return wNotes(await wTask(k.id, tok), k.name, [], 0); }catch(e){ return []; } }))).flat()].slice(0, 30).map(n => `  [${n.s}] ${n.at} ${n.by}: ${n.t}`));
+    lines.push("", "Ô NHẬP CỦA TỪNG BƯỚC (Phương án, Ghi chú, Lý do huỷ…):", ...[...(await Promise.all(kids.slice(0, 10).map(async k => { try{ return wStepNotes(await wTask(k.id, tok), k.name); }catch(e){ return []; } }))).flat()].slice(0, 30).map(n => `  [${n.s}] ${n.at} ${n.by}: ${n.t}`));
     lines.push("", "THỬ API TRAO ĐỔI (bình luận):");
     const pid = +(d && d.parent_id ? d.parent_id : id);
     for(let i = 0; i < WCMT_EP.length; i++){ const u = WCMT_EP[i](pid); try{ const r = await fetch(u, {headers:{Authorization:"Bearer " + tok}}); let txt = await r.text(); let j = null; try{ j = JSON.parse(txt); }catch(e){}
@@ -2711,7 +2730,7 @@ function b2StepOf(a){
   return null;
 }
 /* ghi chú bước + trao đổi trên task WSHR đợt này (lấy khi bấm 🔄 Task WSHR) */
-function notesOf(a){ return tasksOf(a).filter(t => !t.tao || t.tao >= CFG.CAMPAIGN_START).flatMap(t => (t.notes || []).map(n => Object.assign({tid:t.id}, n))).sort((x, y) => String(x.at).localeCompare(String(y.at))); }
+function notesOf(a){ return tasksOf(a).filter(t => (!t.tao || t.tao >= CFG.CAMPAIGN_START) && t.nv === 2).flatMap(t => (t.notes || []).map(n => Object.assign({tid:t.id}, n))).sort((x, y) => String(x.at).localeCompare(String(y.at))); }
 function noteLastSig(a){ const N = notesOf(a); for(let i = N.length - 1; i >= 0; i--){ const g = NOTE_SIG(N[i].t); if(g) return {g, n:N[i]}; } return null; }
 function needAccessOf(a){ return noAccessRaw(a) && !a.b2Fix && !a.noteFix; }
 /* anh Huy 08/10: “cửa hàng tự xử lý là cũng sẽ định kỳ kiểm tra chứ không phải là không cần xử lý”
