@@ -2742,7 +2742,7 @@ function noneWhyOf(a){
 function doneHowOf(a){
   if(a.stg !== "done") return "";
   if(a.b2Fix || a.b2Done) return "Bảo trì xử lý xong (B2 task WSHR)";
-  if(a.manualDone) return /khong can ve sinh/.test(na(a.r.kq)) ? "Đã kiểm tra – sạch" : "Đã kiểm tra xong (vận hành xác nhận)";
+  if(a.manualDone) return /^da ve sinh/.test(na(a.r.kq)) ? "Đã vệ sinh" : /khong can ve sinh/.test(na(a.r.kq)) ? "Đã kiểm tra – sạch" : "Đã kiểm tra xong (vận hành xác nhận)";
   if(a.schDone) return "Cửa hàng rà soát / vệ sinh máng xối xong (task COS.SCH.109)";
   if(a.taskDone) return "Task WSHR hoàn tất (nghiệm thu xong)";
   if(a.noteFix) return "Theo trao đổi trên task: " + a.noteSig.n.t.slice(0, 60);
@@ -2857,10 +2857,10 @@ function recompute(){
        → (1) sheet ghi KQ “Đã kiểm tra không cần vệ sinh” + HT “Sạch/không phát sinh” = Hoàn thành dù cột trạng thái chưa ghi Hoàn tất
          (2) danh sách CN vận hành bảo trì xác nhận tay (MANUAL_DONE) */
     { const md = a.done ? null : MANUAL_DONE[shopKey(a.r.shop)];
-      const ck = !a.done && !md && /khong can ve sinh/.test(na(a.r.kq)) && /sach|khong phat sinh/.test(na(a.r.ht));
+      const ck = !a.done && !md && ((/khong can ve sinh/.test(na(a.r.kq)) && /sach|khong phat sinh/.test(na(a.r.ht))) || /^da ve sinh hoan tat/.test(na(a.r.kq)));   // 19/10 (2705 Quang Trung): KQ “Đã vệ sinh hoàn tất” = xong dù trạng thái còn “Chờ vận hành duyệt”
       a.manualDone = !!md; a.checkDone = ck;
       if(md){ a.done = true; if(!a.completed_date) a.completed_date = md.d; a.completedSrc = md.why; }
-      else if(ck){ a.done = true; a.completedSrc = "Sheet ghi “Đã kiểm tra không cần vệ sinh” · hiện trạng sạch"; } }
+      else if(ck){ a.done = true; a.completedSrc = /^da ve sinh/.test(na(a.r.kq)) ? "Sheet ghi KQ “Đã vệ sinh hoàn tất”" + (a.r.tt ? " (trạng thái: " + a.r.tt + ")" : "") : "Sheet ghi “Đã kiểm tra không cần vệ sinh” · hiện trạng sạch"; } }
     { const b2 = a.done ? null : b2StepOf(a); a.b2Done = !!b2; if(b2){ a.done = true; if(!a.completed_date && b2.d) a.completed_date = b2.d; a.completedSrc = `Task WSHR ${b2.id}: B2 đã xử lý xong${b2.d ? " " + fmtD(b2.d) : ""}`; } }
     { const p = wsProg(a); a.wsProg = p; if(p && (p.k > (a.stepK || 0) || a.nccDrop)) wsApply(a, p); }
     a.ph = phaseOf(a); a.stt = statusOf(a); a.unit = unitOf(a); a.person = personOf(a);
@@ -2900,9 +2900,12 @@ function paceInfo(L){
   return {t, yy, w7, w7p, avg:Math.round(w7 / 7 * 10) / 10, nodate:L.filter(a => (a.stg === "done" || a.stg === "none") && !chotDate(a)).length};
 }
 function renderOv(){
-  const L = V, N = L.length, c = stgCount(L), ch = c.done + c.none, P = paceInfo(L);
+  const L = V, P = paceInfo(L);
+  /* anh Huy 19/10: “cần cải tạo lối lên mái không cần count ở đây” → khối “Đã chốt” không tính CN Cần tạo lối lên mái (theo dõi riêng ở bảng Lối lên mái) */
+  const HL = L.filter(a => a.stg !== "access"), nAcc = L.length - HL.length, N = HL.length, c = stgCount(HL), ch = c.done + c.none;
   $("#heroPct").innerHTML = `${String(pct(ch, N)).replace(".", ",")}<small>%</small>`;
-  $("#heroOf").innerHTML = `<b>${nf(ch)}</b> / ${nf(N)} chi nhánh đã chốt = Hoàn thành <b>${nf(c.done)}</b> + Không cần xử lý <b>${nf(c.none)}</b> · còn <b>${nf(N - ch)}</b> CN · ${esc(scopeText())}`;
+  $("#heroOf").innerHTML = `<b>${nf(ch)}</b> / ${nf(N)} chi nhánh đã chốt = Hoàn thành <b>${nf(c.done)}</b> + Không cần xử lý <b>${nf(c.none)}</b> · còn <b>${nf(N - ch)}</b> CN · ${esc(scopeText())}${nAcc ? ` · <a href="#" id="heroAcc" style="color:inherit">không tính ${nf(nAcc)} CN cần cải tạo lối lên mái</a>` : ""}`;
+  { const ha = $("#heroAcc"); if(ha) ha.onclick = e => { e.preventDefault(); drill("Giai đoạn: Cần tạo lối lên mái", a => a.stg === "access"); }; }
   const tg = LS.get("mxbc_target", ""), left = N - ch;
   const need = tg && tg >= TODAY ? Math.ceil(left / Math.max(1, dayDiff(tg, TODAY))) : null;
   $("#pace").innerHTML = [
@@ -2910,8 +2913,8 @@ function renderOv(){
     ["7 ngày qua", `+${nf(P.w7)}`, `TB ${String(P.avg).replace(".", ",")} CN/ngày${P.w7p || P.w7 ? ` · tuần trước +${nf(P.w7p)}` : ""}`],
     need != null ? ["Cần để kịp hạn " + fmtD(tg), `${nf(need)}`, `CN/ngày · còn ${dayDiff(tg, TODAY)} ngày`] : tg ? ["Hạn " + fmtD(tg), "Quá hạn", `còn ${nf(left)} CN`] : ["Tốc độ cần", "–", "nhập hạn ở biểu đồ"]]
     .map(x => `<div class="pc"><div class="pl">${esc(x[0])}</div><div class="pv">${x[1]}</div><div class="ps">${esc(x[2])}</div></div>`).join("");
-  $("#heroStack").innerHTML = N ? STG.filter(s => c[s.k]).map(s => `<i style="width:${100 * c[s.k] / N}%;background:${s.c}" data-k="${s.k}" data-tip="${esc(`<div class="tv">${nf(c[s.k])} CN · ${fmtP(pct(c[s.k], N))}</div><div class="tm">${s.n} – ${s.s}</div>`)}"></i>`).join("") : "";
-  $("#heroLegend").innerHTML = STG.map(s => `<span data-k="${s.k}" style="cursor:pointer"><i style="background:${s.c}"></i>${s.n} <b>${nf(c[s.k])}</b></span>`).join("");
+  $("#heroStack").innerHTML = N ? STG.filter(s => c[s.k] && s.k !== "access").map(s => `<i style="width:${100 * c[s.k] / N}%;background:${s.c}" data-k="${s.k}" data-tip="${esc(`<div class="tv">${nf(c[s.k])} CN · ${fmtP(pct(c[s.k], N))}</div><div class="tm">${s.n} – ${s.s}</div>`)}"></i>`).join("") : "";
+  $("#heroLegend").innerHTML = STG.filter(s => s.k !== "access").map(s => `<span data-k="${s.k}" style="cursor:pointer"><i style="background:${s.c}"></i>${s.n} <b>${nf(c[s.k])}</b></span>`).join("");
   [...$("#heroStack").children, ...$("#heroLegend").children].forEach(el => el.onclick = () => drill(`Giai đoạn: ${STG[STGI[el.dataset.k]].n}`, a => a.stg === el.dataset.k));
   bindTips($("#heroStack"));
   // 5 số chính
@@ -2926,7 +2929,7 @@ function renderOv(){
     {k:"access", v:L.filter(a => a.stg === "access").length, d:(X => X.length ? `${nf(X.filter(a => loiK(a) === "khong").length)} không có lối lên · ${nf(X.filter(a => loiK(a) !== "khong").length)} có lối nhưng không tiếp cận được → Bảo trì/NCC tạo lối lên rồi vệ sinh` : "Không có CN nào")(L.filter(a => a.stg === "access")), fn:a => a.stg === "access"},
     {k:"nodata", lb:"Chưa có dữ liệu", v:ND.length, d:ND.length ? "chưa báo hiện trạng & chưa có task → cửa hàng cập nhật sheet" : "Mọi CN đã có dữ liệu", fn:a => a.stg === "nodata"},
     {k:"none", v:NO.length, d:NO.length ? "thuê trong tòa nhà / chung cư / kiot / chung chủ – tick ở Danh sách chi nhánh" : "Chưa tick CN nào (thuê tòa nhà / chung cư / kiot / chung chủ)", fn:a => a.stg === "none"}];
-  $("#kpis").innerHTML = T.map((t, i) => { const s = STG[STGI[t.k]]; return `<div class="card tile" data-t="${i}"><div class="lb"><i class="mk" style="background:${s.c}"></i>${esc(t.lb || s.n)}</div><div class="v">${nf(t.v)}<small>CN · ${fmtP(pct(t.v, N))}</small></div><div class="d">${t.d}</div></div>`; }).join("");
+  $("#kpis").innerHTML = T.map((t, i) => { const s = STG[STGI[t.k]]; return `<div class="card tile" data-t="${i}"><div class="lb"><i class="mk" style="background:${s.c}"></i>${esc(t.lb || s.n)}</div><div class="v">${nf(t.v)}<small>CN · ${fmtP(pct(t.v, t.k === "access" ? L.length : N))}</small></div><div class="d">${t.d}</div></div>`; }).join("");
   $("#kpis").querySelectorAll(".tile").forEach(el => el.onclick = () => { const t = T[+el.dataset.t]; drill(t.lbl || STG[STGI[t.k]].n, t.fn); });
   renderLine(); renderGeo(); renderLoi($("#loiTbl"), L, LOIG);
   const RI = riskItems(L).slice(0, 6);
@@ -3432,7 +3435,8 @@ function leakBox(a){
 const MANUAL_DONE = {
   "26 quoc lo 1": {d:"2026-10-19", why:"Vận hành bảo trì xác nhận đã kiểm tra xong (19/10/2026)"},
   "281 nguyen an ninh": {d:"2026-10-19", why:"Vận hành bảo trì xác nhận đã kiểm tra xong (19/10/2026) · sheet: đã kiểm tra, sạch"},
-  "2a dt 743b": {d:"2026-10-19", why:"Vận hành bảo trì xác nhận đã kiểm tra xong (19/10/2026) · sheet: đã kiểm tra, sạch"}};
+  "2a dt 743b": {d:"2026-10-19", why:"Vận hành bảo trì xác nhận đã kiểm tra xong (19/10/2026) · sheet: đã kiểm tra, sạch"},
+  "2705 quang trung": {d:"2026-10-19", why:"Vận hành bảo trì xác nhận đã xong (19/10/2026) · sheet: đã vệ sinh hoàn tất"}};
 /* anh Huy 12/10 (635 Quốc Lộ 14): “task này đã tìm được nhà cung cấp rồi, đang chờ phê duyệt chi phí”
    → tiến độ lấy theo BƯỚC ĐANG MỞ trên task WSHR đợt này (+ ô NCC/chi phí/ngày đến ở B4.2), không để cột “NCC Thực hiện” trống trên sheet kéo CN về “Chờ tìm NCC” */
 const WS_MAP = [[/B4\.3|phê duyệt chi phí/i, 5, "Chờ phê duyệt", "Đã có NCC – chờ duyệt chi phí & phương án (B4.3)", "Duyệt chi phí & phương án trên task WSHR (B4.3) để NCC đến xử lý"],
