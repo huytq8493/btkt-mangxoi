@@ -391,29 +391,304 @@ body.pg-list #stChips{margin-top:0}
 .ftag.gt{background:var(--s1soft)}
 @media (max-width:1100px){.filters.gf{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:640px){.filters.gf,.fbar{grid-template-columns:1fr!important}}
+
+/* ===================== REPORT ===================== */
+.rwrap{max-width:1180px;margin:0 auto;padding:8px 24px 48px}
+.rtool{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:18px 0 4px}
+.rtool label{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--ink2);font-weight:600}
+.rtool select{font:inherit;font-size:14px;border:1px solid var(--border);border-radius:8px;padding:6px 10px;background:var(--card);min-width:220px}
+.wk6{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+.wk{border:1px solid var(--border);background:var(--card);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;justify-content:space-between;min-height:84px;text-align:left;cursor:pointer;font:inherit;color:var(--ink);box-shadow:var(--shadow)}
+.wk:hover{background:var(--hover)}.wk span{font-size:12.5px;color:var(--ink2)}.wk b{font-size:26px;letter-spacing:-.02em}.wk small{font-size:11.5px;color:var(--muted)}
+.wdot{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:6px;vertical-align:baseline;flex:0 0 9px}
+.wmx th{white-space:nowrap}.wmx th.wg{text-align:center;border-bottom:1px solid var(--border);color:var(--ink2)}
+.wmx .wt,.wpp .wt{background:rgba(12,163,12,.06)}.wmx .wp,.wpp .wp{background:rgba(250,178,25,.08)}
+.wmx tr.wtot td{border-top:2px solid var(--border);font-weight:600}
+.wcell{border:0;background:none;font:inherit;font-weight:600;color:var(--ink);cursor:pointer;padding:2px 6px;border-radius:6px;font-variant-numeric:tabular-nums}
+.wcell:hover{background:var(--hover);text-decoration:underline}.wz{color:var(--light,#c3c2b7)}
+.wpn{color:#b26a00}
+.rscroll.x{max-height:none;overflow-x:auto}
+.wleg{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:6px 18px;margin-top:12px;font-size:12px;color:var(--muted)}.wleg b{color:var(--ink2);font-weight:600}
+.wfx{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.wf{border:1px solid var(--border);background:var(--card);border-radius:999px;padding:4px 12px;font:inherit;font-size:12.5px;cursor:pointer;color:var(--ink)}
+.wf small{color:var(--muted);margin-left:2px}.wf.on{background:var(--ink);color:#fff;border-color:var(--ink)}.wf.on small{color:#ddd}
+.wpp tr[data-wp]{cursor:pointer}.wlog td:first-child{white-space:nowrap}
+.wlink{border:0;background:none;padding:0;font:inherit;color:#2a78d6;cursor:pointer;text-decoration:underline}
+.wk6 + .rcard{margin-top:16px}.rcard.rwide + .rgrid2.wg2{margin-top:16px}
+@media (max-width:900px){.wk6{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.gsdd{position:relative;display:inline-block}.gsdd>summary{list-style:none}.gsdd>summary::-webkit-details-marker{display:none}
+.gsdd .car{font-size:11px;color:var(--muted)}.gsdd[open]>summary{background:var(--hover)}
+.gsm{position:absolute;right:0;top:calc(100% + 6px);z-index:60;width:330px;background:var(--card);border:1px solid var(--border);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.12);padding:6px;text-align:left}
+.gsm a{display:block;padding:8px 10px;border-radius:7px;text-decoration:none;color:var(--ink)}.gsm a:hover{background:var(--hover)}
+.gsm b{display:block;font-size:13px;font-weight:600}.gsm span{display:block;font-size:12px;color:var(--muted);margin-top:1px}
+@media (max-width:640px){.gsm{right:auto;left:0}}
+.rsec{display:flex;align-items:center;gap:10px;font-size:19px;margin:30px 0 12px;letter-spacing:-.01em}
+.rsec span{width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;font-size:14px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 28px}
+.rsec small{font-weight:400;font-size:13px;color:var(--muted)}
+.rcard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow);min-width:0}
+.rcard.rwide{margin-top:16px}
+.rch h3{margin:0;font-size:15px}
+.rsub{font-size:12.5px;color:var(--muted);margin:2px 0 12px}
+.rgrid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.rgrid2 + .rgrid2, .rwide + .rgrid2{margin-top:16px}
+.rhero{display:grid;grid-template-columns:minmax(260px,1fr) 2fr;gap:20px;align-items:stretch}
+.rbig .rk{font-size:13px;font-weight:600;color:var(--ink2)}
+.rbig .rv{font-size:64px;font-weight:800;line-height:1;letter-spacing:-.03em;margin:6px 0}
+.rbig .rv small{font-size:26px;font-weight:600;margin-left:2px}
+.rbig .rd{font-size:14px;color:var(--ink2)}
+.rmini{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.rmini>div{border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;justify-content:space-between;min-height:84px}
+.rmini span{font-size:12.5px;color:var(--ink2)}
+.rmini b{font-size:26px;letter-spacing:-.02em}
+.rmini .rclick{cursor:pointer;border-color:rgba(208,59,59,.35);background:#fdf5f5}
+.rmini .rclick:hover{background:#fbe9e9}
+.rbul{margin:18px 0 6px;padding:0;list-style:none;display:grid;gap:8px}
+.rbul li{position:relative;padding-left:20px;font-size:14.5px;line-height:1.55}
+.rbul li:before{content:"";position:absolute;left:4px;top:.6em;width:7px;height:7px;border-radius:50%;background:var(--ink)}
+.rsec-sub{font-size:13px;font-weight:600;color:var(--ink2);margin:18px 0 8px}
+.rbar{display:flex;gap:2px;height:16px;border-radius:6px;overflow:hidden;background:var(--neutralsoft)}
+.rbar i{display:block;min-width:3px;cursor:default}
+.rrows{display:grid;gap:2px;margin-top:10px}
+.rrow{display:grid;grid-template-columns:12px 1fr 64px 64px;align-items:center;gap:10px;border:0;background:none;text-align:left;padding:7px 8px;border-radius:8px;cursor:pointer;color:var(--ink)}
+.rrow:hover{background:var(--hover)}
+.rrow.z{opacity:.5}
+.rrow i{width:10px;height:10px;border-radius:3px}
+.rrow .rl{font-size:13.5px;line-height:1.35}
+.rrow .rl small{display:block;font-size:12px;color:var(--muted)}
+.rrow b{text-align:right;font-size:15px;font-variant-numeric:tabular-nums}
+.rrow .rp{text-align:right;font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.rline svg{width:100%;height:auto;display:block}
+.rline text{font-size:11px;fill:var(--muted)}
+.rline .g{stroke:var(--grid);stroke-width:1}
+.rline .xh{stroke:var(--axis);stroke-width:1;stroke-dasharray:3 3}
+.rtbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.rtbl th{text-align:left;font-size:12px;color:var(--muted);font-weight:600;padding:8px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--card)}
+.rtbl td{padding:8px;border-bottom:1px solid var(--grid);vertical-align:top}
+.rtbl .n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.rtbl tr[data-i],.rtbl tr[data-gl],.rtbl tr[data-ul]{cursor:pointer}
+.rtbl tbody tr:hover{background:var(--hover)}
+.rtbl .sm{display:block}
+.rtbl .sm2{font-size:12px;color:var(--muted)}
+.rprog{display:inline-block;width:70px;height:7px;border-radius:4px;background:var(--neutralsoft);vertical-align:middle;margin-right:6px;overflow:hidden}
+.rprog i{display:block;height:100%;background:var(--good);border-radius:4px}
+.rscroll{max-height:420px;overflow:auto}
+.rscroll.s{max-height:380px}
+.rnote{font-size:12px;color:var(--muted);margin-top:8px}
+.rnone{font-size:13px;color:var(--muted);padding:6px 0}
+.rtodo{display:grid;gap:0}
+.rti{padding:14px 0;border-bottom:1px solid var(--grid)}
+.rti:last-child{border-bottom:0}
+.rth{display:flex;gap:14px;align-items:center}
+.rtn{font-size:24px;min-width:56px;height:44px;border-radius:10px;background:var(--neutralsoft);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-variant-numeric:tabular-nums}
+.rtn:hover{background:var(--grid)}
+.rtt{font-weight:700;font-size:14.5px}
+.rtw{font-size:12.5px;color:var(--ink2)}
+.rchips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0 70px}
+.rchip{border:1px solid var(--border);background:var(--card);border-radius:999px;padding:3px 10px;font-size:12.5px;cursor:pointer;color:var(--ink)}
+.rchip:hover{background:var(--hover)}
+.rmore{font-size:12.5px;color:var(--muted);align-self:center}
+.rdef{margin-top:28px;font-size:12.5px;color:var(--ink2);line-height:1.6}
+.rdef h4{margin:0 0 6px;font-size:13px}
+.rdef ul{margin:0;padding-left:18px}
+.rpm{position:fixed;inset:0;background:rgba(11,11,11,.35);z-index:39;display:none;align-items:flex-start;justify-content:center;padding:6vh 16px}
+.rpm.on{display:flex}
+.rpmb{background:var(--card);border-radius:14px;width:min(860px,100%);max-height:84vh;display:flex;flex-direction:column;box-shadow:0 20px 50px rgba(0,0,0,.2)}
+.rpmh{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:16px 20px;border-bottom:1px solid var(--border)}
+.rpmh h3{margin:0;font-size:16px}
+.rpmh .x{border:1px solid var(--border);background:var(--card);border-radius:8px;width:34px;height:34px;cursor:pointer}
+.rpmc{overflow:auto;padding:4px 20px 16px}
+@media (max-width:900px){.rgrid2,.rhero{grid-template-columns:1fr}.rmini{grid-template-columns:repeat(2,1fr)}.rchips{margin-left:0}}
+@media print{body.rpt{background:#fff}.rtool,.rpm,.top .tools{display:none!important}.rcard{box-shadow:none;break-inside:avoid}.rscroll{max-height:none;overflow:visible}.rsec{break-after:avoid}}
+
+/* Tổng quan = report (anh Huy 19/10 “cập nhập thay thế tab tổng quan”) */
+.ovold{display:none!important}
+#p_ov .rwrap{max-width:none;padding:0 0 8px}
+#p_ov .rtool{display:none}
+#p_ov .rsec:first-of-type{margin-top:6px}
+body.rpt .nav, body.rpt .filters.gf, body.rpt #btnCopy, body.rpt #btnXlsx{display:none!important}
+body.rpt{background:#f3f3ef}
+body.rpt .page:not(#p_ov){display:none!important}
+body.rpt #p_ov{display:block!important}
+body.rpt #p_ov .rwrap{max-width:1180px;margin:0 auto;padding:8px 0 48px}
+body.rpt #p_ov .rtool{display:flex}
+body.rpt #p_ov .rsec:first-of-type{margin-top:30px}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style id="pro-theme">
+/* ===== Pro theme – Corporate navy (ghi đè giao diện, không đổi logic) ===== */
+:root{
+  --page:#f2f4f7; --surface:#f8fafc; --card:#ffffff;
+  --ink:#0f1b2d; --ink2:#475467; --muted:#667085;
+  --grid:#eaecf0; --axis:#d0d5dd; --border:#e4e7ec; --hover:#f5f7fa;
+  --navy:#0b2545; --navy2:#13315c; --navy3:#1d4477; --accent:#1570ef; --accentsoft:#eff6ff;
+  --s1:#1570ef; --s1soft:#e8f1fe; --s1ink:#175cd3;
+  --shadow:0 1px 2px rgba(16,24,40,.05);
+  --shadow2:0 1px 3px rgba(16,24,40,.08),0 8px 24px -6px rgba(16,24,40,.08);
+  --r:12px;
+}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-feature-settings:"cv11","ss01";background:var(--page);color:var(--ink);letter-spacing:-.003em}
+.wrap{max-width:1400px}
+svg.i{width:16px;height:16px;flex:0 0 16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- header ---------- */
+.top{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 60%,var(--navy3) 100%);border-bottom:0;color:#fff;position:relative}
+.top .wrap.hrow{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-top:22px;padding-bottom:18px;flex-wrap:wrap}
+.top .wrap.hrow>div:first-child{flex:1 1 520px}
+.brand{display:flex;align-items:center;gap:16px;min-width:0}
+.logo{width:48px;height:48px;flex:0 0 48px;border-radius:12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center}
+.logo svg{width:30px;height:30px}
+.ttl{min-width:0}
+.top .eyebrow{color:rgba(255,255,255,.62);font-size:11.5px;letter-spacing:.08em;font-weight:600}
+.top .eyebrow i{font-style:normal;opacity:.45;margin:0 4px}
+.top h1{color:#fff;font-size:24px;font-weight:700;letter-spacing:-.02em;margin:3px 0 4px}
+.top .sub{color:rgba(255,255,255,.78);font-size:13px;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center}
+.top .sub .sub0{font-weight:600;color:#fff}
+.top .sub .sub1::before{content:"";display:inline-block;width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.45);vertical-align:middle;margin-right:10px}
+.top .tools{display:flex;flex-direction:column;align-items:stretch;gap:6px;max-width:520px}
+.top .srcline{justify-content:flex-start;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:6px 10px;font-size:12px;color:rgba(255,255,255,.85);line-height:1.4;flex-wrap:nowrap}
+.top .srcline span:last-child{min-width:0}
+.dot8{flex:0 0 8px;box-shadow:0 0 0 3px rgba(255,255,255,.08)}
+.dot8.live{background:#32d583;box-shadow:0 0 0 3px rgba(50,213,131,.22)}
+.dot8.snap{background:#fdb022;box-shadow:0 0 0 3px rgba(253,176,34,.22)}
+
+/* toolbar */
+.tbar .wrap{display:block;padding-top:0;padding-bottom:0}
+.tbar{background:rgba(0,0,0,.16);border-top:1px solid rgba(255,255,255,.08)}
+.tbar .btns{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-start;padding:10px 0}
+.bgrp{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.bsep{width:1px;height:22px;background:rgba(255,255,255,.16);margin:0 4px}
+.bsp{flex:1 1 auto}
+.top .btn{background:transparent;border:1px solid rgba(255,255,255,.18);color:#fff;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:500;text-decoration:none;transition:background .15s,border-color .15s}
+.top .btn:hover{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.32)}
+.top .btn svg.i{opacity:.85}
+.top .btn.pri{background:#fff;color:var(--navy);border-color:#fff;font-weight:600}
+.top .btn.pri:hover{background:#e8eef7}
+.top .btn.pri svg.i{opacity:1}
+.btn.busy svg.i{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.top .gsdd>summary.btn{list-style:none}
+.top .gsdd .car svg.i{width:14px;height:14px;flex-basis:14px;opacity:.7;transition:transform .15s}
+.top .gsdd[open] .car svg.i{transform:rotate(180deg)}
+.top .gsdd[open]>summary.btn{background:rgba(255,255,255,.12)}
+.gsm{left:0;right:auto;border-color:var(--border);box-shadow:0 16px 40px -8px rgba(16,24,40,.28);color:var(--ink);padding:6px}
+.gsm a{border-radius:8px}
+.gsm a:hover{background:var(--accentsoft)}
+
+/* ---------- generic buttons ---------- */
+.btn{border-color:var(--border);border-radius:8px;font-weight:500;color:var(--ink);box-shadow:var(--shadow)}
+.btn:hover{background:var(--hover);border-color:var(--axis)}
+.btn.pri{background:var(--navy);border-color:var(--navy);color:#fff}
+.btn.pri:hover{background:var(--navy2)}
+.top .btn{box-shadow:none}
+
+/* ---------- nav ---------- */
+.nav{background:#fff;border-bottom:1px solid var(--border);box-shadow:0 1px 0 rgba(16,24,40,.02),0 4px 12px -8px rgba(16,24,40,.12)}
+.nav .wrap{gap:4px}
+.tab{padding:14px 14px 12px;font-weight:500;color:var(--muted);font-size:13.5px;border-bottom:2px solid transparent;transition:color .15s}
+.tab:hover{color:var(--ink)}
+.tab.on{color:var(--navy);border-bottom-color:var(--accent);font-weight:600}
+.tab .n{background:#f2f4f7;color:var(--ink2);font-variant-numeric:tabular-nums}
+.tab.on .n{background:var(--accentsoft);color:var(--s1ink)}
+.tab .n.red{background:#fef3f2;color:#b42318}
+
+/* ---------- filters ---------- */
+.fbtn,.fsearch{border-color:var(--border)!important;border-radius:10px;background:#fff;box-shadow:var(--shadow)}
+.fbtn:hover{border-color:var(--axis)!important}
+.fsearch:focus-within{border-color:var(--accent)!important;box-shadow:0 0 0 4px rgba(21,112,239,.12)!important}
+.fbtn .fl,.fsearch .fl{color:var(--muted);letter-spacing:.06em}
+.fdd.act .fbtn{border-color:var(--accent)!important;background:var(--accentsoft)}
+.fpop{border-radius:10px;box-shadow:0 16px 40px -8px rgba(16,24,40,.22)}
+.scope,.gfoot .scope{color:var(--muted)}
+
+/* ---------- cards ---------- */
+.card{border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow);padding:20px 22px}
+.card h2{font-size:15px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+.card .hint{color:var(--muted)}
+.seg{border-color:var(--border);border-radius:8px;background:#f2f4f7;padding:2px;gap:2px}
+.seg button{background:transparent;border-radius:6px;color:var(--ink2);font-weight:500;padding:5px 11px}
+.seg button:hover{color:var(--ink)}
+.seg button.on{background:#fff;color:var(--navy);box-shadow:0 1px 2px rgba(16,24,40,.12);font-weight:600}
+
+/* ---------- report sections ---------- */
+.rsec{font-size:18px;font-weight:700;color:var(--ink);letter-spacing:-.02em;margin:34px 0 12px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.rsec span{background:var(--navy);width:26px;height:26px;flex-basis:26px;font-size:13px;font-weight:700;border-radius:8px}
+.rsec small{color:var(--muted);font-weight:500;font-size:12.5px}
+.rbig .rv,.hero .big,.tile .v,.wkg .cnt{font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.rbig .rk,.tile .lb{color:var(--muted);font-weight:500;text-transform:uppercase;font-size:11.5px;letter-spacing:.06em}
+.rmini>div{border-radius:10px!important;border-color:var(--border)!important}
+.rdef{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:16px 20px}
+.rdef h4{margin-top:0}
+
+/* ---------- tables ---------- */
+.tblwrap{border-color:var(--border);border-radius:10px}
+th,.rtbl th{background:var(--surface);color:var(--muted);font-size:12px;font-weight:600}
+td{color:var(--ink)}
+th,td{border-bottom-color:var(--grid)}
+td.num,th.num,.rtbl .n,.hb .vv,.cnt,.cntb{font-variant-numeric:tabular-nums}
+tbody tr:hover td,.rtbl tbody tr:hover{background:#f7f9fc}
+tfoot td{background:var(--surface);border-top-color:var(--axis)}
+.pill{font-weight:500}
+
+/* chips / misc */
+.chip{border-color:var(--border);font-weight:500;box-shadow:var(--shadow)}
+.chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.chip.on b{color:#fff}
+.dwh{background:var(--surface)}
+.toast{background:var(--navy);box-shadow:0 10px 30px -6px rgba(11,37,69,.45)}
+a{color:var(--s1ink)}
+
+/* ---------- responsive ---------- */
+@media (max-width:900px){.top .tools{max-width:none;width:100%}.bsp{display:none}}
+@media (max-width:640px){
+  .top h1{font-size:20px}.logo{width:40px;height:40px;flex-basis:40px}.bsep{display:none}
+  .top .btn span{display:none}.top .btn.pri span,.top .gsdd summary span:not(.car){display:inline}
+}
+
+/* ---------- print ---------- */
+@media print{
+  .top{background:#fff!important;color:var(--ink)}
+  .top .wrap.hrow{padding:0 0 8px}
+  .top h1,.top .sub .sub0{color:var(--ink)}
+  .top .eyebrow,.top .sub{color:var(--ink2)}
+  .logo{background:var(--navy)}
+  .tbar,.top .tools{display:none!important}
+}
+
 </style>
 </head>
 <body>
 <div class="zov" id="zov" aria-hidden="true"><div class="zbox"><div class="card-h"><div><h2>Tiến độ chốt chi nhánh theo ngày</h2><div class="hint" id="zHint"></div></div><div class="lctools"><div class="seg lcr"><button data-r="14">14 ngày</button><button data-r="30">30 ngày</button><button data-r="all">Từ đầu</button></div><button class="btn" id="zX" aria-label="Đóng">✕ Đóng</button></div></div><div class="lc" id="zlc"></div></div></div>
 
-<header class="top"><div class="wrap">
-  <div>
-    <div class="eyebrow">Vận hành bảo trì · Chương trình mùa mưa 2026</div>
-    <h1>Chống dột &amp; vệ sinh máng xối – Báo cáo hiện trạng và tiến độ</h1>
-    <div class="sub" id="subline">Đang nạp dữ liệu…</div>
+<header class="top"><div class="wrap hrow">
+  <div class="brand">
+    <div class="logo"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 15.5 16 6l11 9.5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.5 13.5V25h15V13.5" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="2" stroke-linejoin="round"/><path d="M16 14.5c2.2 2.9 3.3 4.8 3.3 6.1a3.3 3.3 0 0 1-6.6 0c0-1.3 1.1-3.2 3.3-6.1z" fill="#5ec8f2"/></svg></div>
+    <div class="ttl">
+      <div class="eyebrow">Vận hành bảo trì <i>/</i> Chương trình mùa mưa 2026</div>
+      <h1>Chống dột &amp; vệ sinh máng xối</h1>
+      <div class="sub"><span class="sub0">Báo cáo hiện trạng và tiến độ</span><span class="sub1" id="subline">Đang nạp dữ liệu…</span></div>
+    </div>
   </div>
   <div class="tools">
     <div class="srcline"><span class="dot8" id="srcDot"></span><span id="bSheet">Đang nạp…</span></div>
     <div class="srcline"><span class="dot8" id="tDot"></span><span id="bTask">Task WSHR: —</span></div>
-    <div class="btns">
-      <button class="btn" id="btnCopy" title="Sao chép tóm tắt để gửi Zalo / email">📋 Sao chép tóm tắt</button>
-      <button class="btn" id="btnPrint" title="In hoặc lưu PDF báo cáo">🖨 In / PDF</button>
-      <button class="btn" id="btnXlsx">⬇ Xuất Excel</button>
-      <button class="btn" id="btnWshr" title="Cập nhật trạng thái các task ở cột Link Task từ WSHR">🔄 Task WSHR</button>
-      <button class="btn pri" id="btnReload">⟳ Cập nhật dữ liệu</button>
-    </div>
   </div>
-</div></header>
+</div>
+<div class="tbar"><div class="wrap"><div class="btns">
+  <div class="bgrp">
+    <button class="btn" id="btnCopy" title="Sao chép tóm tắt để gửi Zalo / email"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Sao chép tóm tắt</span></button>
+    <button class="btn" id="btnPrint" title="In hoặc lưu PDF báo cáo"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg><span>In / PDF</span></button>
+    <button class="btn" id="btnXlsx" title="Xuất dữ liệu ra file Excel"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg><span>Xuất Excel</span></button>
+  </div>
+  <span class="bsep"></span>
+  <div class="bgrp">
+    <button class="btn" id="btnWshr" title="Cập nhật trạng thái các task ở cột Link Task từ WSHR"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 14l2 2 4-4"/></svg><span>Task WSHR</span></button>
+    <a class="btn" id="lnkRpt" href="./report.html" target="_blank" rel="noopener"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><path d="M8 17v-5"/><path d="M13 17V8"/><path d="M18 17v-9"/></svg><span>Report</span></a>
+    <details class="gsdd" id="gsDd"><summary class="btn" title="Mở file Google Sheet nguồn dữ liệu"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg><span>Google Sheet</span><span class="car"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></summary><div class="gsm"><a href="https://docs.google.com/spreadsheets/d/1ayCvuEeLWDv-SnxLuqFBL5oLVhuP_8DFONJqSNOYeEs/edit#gid=1727620262" target="_blank" rel="noopener"><b>CỬA HÀNG KIỂM TRA ↗</b><span>Hiện trạng mái, máng, lối lên – cửa hàng cập nhật</span></a><a href="https://docs.google.com/spreadsheets/d/1Vfh9vKXP4--vYnJcotYO5iMveb6o4IGZ7vOfEdteHR4/edit#gid=1862042208" target="_blank" rel="noopener"><b>Bảo trì thực hiện ↗</b><span>Phân công & kết quả của bảo trì nội bộ</span></a><a href="https://docs.google.com/spreadsheets/d/1Vfh9vKXP4--vYnJcotYO5iMveb6o4IGZ7vOfEdteHR4/edit#gid=970641464" target="_blank" rel="noopener"><b>NCC thực hiện ↗</b><span>Phân công NCC, ngày làm, hạng mục & chi phí</span></a><a href="https://docs.google.com/spreadsheets/d/1ayCvuEeLWDv-SnxLuqFBL5oLVhuP_8DFONJqSNOYeEs/edit#gid=1178146739" target="_blank" rel="noopener"><b>Báo cáo mưa dột ↗</b><span>Sheet tổng (file chính)</span></a><a href="https://docs.google.com/spreadsheets/d/19sfMQbis8zXtlqhg4TilId2sE9X-YG-DznawShLarkQ/edit#gid=999639473" target="_blank" rel="noopener"><b>Danh sách NCC ↗</b><span>NCC Công Phú / Thiên Danh / Wasaco</span></a><a href="https://docs.google.com/spreadsheets/d/1TPoPZZNQXUar34jfUDhm_ZgQ0y5z63TSvZC86tRJTEE/edit#gid=1673142363" target="_blank" rel="noopener"><b>Báo cáo mặt tiền ↗</b><span>Ảnh mặt tiền, cây xanh trước cửa hàng</span></a><a href="https://docs.google.com/spreadsheets/d/14Rmk0kKA-ODuPCv-H7TzJitG6taZwiJnU-C0rhscyuY/edit" target="_blank" rel="noopener"><b>Dữ liệu cập nhật từ dashboard ↗</b><span>Tick không cần vệ sinh, ghi chú, xác nhận</span></a></div></details>
+  </div>
+  <span class="bsp"></span>
+  <button class="btn pri" id="btnReload"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 12A9 9 0 0 1 18.5 5.8L21 8"/><path d="M21 3v5h-5"/><path d="M3 21v-5h5"/></svg><span>Cập nhật dữ liệu</span></button>
+</div></div></div>
+</header>
 <div class="wpanel no-print" id="wPanel" hidden><div class="wrap">
   <div class="card" style="margin-top:14px">
     <div class="card-h"><div><h2>Cập nhật task từ WSHR</h2><div class="hint" style="margin-bottom:10px">Đọc các task ở cột Link Task (ưu tiên sheet Bảo trì → NCC → CỬA HÀNG KIỂM TRA): trạng thái, bước đang dừng, người xử lý, ngày tạo/đóng.</div></div><button class="btn" id="wClose" aria-label="Đóng">✕</button></div>
@@ -448,7 +723,25 @@ body.pg-list #stChips{margin-top:0}
     <div class="print-only" id="printHead"></div>
     <!-- ===================== TỔNG QUAN ===================== -->
     <section class="page on pr first" id="p_ov">
-      <div class="grid">
+      <div class="rwrap" id="rpt">
+        <div class="rtool"><label>Phạm vi <select id="rKv"></select></label><span class="sm" id="rScope" style="display:inline"></span></div>
+        <h2 class="rsec"><span>1</span>Kết luận nhanh</h2>
+        <section class="rcard" id="rS1"></section>
+        <h2 class="rsec"><span>2</span>Hiện trạng thực tế tại cửa hàng <small>tính trên tất cả chi nhánh trong phạm vi</small></h2>
+        <div id="rS2"></div>
+        <h2 class="rsec"><span>3</span>Công tác thực hiện – ai làm, đã làm gì <small>“ai làm” theo người / đơn vị thực tế hoàn thành</small></h2>
+        <div id="rS3"></div>
+        <h2 class="rsec"><span>4</span>Mưa dột &amp; rủi ro</h2>
+        <div id="rS4"></div>
+        <h2 class="rsec"><span>5</span>Việc cần làm tiếp theo <small>bấm số để xem danh sách, bấm tên chi nhánh để xem chi tiết</small></h2>
+        <section class="rcard" id="rS5"></section>
+        <section class="rdef"><h4>Cách tính</h4><ul>
+          <li><b>Đã chốt</b> = Hoàn thành + Không cần xử lý. Tiến độ không tính các chi nhánh <b>cần cải tạo lối lên mái</b> (không có lối lên / không tiếp cận được mái) – nhóm này theo dõi riêng.</li>
+          <li><b>Hoàn thành</b> gồm: đã vệ sinh / xử lý (bảo trì, NCC, cửa hàng, bảo vệ; task WSHR bước B2 hoặc task rà soát máng xối COS.SCH.109 hoàn tất) và đã kiểm tra – sạch, không cần vệ sinh (tiếp tục kiểm tra định kỳ).</li>
+          <li><b>Không cần xử lý</b>: cửa hàng thuê trong tòa nhà / chung cư / kiot / chung chủ phía trên.</li>
+          <li>Nguồn: sheet CỬA HÀNG KIỂM TRA, sheet Bảo trì / NCC thực hiện, báo cáo mặt tiền, task WSHR (thoát nước mái, mưa dột 2026), task COS.SCH.109. Bấm “⟳ Cập nhật dữ liệu” và “🔄 Task WSHR” để lấy số mới nhất.</li></ul></section>
+      </div>
+      <div class="grid ovold" aria-hidden="true">
         <div class="card c12">
           <div class="ovh">
             <div class="hero"><div><div class="eyeb">Đã chốt (hoàn thành + không cần xử lý)</div><div class="big" id="heroPct">–</div><div class="of" id="heroOf"></div></div></div>
@@ -461,7 +754,7 @@ body.pg-list #stChips{margin-top:0}
         <div class="card c12">
           <div class="card-h"><div><h2>Tiến độ chốt chi nhánh theo ngày</h2><div class="hint" id="lcHint"></div></div>
             <div class="lctools no-print"><div class="seg lcr"><button data-r="14">14 ngày</button><button data-r="30">30 ngày</button><button data-r="all">Từ đầu</button></div>
-              <label>Hạn chương trình <input type="date" id="target"></label><button class="btn" id="lcZoom" title="Phóng to biểu đồ">⛶ Phóng to</button></div></div>
+              <label>Hạn chương trình <input type="date" id="target"></label><button class="btn" id="lcZoom" title="Phóng to biểu đồ"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg><span>Phóng to</span></button></div></div>
           <div class="lc" id="lc"></div>
           <div class="legend" id="lcLegend" style="margin-top:8px"></div>
           <div class="note" id="lcNote"></div>
@@ -472,7 +765,7 @@ body.pg-list #stChips{margin-top:0}
           <div class="tblwrap" id="stgTbl"></div>
         </div>
         <div class="card c12">
-          <h2>🪜 Lối lên mái theo khu vực</h2>
+          <h2>Lối lên mái theo khu vực</h2>
           <div class="hint" id="loiHint"></div>
           <div class="tblwrap" id="loiTbl"></div>
         </div>
@@ -513,12 +806,12 @@ body.pg-list #stChips{margin-top:0}
     <section class="page pr" id="p_st">
       <div class="grid">
         <div class="card c12">
-          <div class="card-h"><div><h2>📷 Hình ảnh hiện trạng cửa hàng</h2><div class="hint" id="pgHint"></div></div>
+          <div class="card-h"><div><h2>Hình ảnh hiện trạng cửa hàng</h2><div class="hint" id="pgHint"></div></div>
             <div class="seg no-print" id="pgSeg"><button data-k="all" data-l="Tất cả" class="on">Tất cả</button><button data-k="mt" data-l="Ảnh mặt tiền">Ảnh mặt tiền</button><button data-k="ch" data-l="Ảnh cửa hàng gửi">Ảnh cửa hàng gửi</button><button data-k="ws" data-l="Ảnh task WSHR">Ảnh task WSHR</button></div></div>
           <div class="gal" id="pgal"></div>
         </div>
         <div class="card c12">
-          <div class="card-h"><div><h2>🌳 Cây xanh &amp; mái</h2><div class="hint" id="treeHint"></div></div>
+          <div class="card-h"><div><h2>Cây xanh &amp; mái</h2><div class="hint" id="treeHint"></div></div>
             <div class="seg no-print" id="treeSeg"><button data-k="hit" class="on">Ảnh hưởng mái</button><button data-k="no">Không ảnh hưởng</button><button data-k="all">Tất cả có cây</button></div></div>
           <div class="grid" style="margin-top:4px;gap:20px">
             <div class="c4"><div class="hb" id="treeBars"></div></div>
@@ -527,12 +820,12 @@ body.pg-list #stChips{margin-top:0}
           <div class="note" id="treeNote"></div>
         </div>
         <div class="card c12">
-          <div class="card-h"><div><h2>🪜 Lối lên mái &amp; tình trạng thực tế</h2><div class="hint" id="loiHint2"></div></div>
+          <div class="card-h"><div><h2>Lối lên mái &amp; tình trạng thực tế</h2><div class="hint" id="loiHint2"></div></div>
             <div class="seg no-print" id="loiSeg"><button data-g="kv">Khu vực</button><button data-g="tinh" class="on">Tỉnh/TP</button></div></div>
           <div class="tblwrap" id="loiTbl2" style="max-height:460px;overflow:auto"></div>
         </div>
         <div class="card c12">
-          <div class="card-h"><div><h2>✅ Chi nhánh đã chốt – hoàn thành &amp; không cần xử lý</h2><div class="hint" id="noHint"></div></div></div>
+          <div class="card-h"><div><h2>Chi nhánh đã chốt – hoàn thành &amp; không cần xử lý</h2><div class="hint" id="noHint"></div></div></div>
           <div class="grid" style="margin-top:4px;gap:20px">
             <div class="c4"><div class="dsec" style="margin-top:0"><h4>Theo hình thức</h4><div class="hb" id="noWhy"></div></div>
               <div class="dsec"><h4>Bằng chứng</h4><div class="hb" id="noEv"></div></div>
@@ -542,7 +835,7 @@ body.pg-list #stChips{margin-top:0}
           <div class="note">Hoàn thành gồm: đã vệ sinh, Bảo trì/NCC xử lý, và cửa hàng kiểm tra sạch / báo không phát sinh (vẫn kiểm tra định kỳ). “Không cần xử lý” chỉ gồm CN tick thuê trong tòa nhà – chung cư – kiot – chung chủ. CN không có lối lên / không tiếp cận được nằm ở “Cần tạo lối lên mái”. Chưa có ảnh xếp lên đầu.</div>
         </div>
         <div class="card c12">
-          <div class="card-h"><div><h2>🔧 Task WSHR “Kiểm tra hệ thống thoát nước mái/chi nhánh”</h2><div class="hint" id="bdHint"></div></div></div>
+          <div class="card-h"><div><h2>Task WSHR “Kiểm tra hệ thống thoát nước mái/chi nhánh”</h2><div class="hint" id="bdHint"></div></div></div>
           <div class="grid" style="margin-top:4px;gap:20px">
             <div class="c7"><div class="dsec" style="margin-top:0"><h4>Task mới nhất của mỗi chi nhánh đang ở đâu</h4><div class="hb" id="bdSt"></div></div></div>
             <div class="c5"><div class="dsec" style="margin-top:0"><h4>Task đang mở – người đang giữ bước</h4><div class="hb" id="bdWho"></div></div></div>
@@ -558,11 +851,11 @@ body.pg-list #stChips{margin-top:0}
           </div>
         </div>
         <div class="card c12">
-          <div class="card-h"><div><h2>📋 Task “Vệ sinh rà soát máng xối, lối thoát nước cửa hàng” (COS.SCH.109)</h2><div class="hint" id="schHint"></div></div></div>
+          <div class="card-h"><div><h2>Task “Vệ sinh rà soát máng xối, lối thoát nước cửa hàng” (COS.SCH.109)</h2><div class="hint" id="schHint"></div></div></div>
           <div class="hb" id="schSt"></div>
         </div>
         <details class="card c12 refc">
-          <summary><h2 style="display:inline">☔ Tham khảo: chi nhánh từng bị mưa dột (mùa mưa 2025)</h2><div class="hint" id="lkHint"></div></summary>
+          <summary><h2 style="display:inline">Tham khảo: chi nhánh từng bị mưa dột (mùa mưa 2025)</h2><div class="hint" id="lkHint"></div></summary>
           <div class="grid" style="margin-top:4px;gap:20px">
             <div class="c4"><div class="dsec" style="margin-top:0"><h4>Giai đoạn đợt này</h4><div class="hb" id="lkSt"></div></div></div>
             <div class="c8"><div class="tblwrap" id="lkTbl" style="max-height:340px;overflow:auto"></div></div>
@@ -576,7 +869,7 @@ body.pg-list #stChips{margin-top:0}
     <section class="page" id="p_wk">
       <div class="grid">
         <div class="card c12 no-print"><div class="card-h"><div><h2>Báo cáo tuần cho cấp trên</h2><div class="hint">Chọn tuần cần báo cáo · phần kế hoạch là tuần kế tiếp · theo bộ lọc đang chọn</div></div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><select id="wkSel" style="border:1px solid var(--border);border-radius:8px;padding:6px 10px;font:inherit;font-size:13px"></select><button class="btn pri" id="wkCopy">📋 Sao chép báo cáo (Zalo/email)</button><button class="btn" id="wkPrint">🖨 In / PDF</button></div></div></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><select id="wkSel" style="border:1px solid var(--border);border-radius:8px;padding:6px 10px;font:inherit;font-size:13px"></select><button class="btn pri" id="wkCopy"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Sao chép báo cáo (Zalo/email)</span></button><button class="btn" id="wkPrint"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg><span>In / PDF</span></button></div></div></div>
         <div class="c12"><h2 class="wkh2" id="wkT1"></h2></div>
         <div class="c12 grid" id="wkTiles" style="gap:inherit"></div>
         <div class="card c4"><h2>Hoàn thành theo đơn vị</h2><div class="hb" id="wkUnit"></div></div>
@@ -605,6 +898,7 @@ body.pg-list #stChips{margin-top:0}
   </main>
 </div>
 <div class="ov" id="ov"></div>
+<div class="rpm" id="rpm" role="dialog" aria-modal="true"><div class="rpmb"><div class="rpmh"><div><h3 id="rpmT"></h3><div class="sm" id="rpmS"></div></div><button class="x" data-rpx aria-label="Đóng">✕</button></div><div class="rpmc" id="rpmB"></div></div></div>
 <aside class="dw" id="dw" aria-hidden="true"><div class="dwh"><div><h3 id="dwT"></h3><div class="sm" id="dwS"></div></div><button class="x" id="dwX" aria-label="Đóng">✕</button></div><div class="dwb" id="dwB"></div></aside>
 <div class="lbox" id="lb" role="dialog" aria-modal="true" aria-label="Xem ảnh" aria-hidden="true">
   <div class="lbtop"><span id="lbCap"></span><span class="lbsp"></span><a id="lbOpen" target="_blank" rel="noopener">Mở trên Google Drive ↗</a><button class="lbbtn" id="lbX" aria-label="Đóng">✕</button></div>
@@ -2612,7 +2906,7 @@ document.querySelectorAll("#galSeg button").forEach(b => b.onclick = () => { GAL
 document.querySelectorAll("#lgSeg button").forEach(b => b.onclick = () => { LGAL = b.dataset.k; renderSt(); });
 document.querySelectorAll("#wgSeg button").forEach(b => b.onclick = () => { WGAL = b.dataset.k; WGAL_N = 36; renderSt(); });
 $("#target").onchange = e => { LS.set("mxbc_target", e.target.value || ""); render(); };
-$("#btnReload").onclick = async () => { const b = $("#btnReload"); b.disabled = true; b.textContent = "Đang cập nhật…"; try{ await reload(); toast(SRC.kind === "live" ? "Đã cập nhật dữ liệu mới" : "Không kéo được dữ liệu mới – đang dùng bản lưu"); } finally { b.disabled = false; b.textContent = "⟳ Cập nhật dữ liệu"; } };
+$("#btnReload").onclick = async () => { const b = $("#btnReload"); b.dataset.h = b.dataset.h || b.innerHTML; b.disabled = true; b.classList.add("busy"); b.innerHTML = b.dataset.h.replace(/<span>[^<]*<\/span>/, "<span>Đang cập nhật…</span>"); try{ await reload(); toast(SRC.kind === "live" ? "Đã cập nhật dữ liệu mới" : "Không kéo được dữ liệu mới – đang dùng bản lưu"); } finally { b.disabled = false; b.classList.remove("busy"); b.innerHTML = b.dataset.h; } };
 $("#btnXlsx").onclick = exportXlsx;
 $("#btnWshr").onclick = () => { const p = $("#wPanel"); p.hidden = !p.hidden; if(!p.hidden) $("#wTok").focus(); };
 function wShape(n, dep){ if(n == null) return String(n); if(typeof n === "string") return /https?:\/\//.test(n) ? `"URL…${n.split("?")[0].slice(-28)}"` : `"${n.slice(0, 24)}${n.length > 24 ? "…" : ""}"`; if(typeof n !== "object") return String(n);
@@ -2883,6 +3177,7 @@ function render(){
   const todoN = new Set(todoGroups(V).filter(g => g.main).flatMap(g => g.list.map(a => a.r.i))).size;
   $("#nTodo").textContent = nf(todoN);
   if(PAGE === "ov") renderOv(); else if(PAGE === "unit") renderUnit(); else if(PAGE === "st") renderSt(); else if(PAGE === "todo") renderTodo(); else if(PAGE === "wk") renderWk(); else renderList();
+  if(typeof renderReport === "function" && document.getElementById("rpt") && (PAGE === "ov" || document.body.classList.contains("rpt"))) renderReport();
 }
 const stgCount = L => { const c = {}; STG_ORDER.forEach(k => c[k] = 0); L.forEach(a => c[a.stg]++); return c; };
 const prevStg = k => PREV && PREV.stg && PREV.stg[k] != null ? PREV.stg[k] : null;
@@ -3356,8 +3651,8 @@ function openDrawer(i){
   $("#dwB").innerHTML = `<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">${stgPill(a)}<span class="pill p-na"><i></i>${esc(UNIT[a.unit])}</span>${leakN(a) ? `<span class="pill p-crit"><i></i>☔ Từng mưa dột ${leakN(a)} lần</span>` : ""}${isClinic(a) ? '<span class="pill p-run"><i></i>🏥 Clinic</span>' : ""}${taskOpenAfterDone(a) ? '<span class="pill p-warn"><i></i>Task WSHR chưa đóng</span>' : ""}${a.prio.lv ? `${prioPill(a)}<span class="sm" style="display:inline">${esc(a.prio.why.join(" · "))} → <b>${esc(a.prio.act)}</b></span>` : ""}</div>${steps}
     <div class="dsec"><h4>Tiến độ</h4><dl class="kv">
       <dt>Đơn vị thực hiện</dt><dd><b>${esc(UNIT[a.unit])}</b> · ${esc(a.person)}</dd>
-      <dt>Bước chi tiết</dt><dd>${esc(a.step)}${a.current_status ? ` <span class="sm">${esc(a.current_status)}</span>` : ""}</dd>
-      ${a.blocked ? `<dt>Đang vướng</dt><dd><b>${esc(a.blocker_type || "")}</b> — ${esc(a.blocker || "")}${a.stuckDays != null ? ` <span class="sm">${a.stuckDays} ngày</span>` : ""}</dd>` : ""}
+      <dt>Bước chi tiết</dt><dd>${a.done ? esc("Đã xong – " + (a.doneHow || "Hoàn thành")) : esc(a.step) + (a.current_status ? ` <span class="sm">${esc(a.current_status)}</span>` : "")}</dd>
+      ${a.blocked && !a.done ? `<dt>Đang vướng</dt><dd><b>${esc(a.blocker_type || "")}</b> — ${esc(a.blocker || "")}${a.stuckDays != null ? ` <span class="sm">${a.stuckDays} ngày</span>` : ""}</dd>` : ""}
       ${a.stg === "done" ? `<dt>Hình thức</dt><dd><b>${esc(a.doneHow)}</b>${checkOnly(a) ? ' <span class="sm">cửa hàng tiếp tục kiểm tra định kỳ</span>' : ""}</dd>` : ""}
       ${a.done ? `<dt>Chốt</dt><dd>${a.completed_date ? fmtD(a.completed_date) : "Chưa ghi ngày"} <span class="sm">${esc(a.completedSrc || "")}</span></dd>` : `<dt>Việc tiếp theo</dt><dd>${esc(a.stg === "wait" ? "Cửa hàng chủ động tìm NCC, cập nhật sheet & ảnh" : a.stg === "nodata" ? "Cửa hàng cập nhật hiện trạng mái + ảnh lên sheet" : nextOf(a) || "Chưa xác định")}</dd>`}
       <dt>QLVK</dt><dd>${esc(a.qlvk || "—")}</dd>
@@ -3470,6 +3765,284 @@ function wsApply(a, p){
   if(p.at){ a.since = p.at; a.stuckDays = dayDiff(TODAY, p.at); }
 }
 
+/* ================= TRANG REPORT (anh Huy 19/10: “dashboard report trình bày làm sao cho người khác đọc vào hiểu liền,
+   thống kê đúng hiện trạng, công tác thực hiện”) – dùng chung dữ liệu & quy tắc chấm với dashboard chi tiết ================= */
+const R$ = id => document.getElementById(id);
+const RC = {good:"#0ca30c", info:"#2a78d6", warn:"#fab219", serious:"#ec835a", crit:"#d03b3b", gray:"#8a8983", light:"#c3c2b7", pink:"#c7489a"};
+const R_DONE_CLEAN = /^(Đã kiểm tra – sạch|Cửa hàng báo không phát sinh|Đã kiểm tra xong)/;
+const rIsClean = a => a.stg === "done" && R_DONE_CLEAN.test(a.doneHow || "");
+const rIsWork = a => a.stg === "done" && !rIsClean(a);
+let RLIST = [];
+function rRows(items, total, key){
+  return `<div class="rbar">${items.filter(x => x.v).map(x => `<i style="flex:${x.v};background:${x.c}" data-tip="${esc(`<div class="tv">${nf(x.v)} CN · ${fmtP(pct(x.v, total))}</div><div class="tm">${x.n}</div>`)}"></i>`).join("")}</div>
+  <div class="rrows">${items.map((x, i) => `<button class="rrow${x.v ? "" : " z"}" data-rl="${key}|${i}"><i style="background:${x.c}"></i><span class="rl">${esc(x.n)}${x.s ? `<small>${esc(x.s)}</small>` : ""}</span><b>${nf(x.v)}</b><span class="rp">${fmtP(pct(x.v, total))}</span></button>`).join("")}</div>`;
+}
+function rCard(title, sub, body, cls){ return `<section class="rcard${cls ? " " + cls : ""}"><div class="rch"><h3>${title}</h3>${sub ? `<div class="rsub">${sub}</div>` : ""}</div>${body}</section>`; }
+function rChips(L, n){ n = n || 14; return L.length ? `<div class="rchips">${L.slice(0, n).map(a => `<button class="rchip" data-i="${a.r.i}">${esc(a.r.ten)}</button>`).join("")}${L.length > n ? `<span class="rmore">+${nf(L.length - n)} CN</span>` : ""}</div>` : '<div class="rnone">Không có</div>'; }
+function rOpenList(title, L, extra){
+  const m = R$("rpm"); if(!m) return;
+  R$("rpmT").textContent = title; R$("rpmS").textContent = `${nf(L.length)} chi nhánh · bấm một dòng để xem chi tiết`;
+  R$("rpmB").innerHTML = L.length ? `<table class="rtbl"><thead><tr><th>Chi nhánh</th><th>Tỉnh/TP</th><th>Giai đoạn</th><th>${esc(extra ? extra.h : "Ghi chú")}</th></tr></thead><tbody>${L.slice().sort((x, y) => x.r.ten.localeCompare(y.r.ten, "vi")).map(a => `<tr data-i="${a.r.i}"><td><b>${esc(a.r.ten)}</b><span class="sm">${esc(a.r.ma || "")}</span></td><td>${esc(a.r.tinh || "")}</td><td>${stgPill(a)}</td><td style="font-size:12.5px">${esc(extra ? extra.f(a) : (a.stg === "done" ? a.doneHow || "" : nextOf(a) || ""))}</td></tr>`).join("")}</tbody></table>` : '<div class="rnone">Không có chi nhánh nào.</div>';
+  m.classList.add("on");
+}
+function rLine(V){
+  const d = V.map(chotDate).filter(Boolean).sort(); if(!d.length) return '<div class="rnone">Chưa có ngày chốt.</div>';
+  const start = d[0] < addDays(TODAY, -45) ? addDays(TODAY, -45) : d[0], days = [];
+  const before = d.filter(x => x < start).length; let cum = before;
+  for(let x = start; x <= TODAY; x = addDays(x, 1)){ const n = d.filter(y => y === x).length; cum += n; days.push({x, n, cum}); }
+  const W = 760, H = 230, P = {l:44, r:16, t:14, b:28}, iw = W - P.l - P.r, ih = H - P.t - P.b, max = Math.max(1, cum);
+  const X = i => P.l + (days.length < 2 ? iw / 2 : i * iw / (days.length - 1)), Y = v => P.t + ih - v / max * ih;
+  const ticks = [0, .25, .5, .75, 1].map(f => Math.round(max * f));
+  const path = days.map((p, i) => `${i ? "L" : "M"}${X(i).toFixed(1)},${Y(p.cum).toFixed(1)}`).join("");
+  const area = path + `L${X(days.length - 1).toFixed(1)},${Y(0)}L${X(0).toFixed(1)},${Y(0)}Z`;
+  const lab = days.map((p, i) => (i % Math.ceil(days.length / 8) === 0 && days.length - 1 - i >= Math.ceil(days.length / 8) / 2) || i === days.length - 1 ? `<text x="${X(i)}" y="${H - 8}" text-anchor="middle">${fmtDM(p.x)}</text>` : "").join("");
+  return `<div class="rline"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Lũy kế chi nhánh đã chốt theo ngày">
+    ${ticks.map(t => `<line x1="${P.l}" x2="${W - P.r}" y1="${Y(t)}" y2="${Y(t)}" class="g"/><text x="${P.l - 8}" y="${Y(t) + 4}" text-anchor="end">${nf(t)}</text>`).join("")}
+    <path d="${area}" fill="${RC.good}" opacity=".10"/><path d="${path}" fill="none" stroke="${RC.good}" stroke-width="2" stroke-linejoin="round"/>
+    ${lab}<line class="xh" x1="0" x2="0" y1="${P.t}" y2="${P.t + ih}" style="display:none"/><circle class="xd" r="4.5" fill="${RC.good}" stroke="#fff" stroke-width="2" style="display:none"/>
+    <rect x="${P.l}" y="${P.t}" width="${iw}" height="${ih}" fill="transparent" class="hit"/></svg></div>`;
+}
+function rBindLine(root, V){
+  const svg = root.querySelector(".rline svg"); if(!svg) return;
+  const d = V.map(chotDate).filter(Boolean).sort(); const start = d[0] < addDays(TODAY, -45) ? addDays(TODAY, -45) : d[0], days = [];
+  let cum = d.filter(x => x < start).length; for(let x = start; x <= TODAY; x = addDays(x, 1)){ const n = d.filter(y => y === x).length; cum += n; days.push({x, n, cum}); }
+  const W = 760, P = {l:44, r:16, t:14, b:28}, iw = W - P.l - P.r, ih = 230 - P.t - P.b, max = Math.max(1, cum);
+  const hit = svg.querySelector(".hit"), xh = svg.querySelector(".xh"), xd = svg.querySelector(".xd");
+  hit.onpointermove = e => { const r = svg.getBoundingClientRect(), x = (e.clientX - r.left) * W / r.width;
+    const i = Math.max(0, Math.min(days.length - 1, Math.round((x - P.l) / (iw / Math.max(1, days.length - 1))))), p = days[i];
+    const px = P.l + (days.length < 2 ? iw / 2 : i * iw / (days.length - 1)), py = P.t + ih - p.cum / max * ih;
+    xh.setAttribute("x1", px); xh.setAttribute("x2", px); xh.style.display = ""; xd.setAttribute("cx", px); xd.setAttribute("cy", py); xd.style.display = "";
+    showTip(e, `<div class="tv">${nf(p.cum)} CN đã chốt</div><div class="tm">${fmtD(p.x)} · trong ngày +${nf(p.n)}</div>`); };
+  hit.onpointerleave = () => { xh.style.display = "none"; xd.style.display = "none"; hideTip(); };
+}
+/* ===== anh Huy 28/10: “thống kê được tình trạng và công tác thực hiện, ai làm, đã làm gì” =====
+   Ai làm = người / đơn vị THỰC TẾ hoàn thành (theo nguồn chốt), không chỉ theo phân công:
+   · task COS.SCH.109 hoàn tất → cửa hàng (QLCH trên task) · CN giao NCC nhưng NCC chưa ghi ngày làm, cửa hàng báo hoàn tất → cửa hàng
+   · còn lại theo phân công trên sheet (bảo trì / NCC / bảo vệ / cửa hàng). CN chưa xong → đơn vị đang phụ trách. */
+const W_CAT = [
+  {k:"vs", n:"Vệ sinh máng xối", c:"#0ca30c", s:"Đã lên mái dọn rác, lá cây, thông máng"},
+  {k:"xl", n:"Xử lý / sửa chữa", c:"#c7489a", s:"Bảo trì / NCC xử lý dột, máng, lưới (B2 task WSHR, sheet)"},
+  {k:"rs", n:"Cửa hàng rà soát (COS.SCH.109)", c:"#fab219", s:"Task rà soát máng xối định kỳ hoàn tất"},
+  {k:"kt", n:"Kiểm tra – sạch", c:"#2a78d6", s:"Đã kiểm tra, máng sạch, không cần vệ sinh"},
+  {k:"kp", n:"Báo không phát sinh", c:"#8a8983", s:"Cửa hàng báo không phát sinh rác / dột"}];
+const W_PEND = [
+  {k:"run", n:"Đang làm", f:a => a.stg === "run" || a.stg === "nt"},
+  {k:"wait", n:"Chờ xử lý", f:a => a.stg === "wait" || a.stg === "nodata"},
+  {k:"acc", n:"Cần lối lên mái", f:a => a.stg === "access"}];
+const W_U = [["bt", "Bảo trì nội bộ", "#2a78d6"], ["ncc", "Nhà cung cấp (NCC)", "#c7489a"], ["ch", "Cửa hàng", "#fab219"], ["bv", "Bảo vệ cửa hàng", "#8a8983"]];
+const W_UN = Object.fromEntries(W_U.map(x => [x[0], x[1]]));
+function wCat(a){
+  if(a.stg !== "done") return null;
+  const h = a.doneHow || "", kq = na(a.r.kq || "");
+  if(h === "Đã vệ sinh" || /^da ve sinh hoan tat/.test(kq)) return "vs";
+  if(/COS\.SCH/.test(h)) return "rs";
+  if(/^Đã kiểm tra/.test(h)) return "kt";
+  if(/không phát sinh/.test(h)) return "kp";
+  return "xl";
+}
+const wSchFin = a => (a.sch || []).filter(s => /finish/i.test(s.st || "")).sort((x, y) => (y.d1 || y.d0 || "").localeCompare(x.d1 || x.d0 || ""))[0] || null;
+const wNcc = a => (a.asg && a.asg.nccTd) || (a.ncc && (a.ncc.td || a.ncc.wa)) || "";
+const wQ = a => { const q = (a.qlvk || a.r.qlvk || "").replace(/\s*#\d+.*$/, "").trim(); return /^#?n\/?a$|^-$/i.test(q) ? "" : q; };
+function wWho(a){
+  const src = a.completedSrc || "", q = wQ(a);
+  const ch = () => ({u:"ch", n:q ? `Cửa hàng – QLVK ${q}` : "Cửa hàng (chưa rõ QLVK)"});
+  if(a.stg === "done"){
+    if(/COS\.SCH/.test(a.doneHow || "")){ const s = wSchFin(a); return a.unit === "bv" ? {u:"bv", n:"Bảo vệ cửa hàng", d:s && s.nv ? `QLCH ${s.nv}` : ""} : Object.assign(ch(), {d:s && s.nv ? `QLCH ${s.nv}` : ""}); }
+    if(a.unit === "ncc" && !(a.thucHien && a.thucHien.st === "done") && !/^Ngày thực hiện/.test(src)) return Object.assign(ch(), {d:"NCC chưa ghi ngày làm – cửa hàng báo hoàn tất"});
+  }
+  if(a.unit === "bt") return {u:"bt", n:(a.asg && a.asg.nv) || "Bảo trì (chưa ghi tên)"};
+  if(a.unit === "ncc" || a.unit === "tim"){ const n = wNcc(a); return {u:"ncc", n:n ? (/^ncc/i.test(n) ? n : "NCC " + n) : a.stg === "done" ? "NCC (chưa ghi tên)" : "NCC – chưa chốt nhà cung cấp"}; }
+  if(a.unit === "bv") return {u:"bv", n:"Bảo vệ cửa hàng"};
+  return ch();
+}
+function wFix(a){   // hạng mục sửa chữa NCC đã làm (cột chi phí sheet NCC: “ĐÃ XỬ LÝ DỘT MÁI: A-…(…đ); C-…”)
+  const cp = (a.ncc && a.ncc.cp) || ""; if(!/ĐÃ XỬ LÝ/.test(cp)) return [];
+  return cp.split("|")[0].replace(/^.*?:/, "").split(";").map(s => s.replace(/\s+/g, " ").replace(/^\s*[A-Z]\s*-\s*/, "").replace(/\s*\([^)]*đ\)\s*/g, "").trim()).filter(Boolean);
+}
+const W_FIXK = [["Chống dột (bắn keo, dán bạt, xử lý mí)", /keo|bạt|bặt|chống dột|chóng dột|dột/i], ["Gắn / thay lưới chặn rác", /lưới/i], ["Dọn rác mái tôn, máng xối", /dọn rác/i], ["Thay tôn / thay máng xối", /thay tôn|thay máng|tôn lán/i], ["Làm thang / lối lên mái", /thang|cửa leo/i]];
+const wFixK = s => (W_FIXK.find(x => x[1].test(s)) || ["Hạng mục khác"])[0];
+function wWhat(a){
+  const c = wCat(a), p = [];
+  if(c) p.push(W_CAT.find(x => x.k === c).n);
+  if(c === "rs"){ const s = wSchFin(a); if(s) p.push(`task ${s.id}${s.nv ? " – " + s.nv : ""}`); }
+  else if(c === "xl" && /WSHR|B2/.test(a.completedSrc || "")) p.push((a.completedSrc || "").replace(/:\s*/, " – "));
+  const fx = wFix(a); if(fx.length) p.push("NCC đã làm: " + fx.join("; "));
+  if(!c){ p.push((STG.find(s => s.k === a.stg) || {n:""}).n); const nx = nextOf(a); if(nx) p.push(nx); }
+  return p.join(" · ");
+}
+const wHt = a => ({sach:"Sạch / không phát sinh", rac:"Có rác, lá cây", ktc:"Không tiếp cận được", na:"Chưa ghi hiện trạng"})[htK(a)];
+function wOpen(title, L, sub){
+  const m = R$("rpm"); if(!m) return;
+  R$("rpmT").textContent = title; R$("rpmS").textContent = `${nf(L.length)} chi nhánh${sub ? " · " + sub : ""} · bấm một dòng để xem chi tiết`;
+  const S = L.slice().sort((x, y) => (chotDate(y) || "").localeCompare(chotDate(x) || "") || x.r.ten.localeCompare(y.r.ten, "vi"));
+  R$("rpmB").innerHTML = S.length ? `<table class="rtbl"><thead><tr><th>Ngày</th><th>Chi nhánh</th><th>Ai làm</th><th>Đã làm gì</th><th>Tình trạng ghi nhận</th></tr></thead><tbody>${S.map(a => { const w = wWho(a);
+    return `<tr data-i="${a.r.i}"><td class="n" style="text-align:left">${a.stg === "done" ? (chotDate(a) ? fmtD(chotDate(a)) : '<span class="sm2">chưa ghi</span>') : stgPill(a)}</td><td><b>${esc(a.r.ten)}</b><span class="sm">${esc(a.r.tinh || "")}</span></td><td>${esc(w.n)}${w.d ? `<span class="sm">${esc(w.d)}</span>` : ""}<span class="sm">${esc(W_UN[w.u])}</span></td><td style="font-size:12.5px">${esc(wWhat(a))}</td><td style="font-size:12.5px">${esc(wHt(a))}</td></tr>`; }).join("")}</tbody></table>` : '<div class="rnone">Không có chi nhánh nào.</div>';
+  m.classList.add("on");
+}
+function wSection(V0, R){
+  const DN = V0.filter(a => a.stg === "done"), PD = V0.filter(a => a.stg !== "done" && a.stg !== "none");
+  const W = new Map(V0.map(a => [a, wWho(a)])), C = new Map(DN.map(a => [a, wCat(a)]));
+  const cnt = (L, f) => L.filter(f).length;
+  // KPI
+  const ppl = new Set(DN.map(a => W.get(a).n)).size, d7 = DN.filter(a => chotDate(a) && chotDate(a) >= addDays(TODAY, -6)).length;
+  const kpi = [["Chi nhánh đã xong", nf(DN.length), "done|"], ...W_CAT.slice(0, 4).map(c => [c.n, nf(cnt(DN, a => C.get(a) === c.k)), "cat|" + c.k]), ["Người / đội đã làm", nf(ppl), "ppl|"]];
+  // ma trận đơn vị × công việc
+  R.wm = {};
+  const cell = (L, key, t) => { R.wm[key] = {t, L}; return L.length ? `<button class="wcell" data-wm="${key}">${nf(L.length)}</button>` : '<span class="wz">–</span>'; };
+  const rowsU = W_U.map(([u, n, col]) => { const D = DN.filter(a => W.get(a).u === u), P = PD.filter(a => W.get(a).u === u);
+    return `<tr><td><i class="wdot" style="background:${col}"></i><b>${n}</b></td>${W_CAT.map(c => `<td class="n">${cell(D.filter(a => C.get(a) === c.k), `${u}|${c.k}`, `${n} · ${c.n}`)}</td>`).join("")}<td class="n wt">${cell(D, `${u}|done`, `${n} · đã xong`)}</td>${W_PEND.map(p => `<td class="n wp">${cell(P.filter(p.f), `${u}|${p.k}`, `${n} · ${p.n}`)}</td>`).join("")}</tr>`; }).join("");
+  const tot = `<tr class="wtot"><td><b>Tổng</b></td>${W_CAT.map(c => `<td class="n">${cell(DN.filter(a => C.get(a) === c.k), `all|${c.k}`, c.n)}</td>`).join("")}<td class="n wt">${cell(DN, "all|done", "Tất cả CN đã xong")}</td>${W_PEND.map(p => `<td class="n wp">${cell(PD.filter(p.f), `all|${p.k}`, p.n)}</td>`).join("")}</tr>`;
+  const mtx = `<div class="rscroll x"><table class="rtbl wmx"><thead><tr><th rowspan="2">Đơn vị thực hiện</th><th colspan="${W_CAT.length + 1}" class="wg">Đã xong – đã làm gì</th><th colspan="${W_PEND.length}" class="wg wp">Chưa xong – đang phụ trách</th></tr><tr>${W_CAT.map(c => `<th class="n"><i class="wdot" style="background:${c.c}"></i>${c.n}</th>`).join("")}<th class="n wt">Tổng xong</th>${W_PEND.map(p => `<th class="n wp">${p.n}</th>`).join("")}</tr></thead><tbody>${rowsU}${tot}</tbody></table></div>
+    <div class="wleg">${W_CAT.map(c => `<span><i class="wdot" style="background:${c.c}"></i><b>${c.n}</b>: ${c.s}</span>`).join("")}</div>`;
+  // theo người
+  const PM = new Map();
+  V0.filter(a => a.stg !== "none").forEach(a => { const w = W.get(a), k = w.u + "|" + w.n; if(!PM.has(k)) PM.set(k, {u:w.u, n:w.n, D:[], P:[]}); (a.stg === "done" ? PM.get(k).D : PM.get(k).P).push(a); });
+  const PL = [...PM.values()].map(p => (p.last = p.D.map(chotDate).filter(Boolean).sort().pop() || "", p)).sort((x, y) => y.D.length - x.D.length || y.P.length - x.P.length || x.n.localeCompare(y.n, "vi"));
+  R.wp = PL;
+  const ucnt = u => PL.filter(p => u === "" || p.u === u).length;
+  const ppTbl = `<div class="wfx">${[["", "Tất cả"], ...W_U.map(x => [x[0], x[1]])].map(([u, n], i) => `<button class="wf${i ? "" : " on"}" data-wfu="${u}">${n} <small>${nf(ucnt(u))}</small></button>`).join("")}</div>
+    <div class="rscroll"><table class="rtbl wpp"><thead><tr><th>Người / đội thực hiện</th>${W_CAT.map(c => `<th class="n" title="${esc(c.n)}"><i class="wdot" style="background:${c.c}"></i>${c.n.split(" (")[0].replace("Cửa hàng rà soát", "Rà soát")}</th>`).join("")}<th class="n wt">Tổng xong</th><th class="n wp">Còn phụ trách</th><th class="n">Lần gần nhất</th></tr></thead><tbody>${PL.map((p, i) => `<tr data-wp="${i}" data-u="${p.u}"><td><b>${esc(p.n)}</b><span class="sm">${esc(W_UN[p.u])}</span></td>${W_CAT.map(c => { const n = cnt(p.D, a => C.get(a) === c.k); return `<td class="n">${n ? nf(n) : '<span class="wz">–</span>'}</td>`; }).join("")}<td class="n wt">${p.D.length ? `<b>${nf(p.D.length)}</b>` : '<span class="wz">–</span>'}</td><td class="n wp">${p.P.length ? `<b class="wpn">${nf(p.P.length)}</b>` : '<span class="wz">–</span>'}</td><td class="n">${p.last ? fmtDM(p.last) : '<span class="wz">–</span>'}</td></tr>`).join("")}</tbody></table></div>
+    <div class="rnote">Cửa hàng được gom theo QLVK phụ trách; người làm trực tiếp (QLCH) xem trong cột “Ai làm” khi bấm vào. Bấm một dòng để xem từng chi nhánh: ngày, đã làm gì, tình trạng.</div>`;
+  // tình trạng × công tác
+  const HT = [["rac", "Có rác, lá cây", RC.serious], ["sach", "Sạch / không phát sinh", RC.good], ["ktc", "Không tiếp cận được", RC.crit], ["na", "Chưa ghi hiện trạng", RC.light]];
+  R.wh = {};
+  const hcell = (L, key, t) => { R.wh[key] = {t, L}; return L.length ? `<button class="wcell" data-wh="${key}">${nf(L.length)}</button>` : '<span class="wz">–</span>'; };
+  const hx = `<div class="rscroll x"><table class="rtbl wmx"><thead><tr><th>Tình trạng khi kiểm tra</th><th class="n">Số CN</th>${W_CAT.map(c => `<th class="n"><i class="wdot" style="background:${c.c}"></i>${c.n.split(" (")[0].replace("Cửa hàng rà soát", "Rà soát")}</th>`).join("")}<th class="n wp">Chưa xong</th></tr></thead><tbody>${HT.map(([k, n, col]) => { const L = V0.filter(a => a.stg !== "none" && htK(a) === k);
+    return `<tr><td><i class="wdot" style="background:${col}"></i><b>${n}</b></td><td class="n">${hcell(L, k + "|all", n)}</td>${W_CAT.map(c => `<td class="n">${hcell(L.filter(a => C.get(a) === c.k), k + "|" + c.k, `${n} → ${c.n}`)}</td>`).join("")}<td class="n wp">${hcell(L.filter(a => a.stg !== "done"), k + "|pend", `${n} → chưa xong`)}</td></tr>`; }).join("")}</tbody></table></div>
+    <div class="rnote">Đọc theo hàng: CN ghi nhận tình trạng như vậy thì đã được xử lý thế nào. Ví dụ hàng “Có rác, lá cây”: bao nhiêu CN đã vệ sinh, bao nhiêu còn chưa xong.</div>`;
+  // hạng mục sửa chữa NCC
+  const FX = new Map(); V0.forEach(a => wFix(a).forEach(s => { const k = wFixK(s); if(!FX.has(k)) FX.set(k, {n:0, L:new Set()}); FX.get(k).n++; FX.get(k).L.add(a); }));
+  R.wf = [...FX].sort((x, y) => y[1].L.size - x[1].L.size).map(([k, v]) => ({n:k, v:v.L.size, i:v.n, L:[...v.L]}));
+  const nFix = new Set(R.wf.flatMap(x => x.L)).size;
+  const fxB = R.wf.length ? `<table class="rtbl"><thead><tr><th>Hạng mục</th><th class="n">Số CN</th><th class="n">Lượt</th></tr></thead><tbody>${R.wf.map((x, i) => `<tr data-wfi="${i}" style="cursor:pointer"><td>${esc(x.n)}</td><td class="n"><b>${nf(x.v)}</b></td><td class="n">${nf(x.i)}</td></tr>`).join("")}</tbody></table><div class="rnote">Theo cột chi phí trên sheet NCC thực hiện (“ĐÃ XỬ LÝ DỘT MÁI”). Một CN có thể làm nhiều hạng mục.</div>` : '<div class="rnone">Chưa có hạng mục sửa chữa ghi nhận.</div>';
+  // nhật ký
+  const LOG = DN.filter(a => chotDate(a)).sort((x, y) => chotDate(y).localeCompare(chotDate(x)) || x.r.ten.localeCompare(y.r.ten, "vi"));
+  R.wlog = DN;
+  const logB = `<div class="rscroll"><table class="rtbl wlog"><thead><tr><th>Ngày</th><th>Chi nhánh</th><th>Ai làm</th><th>Đã làm gì</th><th>Tình trạng ghi nhận</th></tr></thead><tbody>${LOG.slice(0, 40).map(a => { const w = W.get(a);
+    return `<tr data-i="${a.r.i}"><td class="n" style="text-align:left">${fmtD(chotDate(a))}</td><td><b>${esc(a.r.ten)}</b><span class="sm">${esc(a.r.tinh || "")}</span></td><td>${esc(w.n)}${w.d ? `<span class="sm">${esc(w.d)}</span>` : ""}</td><td style="font-size:12.5px"><i class="wdot" style="background:${(W_CAT.find(c => c.k === C.get(a)) || {}).c}"></i>${esc(wWhat(a))}</td><td style="font-size:12.5px">${esc(wHt(a))}</td></tr>`; }).join("")}</tbody></table></div>
+    <div class="rnote">${nf(Math.min(40, LOG.length))} việc gần nhất có ghi ngày · ${nf(DN.length - LOG.length)} CN đã xong nhưng nguồn chưa ghi ngày · <button class="wlink" data-wall="1">Xem toàn bộ ${nf(DN.length)} CN đã xong ↗</button></div>`;
+  return `<div class="wk6">${kpi.map(([t, v, k]) => `<button class="wk" data-wk="${k}"><span>${t}</span><b>${v}</b>${k === "done|" ? `<small>+${nf(d7)} trong 7 ngày</small>` : ""}</button>`).join("")}</div>
+    ${rCard("Ai làm – đã làm gì (theo đơn vị)", `${nf(DN.length)} CN đã xong theo đơn vị thực tế hoàn thành · ${nf(PD.length)} CN chưa xong theo đơn vị đang phụ trách · bấm số để xem danh sách`, mtx, "rwide")}
+    ${rCard("Theo người / đội thực hiện", `${nf(PL.filter(p => p.D.length).length)} người / đội đã hoàn thành ít nhất 1 CN · ${nf(PL.filter(p => p.P.length).length)} người / đội còn CN đang phụ trách`, ppTbl, "rwide")}
+    <div class="rgrid2 wg2">
+    ${rCard("Tình trạng ghi nhận → công tác đã làm", "Mỗi tình trạng máng xối đã được xử lý ra sao", hx)}
+    ${rCard("Hạng mục sửa chữa NCC đã làm", `${nf(nFix)} CN có hạng mục sửa chữa ghi nhận`, fxB)}</div>
+    ${rCard("Nhật ký công tác gần đây", "Ai làm, làm gì, ở đâu – mới nhất trước · bấm một dòng để xem chi tiết chi nhánh", logB, "rwide")}`;
+}
+function wBind(root, R){
+  root.querySelectorAll("[data-wm]").forEach(el => el.onclick = () => { const x = R.wm[el.dataset.wm]; if(x) wOpen(x.t, x.L); });
+  root.querySelectorAll("[data-wh]").forEach(el => el.onclick = () => { const x = R.wh[el.dataset.wh]; if(x) wOpen(x.t, x.L); });
+  root.querySelectorAll("tr[data-wp]").forEach(el => el.onclick = () => { const p = R.wp[+el.dataset.wp]; wOpen(p.n, p.D.concat(p.P), `${nf(p.D.length)} đã xong · ${nf(p.P.length)} đang phụ trách`); });
+  root.querySelectorAll("tr[data-wfi]").forEach(el => el.onclick = () => { const x = R.wf[+el.dataset.wfi]; wOpen(x.n, x.L); });
+  root.querySelectorAll("[data-wall]").forEach(el => el.onclick = () => wOpen("Tất cả chi nhánh đã xong", R.wlog));
+  root.querySelectorAll("[data-wk]").forEach(el => el.onclick = () => { const [k, v] = el.dataset.wk.split("|");
+    if(k === "done") wOpen("Chi nhánh đã xong", R.wlog);
+    else if(k === "cat") wOpen(W_CAT.find(c => c.k === v).n, R.wlog.filter(a => wCat(a) === v));
+    else { const t = root.querySelector(".wpp"); if(t) t.closest(".rcard").scrollIntoView({behavior:"smooth", block:"start"}); } });
+  root.querySelectorAll("[data-wfu]").forEach(el => el.onclick = () => { const u = el.dataset.wfu;
+    root.querySelectorAll("[data-wfu]").forEach(b => b.classList.toggle("on", b === el));
+    root.querySelectorAll("tr[data-wp]").forEach(tr => tr.style.display = !u || tr.dataset.u === u ? "" : "none"); });
+}
+function renderReport(){
+  const root = R$("rpt"); if(!root) return; rInit();
+  const V0 = V, HL = V0.filter(a => a.stg !== "access"), ACC = V0.filter(a => a.stg === "access");
+  const N = HL.length, c = stgCount(HL), ch = c.done + c.none, left = N - ch, P = paceInfo(V0);
+  const WORK = HL.filter(rIsWork), CLEAN = HL.filter(rIsClean), NONE = HL.filter(a => a.stg === "none");
+  const eta = P.avg > 0 && left > 0 ? addDays(TODAY, Math.ceil(left / P.avg)) : null;
+  const TREEHIT = V0.filter(a => treeK(a) === "hit"), TREENOL = TREEHIT.filter(a => a.luoi && a.luoi.k === "none");
+  const LK = V0.filter(a => a.leak26), LKT = LK.flatMap(a => a.leak26), LKOPEN = LK.filter(a => a.leak26.some(x => x.c === "open" || x.c === "nccno")), LKAGAIN = LK.filter(a => a.leak26.some(x => x.c === "again"));
+  const R = {};   // danh sách để bấm xem
+  const sc = scopeText();
+  R$("rScope").textContent = `${sc} · số liệu đến ${fmtD(TODAY)}`;
+  // ---------- 1. kết luận ----------
+  const stg = STG.filter(s => s.k !== "access");
+  R.stg = stg.map(s => ({n:s.n, s:s.s, v:c[s.k], c:s.c, L:HL.filter(a => a.stg === s.k)}));
+  const bul = [
+    `Đã chốt <b>${nf(ch)}/${nf(N)}</b> chi nhánh (<b>${fmtP(pct(ch, N))}</b>): đã vệ sinh / xử lý <b>${nf(WORK.length)}</b>, kiểm tra sạch – không cần vệ sinh <b>${nf(CLEAN.length)}</b>${NONE.length ? `, không cần xử lý (thuê tòa nhà) <b>${nf(NONE.length)}</b>` : ""}.`,
+    left ? `Còn <b>${nf(left)}</b> chi nhánh chưa chốt: ${stg.filter(s => !["done", "none"].includes(s.k) && c[s.k]).map(s => `${s.n.charAt(0).toLowerCase() + s.n.slice(1)} <b>${nf(c[s.k])}</b>`).join(" · ")}.` : "Tất cả chi nhánh trong phạm vi đã chốt.",
+    `Tuần qua chốt thêm <b>+${nf(P.w7)}</b> CN (trung bình ${String(P.avg).replace(".", ",")} CN/ngày)${eta ? ` – giữ tốc độ này dự kiến xong khoảng <b>${fmtD(eta)}</b>` : ""}.`,
+    ACC.length ? `<b>${nf(ACC.length)}</b> chi nhánh cần cải tạo lối lên mái (${nf(ACC.filter(a => loiK(a) === "khong").length)} không có lối lên, ${nf(ACC.filter(a => loiK(a) !== "khong").length)} có lối nhưng không tiếp cận được) – theo dõi riêng, không tính vào tiến độ.` : "",
+    `Rủi ro: <b>${nf(TREEHIT.length)}</b> CN có cây xanh lớn ảnh hưởng mái (${nf(TREENOL.length)} CN chưa có lưới chặn rác); <b>${nf(LK.length)}</b> CN từng mưa dột năm 2026${LKOPEN.length ? `, <b>${nf(LKOPEN.length)}</b> CN còn task mưa dột chưa xử lý xong` : ""}.`].filter(Boolean);
+  R$("rS1").innerHTML = `<div class="rhero"><div class="rbig"><div class="rk">Đã chốt</div><div class="rv">${String(pct(ch, N)).replace(".", ",")}<small>%</small></div><div class="rd"><b>${nf(ch)}</b> / ${nf(N)} chi nhánh · còn <b>${nf(left)}</b></div></div>
+    <div class="rmini">${[["Hôm nay", "+" + nf(P.t)], ["7 ngày qua", "+" + nf(P.w7)], ["Dự kiến xong", eta ? fmtDM(eta) : left ? "–" : "Đã xong"], ["Cần cải tạo lối lên", nf(ACC.length)]].map((x, i) => `<div${i === 3 ? ' class="rclick" data-rl="acc|0"' : ""}><span>${x[0]}</span><b>${x[1]}</b></div>`).join("")}</div></div>
+    <ul class="rbul">${bul.map(b => `<li>${b}</li>`).join("")}</ul>
+    <div class="rsec-sub">Chi nhánh theo giai đoạn <span class="sm" style="display:inline">(không tính ${nf(ACC.length)} CN cần cải tạo lối lên mái)</span></div>${rRows(R.stg, N, "stg")}`;
+  R.acc = [{n:"Cần cải tạo lối lên mái", L:ACC}];
+  // ---------- 2. hiện trạng ----------
+  const HT = [["sach", "Sạch / không phát sinh", RC.good], ["rac", "Có rác, lá cây", RC.serious], ["ktc", "Không tiếp cận được", RC.crit], ["na", "Chưa ghi hiện trạng", RC.light]];
+  R.ht = HT.map(([k, n, col]) => ({n, v:0, c:col, L:V0.filter(a => htK(a) === k)})).map(x => (x.v = x.L.length, x));
+  const LO = [["co", "Có lối lên mái", RC.good], ["khong", "Không có lối lên mái", RC.crit], ["na", "Chưa cập nhật", RC.light]];
+  R.loi = LO.map(([k, n, col]) => ({n, c:col, L:V0.filter(a => loiK(a) === k)})).map(x => (x.v = x.L.length, x));
+  const LU = [["ok", "Có lưới – tốt", RC.good, a => a.luoi && a.luoi.k === "ok"], ["fix", "Có lưới – thiếu / hư hỏng", RC.warn, a => a.luoi && (a.luoi.k === "part" || a.luoi.k === "bad")], ["none", "Chưa có lưới", RC.crit, a => a.luoi && a.luoi.k === "none"], ["st", "Sân thượng – không cần lưới", RC.gray, a => a.luoi && a.luoi.k === "st"], ["unk", "Chưa xác định", RC.light, a => !a.luoi || a.luoi.k === "unk"]];
+  R.luoi = LU.map(([k, n, col, f]) => ({n, c:col, L:V0.filter(f)})).map(x => (x.v = x.L.length, x));
+  const TR = [["hit", "Cây lớn – ảnh hưởng mái", RC.crit], ["nohit", "Có cây – không ảnh hưởng", RC.warn], ["notree", "Không có cây xanh", RC.good], ["nomt", "Chưa có ảnh mặt tiền", RC.light]];
+  R.tree = TR.map(([k, n, col]) => ({n, c:col, L:V0.filter(a => treeK(a) === k)})).map(x => (x.v = x.L.length, x));
+  const T = V0.length;
+  R$("rS2").innerHTML = `<div class="rgrid2">
+    ${rCard("Máng xối khi kiểm tra", "Hiện trạng cửa hàng / bảo trì ghi nhận trên sheet", rRows(R.ht, T, "ht"))}
+    ${rCard("Lối lên mái", "Có đường lên mái để vệ sinh, kiểm tra định kỳ hay không", rRows(R.loi, T, "loi"))}
+    ${rCard("Lưới chặn rác", `${nf(TREENOL.length)} CN có cây xanh ảnh hưởng mái nhưng chưa có lưới`, rRows(R.luoi, T, "luoi"))}
+    ${rCard("Cây xanh trước cửa hàng", "Theo báo cáo mặt tiền và nhận diện từ ảnh", rRows(R.tree, T, "tree"))}</div>`;
+  // ---------- 3. công tác thực hiện ----------
+  const DN = V0.filter(a => a.stg === "done");
+  const HOW = [["Vệ sinh / xử lý xong", RC.good, rIsWork, "Bảo trì, NCC, cửa hàng hoặc bảo vệ đã vệ sinh, sửa chữa"], ["Kiểm tra – sạch, không cần vệ sinh", RC.info, rIsClean, "Đã lên kiểm tra, máng sạch – tiếp tục kiểm tra định kỳ"], ["Không cần xử lý", RC.gray, a => a.stg === "none", "Thuê trong tòa nhà / chung cư / kiot / chung chủ"]];
+  R.how = HOW.map(([n, col, f, s]) => ({n, s, c:col, L:V0.filter(f)})).map(x => (x.v = x.L.length, x));
+  const UO = ["bt", "ncc", "ch", "bv"], UC = {bt:RC.info, ncc:RC.pink, ch:RC.warn, bv:RC.gray};
+  R.who = UO.map(u => ({n:UNIT[u].replace(" (đã hoàn thành)", ""), c:UC[u], L:DN.filter(a => a.unit === u)})).map(x => (x.v = x.L.length, x));
+  const urow = u => { const U = V0.filter(a => a.unit === u), H = U.filter(a => a.stg !== "access"), d = H.filter(a => a.stg === "done" || a.stg === "none").length;
+    return `<tr data-ul="${u}"><td><b>${esc(UNIT[u].replace(" (đã hoàn thành)", ""))}</b></td><td class="n">${nf(U.length)}</td><td class="n">${nf(d)}</td><td class="n">${nf(H.length - d)}</td><td class="n">${nf(U.length - H.length)}</td><td><div class="rprog"><i style="width:${pct(d, H.length)}%"></i></div><span class="sm" style="display:inline">${fmtP(pct(d, H.length))}</span></td></tr>`; };
+  const geo = new Map(); V0.forEach(a => { const k = a.r.tinh || "(chưa rõ)"; if(!geo.has(k)) geo.set(k, []); geo.get(k).push(a); });
+  const G = [...geo].map(([k, L]) => { const H = L.filter(a => a.stg !== "access"), d = H.filter(a => a.stg === "done" || a.stg === "none").length; return {k, L, n:L.length, d, h:H.length, left:H.length - d, acc:L.length - H.length, kv:(L[0].r.kv || "")}; })
+    .sort((x, y) => y.left - x.left || y.n - x.n);
+  R.geo = G;
+  const TK = V0.flatMap(a => tasksOf(a).filter(t => !t.tao || t.tao >= CFG.CAMPAIGN_START).map(t => ({a, t})));
+  const TKopen = TK.filter(x => x.t.open), steps = new Map(); TKopen.forEach(x => { const s = (x.t.buoc || "Chưa rõ bước").replace(/\s+/g, " ").slice(0, 60); steps.set(s, (steps.get(s) || 0) + 1); });
+  R$("rS3").innerHTML = `${wSection(V0, R)}
+    ${rCard("Tiến độ chốt chi nhánh theo ngày", `Lũy kế số chi nhánh đã chốt có ghi ngày hoàn thành · rê chuột để xem từng ngày${(n => n ? ` · ${nf(n)} CN đã chốt nhưng chưa ghi ngày nên không có trên biểu đồ` : "")(V0.filter(a => (a.stg === "done" || a.stg === "none") && !chotDate(a)).length)}`, rLine(V0), "rwide")}
+    ${rCard("Task WSHR đợt này", `${nf(new Set(TK.map(x => x.a.r.i)).size)} CN có task · ${nf(TK.length)} task · ${nf(TKopen.length)} task còn mở`, TKopen.length ? `<table class="rtbl"><thead><tr><th>Task đang mở dừng ở bước</th><th class="n">Số task</th></tr></thead><tbody>${[...steps].sort((x, y) => y[1] - x[1]).slice(0, 8).map(([s, n]) => `<tr><td>${esc(s)}</td><td class="n">${nf(n)}</td></tr>`).join("")}</tbody></table>` : '<div class="rnone">Không có task WSHR đang mở (bấm 🔄 Task WSHR để cập nhật trực tiếp).</div>', "rwide")}
+    ${rCard("Theo tỉnh / thành", "Xếp theo số chi nhánh còn lại · bấm một dòng để xem danh sách", `<div class="rscroll"><table class="rtbl"><thead><tr><th>Tỉnh / thành</th><th>Khu vực</th><th class="n">Tổng CN</th><th class="n">Đã chốt</th><th class="n">Còn lại</th><th class="n">Cần lối lên</th><th>Tiến độ</th></tr></thead><tbody>${G.map((g, i) => `<tr data-gl="${i}"><td><b>${esc(g.k)}</b></td><td class="sm2">${esc(g.kv)}</td><td class="n">${nf(g.n)}</td><td class="n">${nf(g.d)}</td><td class="n">${g.left ? `<b>${nf(g.left)}</b>` : "–"}</td><td class="n">${g.acc ? nf(g.acc) : "–"}</td><td><div class="rprog"><i style="width:${pct(g.d, g.h)}%"></i></div><span class="sm" style="display:inline">${fmtP(pct(g.d, g.h))}</span></td></tr>`).join("")}</tbody></table></div>`, "rwide")}`;
+  // ---------- 4. mưa dột & rủi ro ----------
+  const LC = {done:["Đã xử lý xong", RC.good], open:["Đang xử lý", RC.warn], nccno:["NCC chưa đến / chưa làm", RC.serious], again:["Tái phát hư hại", RC.crit], closed:["Đóng – chưa nghiệm thu", RC.light]};
+  R.lk = Object.entries(LC).map(([k, [n, col]]) => ({n, c:col, v:LKT.filter(x => x.c === k).length, L:LK.filter(a => a.leak26.some(x => x.c === k))}));
+  const score = a => (a.leak26 ? a.leak26.length * 2 : 0) + (a.leak26 && a.leak26.some(x => x.c === "again") ? 3 : 0) + (a.leak26 && a.leak26.some(x => x.c === "open" || x.c === "nccno") ? 2 : 0) + (treeK(a) === "hit" ? 2 : 0) + (a.luoi && a.luoi.k === "none" ? 1 : 0) + (a.stg !== "done" && a.stg !== "none" ? 2 : 0);
+  const why = a => [a.leak26 && `dột ${a.leak26.length} lần (2026)`, a.leak26 && a.leak26.some(x => x.c === "again") && "tái phát", a.leak26 && a.leak26.some(x => x.c === "open" || x.c === "nccno") && "task dột đang mở", treeK(a) === "hit" && "cây lớn ảnh hưởng mái", a.luoi && a.luoi.k === "none" && "chưa có lưới", a.stg === "access" && "chưa có lối lên mái"].filter(Boolean);
+  const RISK = V0.filter(a => (a.leak26 || treeK(a) === "hit") && (a.stg !== "done" || (a.leak26 && a.leak26.some(x => x.c !== "done")) || (treeK(a) === "hit" && a.luoi && a.luoi.k === "none"))).sort((x, y) => score(y) - score(x));
+  R.risk = RISK;
+  R$("rS4").innerHTML = `<div class="rgrid2">
+    ${rCard("Mưa dột năm 2026 (task WSHR)", `${nf(LKT.length)} lần báo dột tại ${nf(LK.length)} CN · ${nf(LK.filter(a => a.leak26.length >= 2).length)} CN dột từ 2 lần trở lên`, rRows(R.lk, LKT.length, "lk") + `<div class="rnote">Đếm theo số lần báo dột (mỗi lần 1 task). Bấm một dòng để xem chi nhánh.</div>`)}
+    ${rCard("Chi nhánh cần chú ý", `${nf(RISK.length)} CN – từng dột / cây lớn ảnh hưởng mái mà chưa xử lý dứt điểm`, `<div class="rscroll s"><table class="rtbl"><thead><tr><th>Chi nhánh</th><th>Lý do</th><th>Giai đoạn</th></tr></thead><tbody>${RISK.slice(0, 40).map(a => `<tr data-i="${a.r.i}"><td><b>${esc(a.r.ten)}</b><span class="sm">${esc(a.r.tinh || "")}</span></td><td style="font-size:12.5px">${esc(why(a).join(" · "))}</td><td>${stgPill(a)}</td></tr>`).join("")}</tbody></table></div>`)}</div>`;
+  // ---------- 5. việc cần làm ----------
+  const ws = a => a.wsProg && a.wsProg.type === "Chờ phê duyệt";
+  const TODO = [
+    {t:"Cửa hàng chủ động tìm NCC", who:"Cửa hàng · QLVK", L:HL.filter(a => a.stg === "wait"), d:"Đã khảo sát, chưa có người làm – cửa hàng tìm NCC địa phương, cập nhật sheet & ảnh"},
+    {t:"Duyệt chi phí cho NCC", who:"Vận hành bảo trì / Quản lý", L:V0.filter(ws), d:"Đã có NCC & báo giá trên task WSHR – chờ duyệt để NCC đến xử lý"},
+    {t:"Đang thực hiện quá 7 ngày", who:"Bảo trì / Cửa hàng", L:V0.filter(staleRun), d:"Đang làm nhưng trạng thái không đổi ≥ 7 ngày – xác nhận lại thực tế"},
+    {t:"Chờ nghiệm thu", who:"Cửa hàng · QLVK", L:V0.filter(a => a.stg === "nt"), d:"Đã xử lý – nghiệm thu & đóng task WSHR"},
+    {t:"Cải tạo lối lên mái", who:"Bảo trì / NCC", L:ACC, d:"Khảo sát, làm thang / cửa thăm mái rồi vệ sinh máng xối"},
+    {t:"Gắn lưới chặn rác", who:"Bảo trì / NCC", L:TREENOL, d:"Cây xanh lớn ảnh hưởng mái nhưng chưa có lưới"},
+    {t:"Xử lý dứt điểm mưa dột", who:"Vận hành bảo trì", L:LKOPEN, d:"Còn task mưa dột 2026 đang xử lý / NCC chưa đến"},
+    {t:"Cập nhật hiện trạng", who:"Cửa hàng", L:HL.filter(a => a.stg === "nodata"), d:"Chưa báo hiện trạng mái & chưa có task – cập nhật sheet"}].filter(x => x.L.length);
+  R.todo = TODO;
+  R$("rS5").innerHTML = TODO.length ? `<div class="rtodo">${TODO.map((x, i) => `<div class="rti"><div class="rth"><b class="rtn" data-rl="todo|${i}">${nf(x.L.length)}</b><div><div class="rtt">${esc(x.t)}</div><div class="rtw">${esc(x.who)} · ${esc(x.d)}</div></div></div>${rChips(x.L, 12)}</div>`).join("")}</div>` : '<div class="rnone">Không còn việc tồn.</div>';
+  RLIST = R;
+  // ---------- tương tác ----------
+  root.querySelectorAll("[data-rl]").forEach(el => el.onclick = () => { const [k, i] = el.dataset.rl.split("|"), it = (R[k] || [])[+i]; if(!it) return;
+    const L = it.L, t = it.n || it.t; rOpenList(t, L, k === "lk" ? {h:"Các lần dột 2026", f:a => (a.leak26 || []).map(x => fmtDM(x.d) + " " + (LC[x.c] || [""])[0]).join(" · ")} : k === "todo" ? null : null); });
+  root.querySelectorAll("[data-gl]").forEach(el => el.onclick = () => { const g = R.geo[+el.dataset.gl]; rOpenList(`Tỉnh / thành: ${g.k}`, g.L); });
+  root.querySelectorAll("[data-ul]").forEach(el => el.onclick = () => { const u = el.dataset.ul; rOpenList(`Đơn vị: ${UNIT[u]}`, V0.filter(a => a.unit === u)); });
+  root.querySelectorAll("tr[data-i], .rchip[data-i]").forEach(el => el.onclick = () => openDrawer(+el.dataset.i));
+  wBind(root, R); bindTips(root); rBindLine(root, V0);
+}
+function rInit(){
+  const m = R$("rpm"); if(!m || m.dataset.ok) return; m.dataset.ok = 1;
+  m.onclick = e => { if(e.target === m || e.target.closest("[data-rpx]")) m.classList.remove("on"); };
+  R$("rpmB").onclick = e => { const tr = e.target.closest("tr[data-i]"); if(tr) openDrawer(+tr.dataset.i); };
+  const kv = R$("rKv"); if(kv){ const ks = [...new Set(ALL.map(a => a.r.kv).filter(Boolean))].sort(); kv.innerHTML = `<option value="">Toàn hệ thống</option>${ks.map(k => `<option>${esc(k)}</option>`).join("")}`;
+    kv.onchange = () => { F.kvs.splice(0); if(kv.value) F.kvs.push(kv.value); syncF(); render(); }; }
+  document.addEventListener("keydown", e => { if(e.key === "Escape") m.classList.remove("on"); });
+}
+
+document.addEventListener("click", e => { const d = document.getElementById("gsDd"); if(d && d.open && !d.contains(e.target)) d.open = false; if(d && e.target.closest(".gsm a")) d.open = false; });
 GRID = buildGrid((window.MX_CHKT_SNAP || {}).rows);
 SRC = {kind:"snap", at:(LUOI_DATA && LUOI_DATA.at) || (window.MX_CHKT_SNAP || {}).at || SNAP.at};
 go(["ov", "unit", "st", "todo", "list", "wk"].includes(PAGE) ? PAGE : "ov");
