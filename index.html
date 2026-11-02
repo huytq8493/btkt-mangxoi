@@ -4388,6 +4388,28 @@ recompute();
 reload();
 
 </script>
+<script id="kv-fix">
+/* anh Huy 02/11: chuẩn hoá khu vực – CN ở tỉnh ngoài TP.HCM / Bình Dương luôn thuộc “Ngoài HCM - Bình Dương”;
+   KV_FIX: sửa tay cho CN mà sheet ghi sai tỉnh / khu vực (khóa = tên CN không dấu, không phân biệt hoa thường) */
+(function(){
+  const KV_IN = "HCM - Bình Dương", KV_OUT = "Ngoài HCM - Bình Dương";
+  const n = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/gi, "d").toLowerCase().replace(/\s+/g, " ").trim();
+  const KV_FIX = {
+    "808 pham huu lau": {tinh:"Đồng Tháp", tp:"Cao Lãnh", kv:KV_OUT}
+  };
+  const IN_TINH = new Set(["ho chi minh", "tp ho chi minh", "tp. ho chi minh", "hcm", "binh duong"]);
+  function fix(a){
+    const r = a && a.r; if(!r) return a;
+    const k = n(r.ten).replace(/^shop - /, ""), f = KV_FIX[k] || KV_FIX[n(r.shop).replace(/^shop - /, "")];
+    if(f) Object.assign(r, f);
+    else if(r.tinh && !IN_TINH.has(n(r.tinh)) && r.kv !== KV_OUT) r.kv = KV_OUT;
+    return a;
+  }
+  const _b = buildAll;
+  buildAll = function(){ const out = _b.apply(this, arguments); return Array.isArray(out) ? out.map(fix) : out; };
+})();
+</script>
+
 <script id="pro-fx">(function(){var r=0;document.addEventListener('pointermove',function(e){if(r)return;r=requestAnimationFrame(function(){r=0;var c=e.target&&e.target.closest&&e.target.closest('.card,.rcard');if(!c)return;var b=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-b.left)+'px');c.style.setProperty('--my',(e.clientY-b.top)+'px');});},{passive:true});})();</script>
 <script id="sum-fx">
 /* ===== Report: Tổng hợp Clinic / Cosmetic theo format Summary (Lối lên mái × Cây xanh → Ưu tiên; Đơn vị, Giai đoạn, Kết quả) ===== */
