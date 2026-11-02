@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="color-scheme" content="light">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Báo cáo chống dột – Vệ sinh máng xối</title>
+<title>Report chống dột – Vệ sinh máng xối</title>
 <style>
 :root{
   color-scheme: light;
@@ -654,9 +654,337 @@ a{color:var(--s1ink)}
   .tbar,.top .tools{display:none!important}
 }
 
+/* ===================== GLASS THEME ===================== */
+:root{
+  --page:#eaf0f8;
+  --card:rgba(255,255,255,.58);
+  --surface:rgba(248,250,253,.72);
+  --glass-b:rgba(255,255,255,.75);
+  --glass-line:rgba(15,27,45,.08);
+  --border:rgba(15,27,45,.09);
+  --grid:rgba(15,27,45,.07);
+  --hover:rgba(255,255,255,.55);
+  --blur:saturate(170%) blur(20px);
+  --shadow:0 1px 1px rgba(16,24,40,.03),0 10px 30px -12px rgba(30,58,110,.18);
+  --shadow2:0 2px 4px rgba(16,24,40,.04),0 22px 48px -16px rgba(30,58,110,.32);
+  --r:18px;
+  --g1:#3b82f6; --g2:#8b5cf6; --g3:#06b6d4; --g4:#22c55e;
+}
+html{background:var(--page)}
+body{background:transparent;min-height:100vh;position:relative}
+
+/* ---- aurora background ---- */
+body::before{content:"";position:fixed;inset:-20vmax;z-index:-2;pointer-events:none;
+  background:
+    radial-gradient(38vmax 30vmax at 12% 18%,rgba(59,130,246,.55),transparent 62%),
+    radial-gradient(34vmax 28vmax at 88% 10%,rgba(168,85,247,.42),transparent 60%),
+    radial-gradient(40vmax 32vmax at 78% 78%,rgba(6,182,212,.42),transparent 62%),
+    radial-gradient(36vmax 30vmax at 18% 88%,rgba(244,114,182,.28),transparent 60%),
+    linear-gradient(180deg,#e8eefb 0%,#eef0fb 100%);
+  animation:aur 28s ease-in-out infinite alternate}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.35;
+  background-image:radial-gradient(rgba(15,27,45,.09) 1px,transparent 1px);background-size:22px 22px;
+  -webkit-mask-image:linear-gradient(180deg,#000,transparent 70%);mask-image:linear-gradient(180deg,#000,transparent 70%)}
+@keyframes aur{0%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(2vmax,-1.5vmax,0) scale(1.05)}100%{transform:translate3d(-2vmax,1vmax,0) scale(1.02)}}
+
+/* ---- hero header: deep glass ---- */
+.top{background:
+    radial-gradient(60% 140% at 0% 0%,rgba(59,130,246,.55),transparent 60%),
+    radial-gradient(50% 160% at 100% 0%,rgba(139,92,246,.45),transparent 62%),
+    radial-gradient(40% 120% at 60% 120%,rgba(6,182,212,.35),transparent 60%),
+    linear-gradient(135deg,#071a33,#0d2850 55%,#132f63);
+  overflow:visible;isolation:isolate}
+.top::after{content:"";position:absolute;inset:auto 0 0 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent)}
+.top .wrap.hrow{padding-top:26px;padding-bottom:20px}
+.logo{background:linear-gradient(145deg,rgba(255,255,255,.22),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.28);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 30px -8px rgba(59,130,246,.65);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.top h1{font-size:27px;font-weight:800;letter-spacing:-.025em;
+  background:linear-gradient(90deg,#fff 0%,#dbeafe 55%,#a5f3fc 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.top .srcline{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:12px;
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+.tbar{background:rgba(255,255,255,.05);border-top:1px solid rgba(255,255,255,.10);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.top .btn{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:11px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);transition:all .2s}
+.top .btn:hover{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.34);transform:translateY(-1px);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 8px 20px -8px rgba(0,0,0,.5)}
+.top .btn.pri{background:linear-gradient(135deg,#ffffff,#e0ecff);color:#0b2545;border-color:rgba(255,255,255,.9);
+  box-shadow:0 0 0 1px rgba(255,255,255,.4),0 10px 28px -6px rgba(96,165,250,.8)}
+.top .btn.pri:hover{background:#fff;box-shadow:0 0 0 4px rgba(147,197,253,.35),0 12px 32px -6px rgba(96,165,250,.9)}
+
+/* ---- floating glass nav ---- */
+.nav{background:rgba(255,255,255,.55);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);
+  border-bottom:1px solid rgba(255,255,255,.7);box-shadow:0 1px 0 rgba(15,27,45,.05),0 12px 30px -18px rgba(30,58,110,.35)}
+.nav .wrap{gap:6px;padding-top:8px;padding-bottom:8px}
+.tab{border:1px solid transparent;border-radius:11px;padding:8px 14px;transition:all .2s}
+.tab:hover{background:rgba(255,255,255,.6);color:var(--ink)}
+.tab.on{background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,.7));border-color:rgba(255,255,255,.9);
+  border-bottom-color:rgba(255,255,255,.9);color:var(--navy);
+  box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 6px 18px -8px rgba(30,58,110,.45),0 0 0 1px rgba(21,112,239,.10)}
+.tab.on::after{content:"";display:block;height:2px;margin:6px auto -4px;width:22px;border-radius:2px;background:linear-gradient(90deg,var(--g1),var(--g3))}
+
+/* ---- glass surfaces ---- */
+.card,.rcard,.rdef,.fbtn,.fsearch,.tblwrap,.risk,.wkg,.gi,.wk,.chip,.rchip,.rmini>div,.tile{
+  -webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur)}
+.card,.rcard,.rdef{background:linear-gradient(160deg,rgba(255,255,255,.66),rgba(255,255,255,.34));
+  border:1px solid var(--glass-b);border-radius:var(--r);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),var(--shadow);position:relative}
+.card::before,.rcard::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(420px circle at var(--mx,50%) var(--my,-40%),rgba(255,255,255,.55),transparent 45%);opacity:0;transition:opacity .3s}
+.card:hover::before,.rcard:hover::before{opacity:1}
+.card,.rcard,.risk,.wkg,.gi,.tile,.rmini>div{transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s,border-color .25s}
+.card:hover,.rcard:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.95),var(--shadow2)}
+.risk:hover,.wkg:hover,.gi:hover,.tile:hover,.rmini .rclick:hover{transform:translateY(-2px);box-shadow:var(--shadow2)}
+.rmini>div{background:linear-gradient(160deg,rgba(255,255,255,.85),rgba(255,255,255,.55))!important;border:1px solid var(--glass-b)!important;border-radius:14px!important;
+  box-shadow:inset 0 1px 0 #fff,0 6px 18px -10px rgba(30,58,110,.3)}
+.tblwrap{background:rgba(255,255,255,.5);border:1px solid var(--glass-b);border-radius:14px}
+th,.rtbl th{background:rgba(244,247,252,.92);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+tbody tr:hover td,.rtbl tbody tr:hover{background:rgba(219,234,254,.38)}
+tfoot td{background:rgba(241,245,251,.85)}
+.fbtn,.fsearch{background:rgba(255,255,255,.6)!important;border:1px solid var(--glass-b)!important;border-radius:14px;box-shadow:inset 0 1px 0 #fff,0 6px 18px -12px rgba(30,58,110,.35)}
+.fbtn:hover{background:rgba(255,255,255,.82)!important}
+.fdd.act .fbtn{background:rgba(219,234,254,.7)!important;border-color:rgba(21,112,239,.35)!important}
+.btn{background:rgba(255,255,255,.62);border-color:var(--glass-b);border-radius:10px;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:inset 0 1px 0 #fff,0 4px 12px -8px rgba(30,58,110,.35)}
+.btn:hover{background:rgba(255,255,255,.9)}
+.btn.pri{background:linear-gradient(135deg,#1d4ed8,#0b2545);border-color:transparent;color:#fff;box-shadow:0 8px 22px -8px rgba(29,78,216,.7)}
+.seg{background:rgba(15,27,45,.05);border-color:rgba(255,255,255,.7);border-radius:11px}
+.seg button{border-radius:8px}
+.seg button.on{background:rgba(255,255,255,.95);box-shadow:0 2px 8px -2px rgba(30,58,110,.3)}
+.chip{background:rgba(255,255,255,.6);border-color:var(--glass-b)}
+.chip.on{background:linear-gradient(135deg,#1d4ed8,#0b2545);border-color:transparent;box-shadow:0 6px 16px -8px rgba(29,78,216,.8)}
+
+/* section titles */
+.rsec{border-bottom:0;padding-bottom:0;position:relative}
+.rsec span{background:linear-gradient(135deg,var(--g1),var(--g2));border-radius:10px;box-shadow:0 6px 16px -6px rgba(99,102,241,.75);width:30px;height:30px;flex-basis:30px}
+.rsec::after{content:"";flex:1 1 auto;height:1px;margin-left:12px;background:linear-gradient(90deg,rgba(15,27,45,.14),transparent)}
+.hero .big,.rbig .rv{background:linear-gradient(135deg,#0b2545 0%,#1d4ed8 60%,#0891b2 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .big small,.rbig .rv small{-webkit-text-fill-color:var(--ink2)}
+
+/* progress bars glow */
+.stack,.stack.stg{border-radius:999px;box-shadow:inset 0 1px 2px rgba(15,27,45,.12);background:rgba(15,27,45,.06)}
+.k-done,.stack i[style*="--good"]{box-shadow:0 0 12px rgba(12,163,12,.35)}
+
+/* overlays: stronger frost */
+.dw,.fpop,.gsm,.rpmb,.zbox,#tip{background:rgba(255,255,255,.86)!important;-webkit-backdrop-filter:saturate(180%) blur(28px);backdrop-filter:saturate(180%) blur(28px);border:1px solid rgba(255,255,255,.9)}
+.dw{box-shadow:-24px 0 60px -20px rgba(15,27,45,.35)}
+.ov.on{background:rgba(11,26,51,.28);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.dwh{background:rgba(248,250,253,.7)}
+.toast{background:rgba(11,37,69,.82);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.15)}
+
+/* page enter animation */
+.page.on>.grid>*,.page.on .rwrap>*{animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+.page.on>.grid>*:nth-child(2),.page.on .rwrap>*:nth-child(2){animation-delay:.04s}
+.page.on>.grid>*:nth-child(3),.page.on .rwrap>*:nth-child(3){animation-delay:.08s}
+.page.on>.grid>*:nth-child(4),.page.on .rwrap>*:nth-child(4){animation-delay:.12s}
+.page.on>.grid>*:nth-child(n+5),.page.on .rwrap>*:nth-child(n+5){animation-delay:.16s}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* scrollbar */
+*::-webkit-scrollbar{width:10px;height:10px}
+*::-webkit-scrollbar-thumb{background:rgba(15,27,45,.18);border-radius:10px;border:2px solid transparent;background-clip:padding-box}
+*::-webkit-scrollbar-thumb:hover{background-color:rgba(15,27,45,.32)}
+*::-webkit-scrollbar-track{background:transparent}
+
+@media (prefers-reduced-motion:reduce){body::before,.page.on>.grid>*,.page.on .rwrap>*{animation:none!important}.card,.rcard{transition:none}}
+@media (max-width:640px){:root{--blur:saturate(160%) blur(12px)}.top h1{font-size:21px}}
+
+/* print: tắt hiệu ứng kính */
+@media print{
+  html,body{background:#fff!important}
+  body::before,body::after,.card::before,.rcard::before{display:none!important}
+  .card,.rcard,.rdef,.tblwrap,.fbtn,.rmini>div{background:#fff!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:none!important;border:1px solid #e4e7ec!important}
+  .top{background:#fff!important}
+  .top h1,.hero .big,.rbig .rv{-webkit-text-fill-color:#0f1b2d;color:#0f1b2d;background:none}
+  .page.on>.grid>*,.page.on .rwrap>*{animation:none!important}
+}
+
+.rmini .rclick{background:linear-gradient(160deg,rgba(254,226,226,.85),rgba(254,242,242,.55))!important;border-color:rgba(220,38,38,.28)!important}
+.rmini .rclick b{color:#b42318}
+/* soft glow ring on hero card */
+#rS1{box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 0 0 1px rgba(255,255,255,.6),0 30px 60px -28px rgba(59,130,246,.45)}
+
+
+/* ===== Report mode + bảng tổng hợp Clinic / Cosmetic ===== */
+body.rpt{background:transparent}
+body.rpt #p_ov .rwrap{max-width:1340px}
+body.rpt .rtool{align-items:center;gap:12px;flex-wrap:wrap}
+.rtool .sp{flex:1 1 auto}
+.rtool .btn.pri{display:inline-flex}
+
+.sxlegend{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;font-size:12.5px;color:var(--ink2);margin:0 0 14px;padding:10px 14px;border-radius:12px;background:rgba(255,255,255,.5);border:1px solid var(--glass-b,var(--border));-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.sxlegend b{color:var(--ink);font-weight:600}
+.sxlegend span{display:inline-flex;align-items:center;gap:6px}
+.sxlegend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+
+.sxcard{margin-top:18px;padding:22px 24px!important}
+.sxhd{display:flex;gap:14px;align-items:center;margin-bottom:16px}
+.sxhd h3{margin:0;font-size:19px;letter-spacing:-.02em}
+.sxtag{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;padding:7px 11px;border-radius:10px;
+  background:linear-gradient(135deg,#1d4ed8,#6941c6);box-shadow:0 8px 20px -8px rgba(105,65,198,.7)}
+.sx-cos .sxtag{background:linear-gradient(135deg,#0e9384,#1570ef);box-shadow:0 8px 20px -8px rgba(14,147,132,.7)}
+
+.sxk{display:grid;grid-template-columns:1.3fr repeat(4,1fr);gap:10px;margin-bottom:18px}
+.sxkb{text-align:left;font:inherit;color:inherit;border:1px solid var(--glass-b,var(--border));border-radius:14px;padding:12px 14px;
+  background:linear-gradient(160deg,rgba(255,255,255,.85),rgba(255,255,255,.5));box-shadow:inset 0 1px 0 #fff,0 6px 18px -12px rgba(30,58,110,.35);
+  display:flex;flex-direction:column;gap:2px;min-width:0;position:relative;overflow:hidden}
+.sxkb span{font-size:11.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.sxkb b{font-size:28px;line-height:1.15;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.sxkb small{font-size:12px;color:var(--muted)}
+.sxkp{cursor:pointer;transition:transform .2s,box-shadow .2s}
+.sxkp::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--pc)}
+.sxkp b{color:var(--pc)}
+.sxkp:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 #fff,0 14px 30px -14px rgba(30,58,110,.45)}
+.sxbar{height:6px;border-radius:99px;background:rgba(15,27,45,.08);margin-top:6px;overflow:hidden}
+.sxbar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#12b76a,#0ca30c);box-shadow:0 0 10px rgba(18,183,106,.5)}
+
+.sxh4{margin:6px 0 10px;font-size:13px;font-weight:700;color:var(--ink);letter-spacing:-.005em}
+.sxuh{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:22px}
+.sxu button em{font-style:normal;font-size:11px;color:var(--muted);margin-left:4px;font-variant-numeric:tabular-nums}
+.sxu button.on em{color:var(--s1ink)}
+.sxut .sxw{margin-top:4px}
+
+.sxw{overflow:auto;border-radius:14px;border:1px solid var(--glass-b,var(--border));background:rgba(255,255,255,.55);max-width:100%}
+table.sx{border-collapse:separate;border-spacing:0;width:100%;font-size:12.5px;min-width:max-content}
+.sx th,.sx td{padding:0;border-bottom:1px solid var(--grid);white-space:nowrap;text-align:center;vertical-align:middle;position:static}
+.sx thead th{position:sticky;top:0;z-index:2;font-size:11px;font-weight:600;color:var(--ink2);text-transform:none;letter-spacing:0;cursor:default;background:rgba(244,247,252,.96)}
+.sx thead tr.sxh th{top:31px;padding:7px 8px;max-width:118px;white-space:normal;line-height:1.25;vertical-align:bottom}
+.sx thead tr.sxg th{height:31px;padding:6px 10px;font-size:11.5px;font-weight:700;color:#fff;letter-spacing:.02em}
+.sx thead tr.sxg th.st0,.sx thead tr.sxg th.st2,.sx thead tr.sxg th.st3{background:#0b2545;color:#fff;vertical-align:middle}
+.sx thead tr.sxg th.gu{background:linear-gradient(135deg,#1d4ed8,#2563eb)}
+.sx thead tr.sxg th.gs{background:linear-gradient(135deg,#0e9384,#0891b2)}
+.sx thead tr.sxg th.gh{background:linear-gradient(135deg,#6941c6,#7c3aed)}
+.sx thead tr.sxh th.gu{box-shadow:inset 0 2px 0 #2563eb}
+.sx thead tr.sxh th.gs{box-shadow:inset 0 2px 0 #0891b2}
+.sx thead tr.sxh th.gh{box-shadow:inset 0 2px 0 #7c3aed}
+.sx .gb{border-left:1px solid rgba(15,27,45,.12)}
+.sxd{display:inline-block;width:7px;height:7px;border-radius:2px;margin-right:5px;vertical-align:1px}
+/* cột cố định bên trái */
+.sx .st0,.sx .st1,.sx .st2,.sx .st3{position:sticky;z-index:1;background:rgba(250,251,253,.97);text-align:left}
+.sx thead .st0,.sx thead .st2,.sx thead .st3{z-index:3}
+.sx .st0{left:0;min-width:22px}
+.sx td.st0.sxi{width:22px;min-width:22px}
+.sx .st1{left:22px;min-width:186px;padding:8px 10px}
+.sx thead .st0{min-width:208px}
+.sx .st2{left:208px;min-width:132px;padding:6px 10px}
+.sx .st3{left:340px;min-width:70px;text-align:center;box-shadow:inset -1px 0 0 rgba(15,27,45,.12)}
+.sx td.sxl{padding:9px 12px;font-weight:700;color:var(--ink)}
+.sxcar{display:inline-block;width:8px;height:8px;border-radius:2px;background:linear-gradient(135deg,#1d4ed8,#6941c6);margin-right:8px;vertical-align:1px}
+.sx tr.sx-sub td{background:rgba(232,241,254,.75)}
+.sx tr.sx-sub td.st0,.sx tr.sx-sub td.st2,.sx tr.sx-sub td.st3{background:rgba(232,241,254,.98)}
+.sx tr.sx-tot td{background:rgba(234,236,240,.8);border-bottom:0;font-weight:700}
+.sx tr.sx-tot td.st0,.sx tr.sx-tot td.st2,.sx tr.sx-tot td.st3{background:rgba(234,236,240,.98)}
+.sx tr.sx-row:hover td{background:rgba(219,234,254,.35)}
+.sx tr.sx-row:hover td.st0,.sx tr.sx-row:hover td.st1,.sx tr.sx-row:hover td.st2,.sx tr.sx-row:hover td.st3{background:rgba(237,244,255,.98)}
+.sxp{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--pc);padding:2px 9px 2px 7px;border-radius:999px;
+  background:color-mix(in srgb,var(--pc) 10%,#fff);border:1px solid color-mix(in srgb,var(--pc) 28%,transparent)}
+.sxp::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--pc)}
+.sx .z{color:rgba(15,27,45,.22);font-size:12px}
+.sxn,.sxc{font:inherit;border:0;cursor:pointer;font-variant-numeric:tabular-nums;border-radius:8px;transition:transform .15s,box-shadow .15s}
+.sxn{background:none;font-weight:800;font-size:14px;color:var(--navy,#0b2545);padding:6px 10px}
+.sxn:hover{background:rgba(21,112,239,.1)}
+.sxc{min-width:38px;padding:5px 8px;margin:4px;font-weight:600;color:#0f1b2d}
+td.gu .sxc{background:rgba(37,99,235,var(--a))}
+td.gs .sxc{background:rgba(8,145,178,var(--a))}
+td.gh .sxc{background:rgba(124,58,237,var(--a))}
+.sxc:hover{transform:scale(1.08);box-shadow:0 6px 16px -6px rgba(30,58,110,.5);color:#fff;background:#1d4ed8!important}
+.sx tr.sx-sub .sxc,.sx tr.sx-tot .sxc{font-weight:800}
+
+@media (max-width:900px){.sxk{grid-template-columns:repeat(2,1fr)}.sxk .sxkb:first-child{grid-column:span 2}}
+@media print{
+  .sxw{overflow:visible;border:1px solid #d0d5dd}
+  .sx .st0,.sx .st1,.sx .st2,.sx .st3,.sx thead th{position:static}
+  .sxcard{break-inside:auto}
+  .sxu,.rtool .btn{display:none!important}
+
+}
+.sx thead tr.sxg th.gu,.sx thead tr.sxg th.gs,.sx thead tr.sxg th.gh{text-align:left;padding-left:14px}
+.sxw{position:relative;scrollbar-width:thin}
+.sxhint{font-size:11.5px;color:var(--muted);margin:6px 2px 0;display:flex;align-items:center;gap:6px}
+@media print{.sxhint{display:none}}
+/* ===== tab giống sheet Excel ===== */
+.rtp{display:none}
+.rtp.on{display:block;animation:rise .45s cubic-bezier(.2,.8,.2,1) both}
+.rtp>.rsec:first-child,.rtp>div:first-child>.rsec:first-child{margin-top:18px}
+.rtabs{position:sticky;top:0;z-index:25;display:flex;gap:4px;overflow-x:auto;margin:14px 0 0;padding:6px;border-radius:16px;
+  background:rgba(255,255,255,.62);-webkit-backdrop-filter:saturate(170%) blur(20px);backdrop-filter:saturate(170%) blur(20px);
+  border:1px solid rgba(255,255,255,.8);box-shadow:inset 0 1px 0 #fff,0 12px 30px -16px rgba(30,58,110,.4);scrollbar-width:none}
+.rtabs::-webkit-scrollbar{display:none}
+.rtabs button{font:inherit;font-size:13px;font-weight:500;color:var(--ink2);border:1px solid transparent;background:none;border-radius:11px;padding:8px 13px;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:7px;transition:all .2s}
+.rtabs button:hover{background:rgba(255,255,255,.7);color:var(--ink)}
+.rtabs button .ri{width:18px;height:18px;border-radius:6px;font-size:10.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;background:rgba(15,27,45,.07);color:var(--muted)}
+.rtabs button em{font-style:normal;font-size:11px;font-weight:600;color:var(--muted);background:rgba(15,27,45,.06);padding:1px 7px;border-radius:99px;font-variant-numeric:tabular-nums}
+.rtabs button.on{background:linear-gradient(135deg,#0b2545,#1d4ed8);color:#fff;font-weight:600;box-shadow:0 8px 20px -8px rgba(29,78,216,.75)}
+.rtabs button.on .ri{background:rgba(255,255,255,.22);color:#fff}
+.rtabs button.on em{background:rgba(255,255,255,.2);color:#fff}
+
+/* bảng sheet */
+.tbt{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.tsr{display:flex;align-items:center;gap:8px;border:1px solid var(--glass-b,var(--border));background:rgba(255,255,255,.75);border-radius:11px;padding:7px 11px;min-width:300px;flex:0 1 420px;box-shadow:inset 0 1px 0 #fff}
+.tsr:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px rgba(21,112,239,.12)}
+.tsr svg{color:var(--muted)}
+.tsr input{border:0;outline:0;background:none;font:inherit;font-size:13px;flex:1;min-width:0;color:var(--ink)}
+.tw{overflow:auto;border-radius:14px;border:1px solid var(--glass-b,var(--border));background:rgba(255,255,255,.55)}
+.tw.tall{max-height:68vh}
+table.xt{border-collapse:separate;border-spacing:0;width:100%;font-size:13px}
+.xt th{position:sticky;top:0;z-index:2;background:rgba(244,247,252,.97);font-size:12px;font-weight:600;color:var(--ink2);padding:10px 12px;text-align:left;white-space:nowrap;border-bottom:1px solid var(--border);cursor:pointer;user-select:none}
+.xt th:hover{color:var(--ink)}
+.xt th.srt{color:var(--s1ink)}
+.xt td{padding:8px 12px;border-bottom:1px solid var(--grid);vertical-align:top}
+.xt td.num,.xt th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.xt tbody tr:last-child td{border-bottom:0}
+.xt.clk tbody tr{cursor:pointer}
+.xt tbody tr:hover td{background:rgba(219,234,254,.38)}
+.xt .stk0,.xt .stk1{position:sticky;z-index:1;background:rgba(250,251,253,.97)}
+.xt th.stk0,.xt th.stk1{z-index:3;background:rgba(244,247,252,.98)}
+.xt .stk0{left:0;min-width:74px}
+.xt .stk1{left:74px;min-width:200px;font-weight:600;box-shadow:inset -1px 0 0 rgba(15,27,45,.1)}
+.xt tfoot td{position:sticky;bottom:0;background:rgba(234,236,240,.97);font-weight:700;border-top:1px solid var(--axis);padding:10px 12px}
+.xt .z{color:rgba(15,27,45,.22)}
+.hc{font:inherit;border:0;cursor:pointer;min-width:38px;padding:4px 8px;border-radius:8px;font-weight:600;font-variant-numeric:tabular-nums;color:#0f1b2d;
+  background:color-mix(in srgb,var(--hc) calc(var(--a) * 100%),transparent);transition:transform .15s,box-shadow .15s}
+.hc:hover{transform:scale(1.08);background:var(--hc);color:#fff;box-shadow:0 6px 16px -6px rgba(30,58,110,.5)}
+.pbar{display:inline-block;width:70px;height:6px;border-radius:99px;background:rgba(15,27,45,.08);overflow:hidden;vertical-align:middle;margin-right:8px}
+.pbar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#12b76a,#0ca30c)}
+.pbar.lg{width:100%;height:8px;margin:8px 0 0}
+.sgp{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:2px 9px 2px 7px;border-radius:99px;white-space:nowrap;
+  color:color-mix(in srgb,var(--hc) 75%,#000);background:color-mix(in srgb,var(--hc) 12%,#fff);border:1px solid color-mix(in srgb,var(--hc) 30%,transparent)}
+.sgp::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--hc)}
+.xt.pv td.rep{color:rgba(15,27,45,.28)}
+.xt.pv td.rep .sgp{opacity:.35}
+
+/* tab Tóm tắt */
+.ttc{padding:22px 24px!important}
+.ttmeta{display:flex;flex-wrap:wrap;gap:10px 28px;padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid var(--grid)}
+.ttmeta div{display:flex;flex-direction:column;gap:2px}
+.ttmeta span{font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.ttmeta b{font-size:14px;font-weight:600}
+.ttk{display:grid;grid-template-columns:2fr repeat(4,1fr);gap:10px}
+.ttb{font:inherit;color:inherit;text-align:left;border:1px solid var(--glass-b,var(--border));border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;position:relative;overflow:hidden;
+  background:linear-gradient(160deg,rgba(255,255,255,.88),rgba(255,255,255,.52));box-shadow:inset 0 1px 0 #fff,0 6px 18px -12px rgba(30,58,110,.35)}
+.ttb.hero{grid-row:span 2;justify-content:center}
+.ttb.hero b{font-size:46px;background:linear-gradient(135deg,#0b2545,#1d4ed8 60%,#0891b2);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ttb span{font-size:11.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;display:flex;align-items:center}
+.ttb b{font-size:26px;font-weight:800;letter-spacing:-.03em;line-height:1.15;font-variant-numeric:tabular-nums}
+.ttb small{font-size:12px;color:var(--muted)}
+button.ttb{cursor:pointer;transition:transform .2s,box-shadow .2s}
+button.ttb::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--hc)}
+button.ttb:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 #fff,0 14px 30px -14px rgba(30,58,110,.45)}
+.ttl{margin:0;padding:0;list-style:none}
+.ttl li{position:relative;padding:9px 0 9px 22px;border-top:1px solid var(--grid);font-size:13.5px;line-height:1.55}
+.ttl li:first-child{border-top:0}
+.ttl li::before{content:"";position:absolute;left:4px;top:16px;width:7px;height:7px;border-radius:2px;background:linear-gradient(135deg,#1d4ed8,#6941c6)}
+.sev{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;background:#98a2b3;vertical-align:1px}
+.sev.hi{background:#d92d20;box-shadow:0 0 0 3px rgba(217,45,32,.15)}.sev.md{background:#f79009;box-shadow:0 0 0 3px rgba(247,144,9,.15)}.sev.lo{background:#1570ef}
+.xt b.big{font-size:16px}
+@media (max-width:900px){.ttk{grid-template-columns:repeat(2,1fr)}.ttb.hero{grid-column:span 2;grid-row:auto}.tsr{min-width:0;flex:1 1 100%}}
+@media print{.rtabs,.tbt{display:none!important}.tw,.tw.tall{max-height:none;overflow:visible}.xt th,.xt tfoot td,.xt .stk0,.xt .stk1{position:static}}
+.xt.nw td{white-space:nowrap;max-width:280px;overflow:hidden;text-overflow:ellipsis}
+.xt tfoot td{background:#eceff4}
+.rsec.sub span{width:auto;min-width:30px;padding:0 7px;font-size:12px}
+.rsec.sub{font-size:17px}
+.xt td:first-child,.xt th:first-child{white-space:nowrap}
+
 </style>
 </head>
-<body>
+<body class="rpt">
 <div class="zov" id="zov" aria-hidden="true"><div class="zbox"><div class="card-h"><div><h2>Tiến độ chốt chi nhánh theo ngày</h2><div class="hint" id="zHint"></div></div><div class="lctools"><div class="seg lcr"><button data-r="14">14 ngày</button><button data-r="30">30 ngày</button><button data-r="all">Từ đầu</button></div><button class="btn" id="zX" aria-label="Đóng">✕ Đóng</button></div></div><div class="lc" id="zlc"></div></div></div>
 
 <header class="top"><div class="wrap hrow">
@@ -665,7 +993,7 @@ a{color:var(--s1ink)}
     <div class="ttl">
       <div class="eyebrow">Vận hành bảo trì <i>/</i> Chương trình mùa mưa 2026</div>
       <h1>Chống dột &amp; vệ sinh máng xối</h1>
-      <div class="sub"><span class="sub0">Báo cáo hiện trạng và tiến độ</span><span class="sub1" id="subline">Đang nạp dữ liệu…</span></div>
+      <div class="sub"><span class="sub0">Report hiện trạng &amp; công tác thực hiện</span><span class="sub1" id="subline">Đang nạp dữ liệu…</span></div>
     </div>
   </div>
   <div class="tools">
@@ -682,7 +1010,7 @@ a{color:var(--s1ink)}
   <span class="bsep"></span>
   <div class="bgrp">
     <button class="btn" id="btnWshr" title="Cập nhật trạng thái các task ở cột Link Task từ WSHR"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 14l2 2 4-4"/></svg><span>Task WSHR</span></button>
-    <a class="btn" id="lnkRpt" href="./report.html" target="_blank" rel="noopener"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><path d="M8 17v-5"/><path d="M13 17V8"/><path d="M18 17v-9"/></svg><span>Report</span></a>
+    <a class="btn" id="lnkDash" href="./dashboard.html" target="_blank" rel="noopener"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><path d="M8 17v-5"/><path d="M13 17V8"/><path d="M18 17v-9"/></svg><span>Dashboard chi tiết ↗</span></a>
     <details class="gsdd" id="gsDd"><summary class="btn" title="Mở file Google Sheet nguồn dữ liệu"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg><span>Google Sheet</span><span class="car"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span></summary><div class="gsm"><a href="https://docs.google.com/spreadsheets/d/1ayCvuEeLWDv-SnxLuqFBL5oLVhuP_8DFONJqSNOYeEs/edit#gid=1727620262" target="_blank" rel="noopener"><b>CỬA HÀNG KIỂM TRA ↗</b><span>Hiện trạng mái, máng, lối lên – cửa hàng cập nhật</span></a><a href="https://docs.google.com/spreadsheets/d/1Vfh9vKXP4--vYnJcotYO5iMveb6o4IGZ7vOfEdteHR4/edit#gid=1862042208" target="_blank" rel="noopener"><b>Bảo trì thực hiện ↗</b><span>Phân công & kết quả của bảo trì nội bộ</span></a><a href="https://docs.google.com/spreadsheets/d/1Vfh9vKXP4--vYnJcotYO5iMveb6o4IGZ7vOfEdteHR4/edit#gid=970641464" target="_blank" rel="noopener"><b>NCC thực hiện ↗</b><span>Phân công NCC, ngày làm, hạng mục & chi phí</span></a><a href="https://docs.google.com/spreadsheets/d/1ayCvuEeLWDv-SnxLuqFBL5oLVhuP_8DFONJqSNOYeEs/edit#gid=1178146739" target="_blank" rel="noopener"><b>Báo cáo mưa dột ↗</b><span>Sheet tổng (file chính)</span></a><a href="https://docs.google.com/spreadsheets/d/19sfMQbis8zXtlqhg4TilId2sE9X-YG-DznawShLarkQ/edit#gid=999639473" target="_blank" rel="noopener"><b>Danh sách NCC ↗</b><span>NCC Công Phú / Thiên Danh / Wasaco</span></a><a href="https://docs.google.com/spreadsheets/d/1TPoPZZNQXUar34jfUDhm_ZgQ0y5z63TSvZC86tRJTEE/edit#gid=1673142363" target="_blank" rel="noopener"><b>Báo cáo mặt tiền ↗</b><span>Ảnh mặt tiền, cây xanh trước cửa hàng</span></a><a href="https://docs.google.com/spreadsheets/d/14Rmk0kKA-ODuPCv-H7TzJitG6taZwiJnU-C0rhscyuY/edit" target="_blank" rel="noopener"><b>Dữ liệu cập nhật từ dashboard ↗</b><span>Tick không cần vệ sinh, ghi chú, xác nhận</span></a></div></details>
   </div>
   <span class="bsp"></span>
@@ -724,22 +1052,32 @@ a{color:var(--s1ink)}
     <!-- ===================== TỔNG QUAN ===================== -->
     <section class="page on pr first" id="p_ov">
       <div class="rwrap" id="rpt">
-        <div class="rtool"><label>Phạm vi <select id="rKv"></select></label><span class="sm" id="rScope" style="display:inline"></span></div>
-        <h2 class="rsec"><span>1</span>Kết luận nhanh</h2>
+        <div class="rtool"><label>Phạm vi <select id="rKv"></select></label><span class="sm" id="rScope" style="display:inline"></span><span class="sp"></span><button class="btn pri" id="btnSumX" title="Tải file Excel gồm đủ các sheet giống các tab"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg><span>Xuất Excel (đủ các sheet)</span></button></div>
+        <div class="rtabs" id="rTabs"></div>
+<div class="rtp" data-t="tt"><div id="rtTT"></div><h2 class="rsec sub"><span>1.1</span>Kết luận nhanh</h2>
         <section class="rcard" id="rS1"></section>
-        <h2 class="rsec"><span>2</span>Hiện trạng thực tế tại cửa hàng <small>tính trên tất cả chi nhánh trong phạm vi</small></h2>
+        <h2 class="rsec sub"><span>1.2</span>Hiện trạng thực tế tại cửa hàng <small>tính trên tất cả chi nhánh trong phạm vi</small></h2>
         <div id="rS2"></div>
-        <h2 class="rsec"><span>3</span>Công tác thực hiện – ai làm, đã làm gì <small>“ai làm” theo người / đơn vị thực tế hoàn thành</small></h2>
+        <h2 class="rsec sub"><span>1.3</span>Công tác thực hiện – ai làm, đã làm gì <small>“ai làm” theo người / đơn vị thực tế hoàn thành</small></h2>
         <div id="rS3"></div>
-        <h2 class="rsec"><span>4</span>Mưa dột &amp; rủi ro</h2>
+        <h2 class="rsec sub"><span>1.4</span>Mưa dột &amp; rủi ro</h2>
         <div id="rS4"></div>
-        <h2 class="rsec"><span>5</span>Việc cần làm tiếp theo <small>bấm số để xem danh sách, bấm tên chi nhánh để xem chi tiết</small></h2>
+        <h2 class="rsec sub"><span>1.5</span>Việc cần làm tiếp theo <small>bấm số để xem danh sách, bấm tên chi nhánh để xem chi tiết</small></h2>
         <section class="rcard" id="rS5"></section>
         <section class="rdef"><h4>Cách tính</h4><ul>
           <li><b>Đã chốt</b> = Hoàn thành + Không cần xử lý. Tiến độ không tính các chi nhánh <b>cần cải tạo lối lên mái</b> (không có lối lên / không tiếp cận được mái) – nhóm này theo dõi riêng.</li>
           <li><b>Hoàn thành</b> gồm: đã vệ sinh / xử lý (bảo trì, NCC, cửa hàng, bảo vệ; task WSHR bước B2 hoặc task rà soát máng xối COS.SCH.109 hoàn tất) và đã kiểm tra – sạch, không cần vệ sinh (tiếp tục kiểm tra định kỳ).</li>
           <li><b>Không cần xử lý</b>: cửa hàng thuê trong tòa nhà / chung cư / kiot / chung chủ phía trên.</li>
-          <li>Nguồn: sheet CỬA HÀNG KIỂM TRA, sheet Bảo trì / NCC thực hiện, báo cáo mặt tiền, task WSHR (thoát nước mái, mưa dột 2026), task COS.SCH.109. Bấm “⟳ Cập nhật dữ liệu” và “🔄 Task WSHR” để lấy số mới nhất.</li></ul></section>
+          <li>Nguồn: sheet CỬA HÀNG KIỂM TRA, sheet Bảo trì / NCC thực hiện, báo cáo mặt tiền, task WSHR (thoát nước mái, mưa dột 2026), task COS.SCH.109. Bấm “⟳ Cập nhật dữ liệu” và “🔄 Task WSHR” để lấy số mới nhất.</li></ul></section></div>
+<div class="rtp" data-t="sum"><h2 class="rsec"><span>2</span>Tổng hợp Clinic / Cosmetic <small>lối lên mái × cây xanh → ưu tiên · đơn vị · giai đoạn · kết quả</small></h2>
+        <div id="rSum"></div></div>
+<div class="rtp" data-t="ct"><div id="rtCT"></div></div>
+<div class="rtp" data-t="ds"><div id="rtDS"></div></div>
+<div class="rtp" data-t="kv"><div id="rtKV"></div></div>
+<div class="rtp" data-t="tinh"><div id="rtTINH"></div></div>
+<div class="rtp" data-t="dv"><div id="rtDV"></div></div>
+<div class="rtp" data-t="kcx"><div id="rtKCX"></div></div>
+        
       </div>
       <div class="grid ovold" aria-hidden="true">
         <div class="card c12">
@@ -4048,6 +4386,374 @@ SRC = {kind:"snap", at:(LUOI_DATA && LUOI_DATA.at) || (window.MX_CHKT_SNAP || {}
 go(["ov", "unit", "st", "todo", "list", "wk"].includes(PAGE) ? PAGE : "ov");
 recompute();
 reload();
+
+</script>
+<script id="pro-fx">(function(){var r=0;document.addEventListener('pointermove',function(e){if(r)return;r=requestAnimationFrame(function(){r=0;var c=e.target&&e.target.closest&&e.target.closest('.card,.rcard');if(!c)return;var b=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-b.left)+'px');c.style.setProperty('--my',(e.clientY-b.top)+'px');});},{passive:true});})();</script>
+<script id="sum-fx">
+/* ===== Report: Tổng hợp Clinic / Cosmetic theo format Summary (Lối lên mái × Cây xanh → Ưu tiên; Đơn vị, Giai đoạn, Kết quả) ===== */
+(function(){
+  if(!document.getElementById("rSum")) return;
+  const LOI = [["co", "Có lối lên mái"], ["khong", "Không có lối lên mái"], ["blank", "Chưa rõ lối lên mái"]];
+  const TREE = [["hit", "Cây xanh ảnh hưởng mái"], ["no", "Không ảnh hưởng"], ["blank", "Không có cây xanh"]];
+  const PRIO = {p1:{n:"Ưu tiên 1", c:"#d92d20"}, p2:{n:"Ưu tiên 2", c:"#f79009"}, p3:{n:"Ưu tiên 3", c:"#1570ef"}, bs:{n:"Bổ sung thông tin", c:"#98a2b3"}};
+  const PRIO_ORDER = ["p1", "p2", "p3", "bs"];
+  const STG_SX = ["done", "none", "nt", "run", "wait", "access", "nodata"];
+  const UNIT_SX = ["bt", "ncc", "ch", "bv"];
+  const HOW = [
+    ["Đã vệ sinh", "Đã vệ sinh"], ["Bảo trì / NCC xử lý", "BT / NCC xử lý"], ["Bảo trì xử lý xong (B2 task WSHR)", "BT xong (B2 WSHR)"],
+    ["Task WSHR hoàn tất (nghiệm thu xong)", "Task WSHR nghiệm thu"], ["Cửa hàng rà soát / vệ sinh máng xối xong (task COS.SCH.109)", "CH rà soát (COS.SCH.109)"],
+    ["Hoàn tất (theo sheet)", "Hoàn tất theo sheet"], ["Theo trao đổi trên task", "Theo trao đổi trên task"], ["Đã kiểm tra – sạch", "Kiểm tra – sạch"],
+    ["Cửa hàng báo không phát sinh", "CH báo không phát sinh"], ["Đã kiểm tra xong (vận hành xác nhận)", "VH xác nhận"]];
+  const NOT_DONE = "Chưa hoàn thành";
+  const loiOf = a => { const v = String(a.r.loi || "").trim().toLowerCase(); return v === "có" ? "co" : v === "không" ? "khong" : "blank"; };
+  const treeOf = a => hasTree(a) ? (a.treeHit ? "hit" : "no") : "blank";
+  const prioOf = a => prioRC(loiOf(a), treeOf(a));
+  /* anh Huy 02/11: cây xanh để trống = không có cây xanh → như “không ảnh hưởng” (Ưu tiên 3); chỉ thiếu lối lên mới là Bổ sung thông tin */
+  const prioRC = (l, t) => l === "blank" ? "bs" : t !== "hit" ? "p3" : l === "khong" ? "p1" : "p2";
+  const howOf = a => { const h = a.doneHow || ""; if(!h) return NOT_DONE; if(/^Theo trao đổi/.test(h)) return "Theo trao đổi trên task"; return h; };
+  const unitName = k => UNIT[k] || k;
+  const stgName = k => STG[STGI[k]].n, stgColor = k => STG[STGI[k]].c;
+  let Q = [], UNIT_SEL = {};
+  const q = (title, fn) => { Q.push({title, fn}); return Q.length - 1; };
+  const G = () => {
+    const L = V.slice();
+    return [
+      {k:"clinic", t:"Chi nhánh Clinic", s:"Chi nhánh có Hasaki Clinic", L:L.filter(a => isClinic(a))},
+      {k:"cos", t:"Chi nhánh Cosmetic", s:"Chi nhánh không có Clinic", L:L.filter(a => !isClinic(a))}];
+  };
+  const howCols = L => { const have = new Set(L.map(howOf)); const cols = HOW.filter(h => have.has(h[0])); [...have].filter(h => h !== NOT_DONE && !HOW.some(x => x[0] === h)).forEach(h => cols.push([h, h])); cols.push([NOT_DONE, NOT_DONE]); return cols; };
+
+  /* ---------- dựng cấu trúc bảng (dùng chung cho HTML & Excel) ---------- */
+  function model(L, withUnit){
+    const cols = [];
+    if(withUnit) UNIT_SX.forEach(k => cols.push({g:"u", k, n:unitName(k), f:a => a.unit === k}));
+    STG_SX.forEach(k => cols.push({g:"s", k, n:stgName(k), c:stgColor(k), f:a => a.stg === k}));
+    howCols(L).forEach(([k, n]) => cols.push({g:"h", k, n, full:k, f:a => howOf(a) === k}));
+    const rows = [];
+    LOI.forEach(([lk, ln]) => {
+      const LL = L.filter(a => loiOf(a) === lk); if(!LL.length) return;
+      rows.push({type:"sub", lk, label:ln, L:LL});
+      TREE.forEach(([tk, tn]) => { const LT = LL.filter(a => treeOf(a) === tk); rows.push({type:"row", lk, tk, label:tn, pr:prioRC(lk, tk), L:LT}); });
+    });
+    rows.push({type:"tot", label:"Tổng cộng", L});
+    return {cols, rows};
+  }
+  const GROUPS = {u:{n:"Đơn vị thực hiện", cls:"gu"}, s:{n:"Giai đoạn – trạng thái", cls:"gs"}, h:{n:"Kết quả để lại", cls:"gh"}};
+  function tableHTML(gt, L, withUnit, scopeLbl){
+    const m = model(L, withUnit), gs = ["u", "s", "h"].filter(g => m.cols.some(c => c.g === g));
+    const head1 = `<tr class="sxg"><th class="st0" colspan="2" rowspan="2">Lối lên mái · Cây xanh</th><th class="st2" rowspan="2">Ưu tiên</th><th class="st3" rowspan="2">SL CN</th>${gs.map(g => `<th class="${GROUPS[g].cls}" colspan="${m.cols.filter(c => c.g === g).length}">${GROUPS[g].n}</th>`).join("")}</tr>`;
+    const head2 = `<tr class="sxh">${m.cols.map((c, i) => `<th class="${GROUPS[c.g].cls}${i && m.cols[i - 1].g !== c.g ? " gb" : ""}" title="${esc(c.full || c.n)}">${c.c ? `<i class="sxd" style="background:${c.c}"></i>` : ""}${esc(c.n)}</th>`).join("")}</tr>`;
+    const body = m.rows.map(r => {
+      const tot = r.L.length, lbl = `${gt} · ${scopeLbl ? scopeLbl + " · " : ""}`;
+      const rowLbl = r.type === "row" ? `${LOI.find(x => x[0] === r.lk)[1]} · ${r.label}` : r.label;
+      const first = r.type === "sub" ? `<td class="st0 sxl" colspan="2"><span class="sxcar"></span>${esc(r.label)}</td><td class="st2"></td>`
+        : r.type === "tot" ? `<td class="st0 sxl" colspan="2">Tổng cộng</td><td class="st2"></td>`
+        : `<td class="st0 sxi"></td><td class="st1">${esc(r.label)}</td><td class="st2"><span class="sxp" style="--pc:${PRIO[r.pr].c}">${PRIO[r.pr].n}</span></td>`;
+      const n0 = tot ? `<button class="sxn" data-q="${q(lbl + rowLbl, a => r.L.includes(a))}">${nf(tot)}</button>` : '<span class="z">0</span>';
+      const cells = m.cols.map((c, i) => { const v = r.L.filter(c.f).length, gb = i && m.cols[i - 1].g !== c.g ? " gb" : "";
+        if(!v) return `<td class="${GROUPS[c.g].cls}${gb}"><span class="z">·</span></td>`;
+        const al = Math.min(1, v / Math.max(1, tot));
+        return `<td class="${GROUPS[c.g].cls}${gb}"><button class="sxc" style="--a:${(0.10 + al * 0.55).toFixed(3)}" data-q="${q(lbl + rowLbl + " · " + (c.full || c.n), a => r.L.includes(a) && c.f(a))}">${nf(v)}</button></td>`; }).join("");
+      return `<tr class="sx-${r.type}">${first}<td class="st3">${n0}</td>${cells}</tr>`;
+    }).join("");
+    return `<div class="sxw"><table class="sx"><thead>${head1}${head2}</thead><tbody>${body}</tbody></table></div><div class="sxhint">↔ Kéo ngang (hoặc Shift + lăn chuột) để xem đủ ${gs.map(g => GROUPS[g].n.toLowerCase()).join(", ")}</div>`;
+  }
+  function groupHTML(g){
+    const L = g.L, N = L.length; if(!N) return "";
+    const pc = Object.fromEntries(PRIO_ORDER.map(k => [k, L.filter(a => prioOf(a) === k)]));
+    const ch = L.filter(a => a.stg === "done" || a.stg === "none").length;
+    const units = UNIT_SX.filter(k => L.some(a => a.unit === k)); const us = UNIT_SEL[g.k] && units.includes(UNIT_SEL[g.k]) ? UNIT_SEL[g.k] : units[0];
+    const kpi = `<div class="sxk">
+      <div class="sxkb"><span>Tổng chi nhánh</span><b>${nf(N)}</b><small>đã chốt ${nf(ch)} · ${fmtP(pct(ch, N))}</small><div class="sxbar"><i style="width:${pct(ch, N)}%"></i></div></div>
+      ${PRIO_ORDER.map(k => `<button class="sxkb sxkp" style="--pc:${PRIO[k].c}" data-q="${q(g.t + " · " + PRIO[k].n, a => pc[k].includes(a))}"><span>${PRIO[k].n}</span><b>${nf(pc[k].length)}</b><small>${k === "p1" ? "Không lối lên · cây ảnh hưởng" : k === "p2" ? "Có lối lên · cây ảnh hưởng" : k === "p3" ? "Cây không ảnh hưởng / không có cây" : "Chưa rõ lối lên mái"}</small></button>`).join("")}
+    </div>`;
+    const useg = `<div class="seg sxu" data-g="${g.k}">${units.map(k => `<button data-u="${k}" class="${k === us ? "on" : ""}">${esc(unitName(k))} <em>${nf(L.filter(a => a.unit === k).length)}</em></button>`).join("")}</div>`;
+    return `<section class="rcard sxcard sx-${g.k}">
+      <div class="sxhd"><div class="sxtag">${g.k === "clinic" ? "Clinic" : "Cosmetic"}</div><div><h3>${nf(N)} ${esc(g.t)}</h3><div class="rsub">${esc(g.s)} · bấm một con số để xem danh sách chi nhánh</div></div></div>
+      ${kpi}
+      <h4 class="sxh4">Tổng hợp theo lối lên mái & cây xanh</h4>
+      ${tableHTML(g.t, L, true)}
+      <div class="sxuh"><h4 class="sxh4">Chi tiết theo đơn vị thực hiện</h4>${useg}</div>
+      <div class="sxut">${us ? tableHTML(g.t, L.filter(a => a.unit === us), false, unitName(us)) : ""}</div>
+    </section>`;
+  }
+  function renderSum(){
+    const root = document.getElementById("rSum"); if(!root) return;
+    Q = [];
+    const gs = G();
+    root.innerHTML = `<div class="sxlegend"><b>Cách xếp ưu tiên</b><span><i style="background:${PRIO.p1.c}"></i>Ưu tiên 1: không có lối lên + cây ảnh hưởng mái</span><span><i style="background:${PRIO.p2.c}"></i>Ưu tiên 2: có lối lên + cây ảnh hưởng mái</span><span><i style="background:${PRIO.p3.c}"></i>Ưu tiên 3: cây không ảnh hưởng mái hoặc không có cây xanh</span><span><i style="background:${PRIO.bs.c}"></i>Bổ sung thông tin: chưa rõ có lối lên mái hay không</span></div>` + gs.map(groupHTML).join("");
+  }
+  document.addEventListener("click", e => {
+    const b = e.target.closest("#rSum [data-q]"); if(b){ const x = Q[+b.dataset.q]; if(x) rOpenList(x.title, V.filter(x.fn), {h:"Đơn vị · kết quả", f:a => `${unitName(a.unit)} · ${a.stg === "done" ? (a.doneHow || "Hoàn thành") : stgName(a.stg)}`}); return; }
+    const u = e.target.closest("#rSum .sxu button"); if(u){ UNIT_SEL[u.parentElement.dataset.g] = u.dataset.u; renderSum(); }
+  });
+
+  /* ---------- Excel theo format Summary ---------- */
+  const xe = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  const cl = i => { let s = ""; i++; while(i){ const m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); } return s; };
+  function sheetXML(cells, merges, widths, freeze){
+    const byRow = new Map(); cells.forEach(c => { if(!byRow.has(c.r)) byRow.set(c.r, []); byRow.get(c.r).push(c); });
+    const rows = [...byRow.keys()].sort((a, b) => a - b).map(r => `<row r="${r + 1}">${byRow.get(r).sort((a, b) => a.c - b.c).map(c => {
+      const ref = cl(c.c) + (r + 1), s = c.s || 0;
+      return typeof c.v === "number" ? `<c r="${ref}" s="${s}"><v>${c.v}</v></c>` : c.v === "" || c.v == null ? `<c r="${ref}" s="${s}"/>` : `<c r="${ref}" s="${s}" t="inlineStr"><is><t xml:space="preserve">${xe(c.v)}</t></is></c>`; }).join("")}</row>`).join("");
+    return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheetViews><sheetView workbookViewId="0" zoomScale="90">${freeze ? `<pane xSplit="${freeze.x}" ySplit="${freeze.y}" topLeftCell="${cl(freeze.x)}${freeze.y + 1}" activePane="bottomRight" state="frozen"/>` : ""}</sheetView></sheetViews><cols>${widths.map((w, i) => `<col min="${i + 1}" max="${i + 1}" width="${w}" customWidth="1"/>`).join("")}</cols><sheetData>${rows}</sheetData>${merges.length ? `<mergeCells count="${merges.length}">${merges.map(m => `<mergeCell ref="${m}"/>`).join("")}</mergeCells>` : ""}</worksheet>`;
+  }
+  // styles: 0 thường · 1 tiêu đề lớn · 2 phụ đề · 3 head navy · 4 head đơn vị · 5 head giai đoạn · 6 head kết quả · 7 dòng nhóm · 8 ô số · 9 ô chữ · 10 tổng · 11 ô số nhóm · 12 tổng số · 13 head trái
+  const STYLES = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
+<fonts count="5"><font><sz val="10"/><name val="Arial"/></font><font><b/><sz val="14"/><color rgb="FF0B2545"/><name val="Arial"/></font><font><i/><sz val="9"/><color rgb="FF667085"/><name val="Arial"/></font><font><b/><sz val="10"/><color rgb="FFFFFFFF"/><name val="Arial"/></font><font><b/><sz val="10"/><color rgb="FF0F1B2D"/><name val="Arial"/></font></fonts>
+<fills count="9"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>
+<fill><patternFill patternType="solid"><fgColor rgb="FF0B2545"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FF1D4ED8"/></patternFill></fill>
+<fill><patternFill patternType="solid"><fgColor rgb="FF0E9384"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FF6941C6"/></patternFill></fill>
+<fill><patternFill patternType="solid"><fgColor rgb="FFE8F1FE"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFEAECF0"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFFFFFFF"/></patternFill></fill></fills>
+<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color rgb="FFD0D5DD"/></left><right style="thin"><color rgb="FFD0D5DD"/></right><top style="thin"><color rgb="FFD0D5DD"/></top><bottom style="thin"><color rgb="FFD0D5DD"/></bottom><diagonal/></border></borders>
+<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>
+<cellXfs count="14">
+<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>
+<xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/>
+<xf numFmtId="0" fontId="2" fillId="0" borderId="0" xfId="0" applyFont="1"/>
+<xf numFmtId="0" fontId="3" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>
+<xf numFmtId="0" fontId="3" fillId="3" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>
+<xf numFmtId="0" fontId="3" fillId="4" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>
+<xf numFmtId="0" fontId="3" fillId="5" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>
+<xf numFmtId="0" fontId="4" fillId="6" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="center"/></xf>
+<xf numFmtId="0" fontId="0" fillId="8" borderId="1" xfId="0" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf>
+<xf numFmtId="0" fontId="0" fillId="8" borderId="1" xfId="0" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="center"/></xf>
+<xf numFmtId="0" fontId="4" fillId="7" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment vertical="center"/></xf>
+<xf numFmtId="0" fontId="4" fillId="6" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf>
+<xf numFmtId="0" fontId="4" fillId="7" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="center" vertical="center"/></xf>
+<xf numFmtId="0" fontId="3" fillId="2" borderId="1" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="left" vertical="center" wrapText="1"/></xf>
+</cellXfs></styleSheet>`;
+  function block(cells, merges, r0, title, L, withUnit){
+    const m = model(L, withUnit); let r = r0;
+    cells.push({r, c:0, v:title, s:7}); for(let c = 1; c < 4 + m.cols.length; c++) cells.push({r, c, v:"", s:7}); merges.push(`A${r + 1}:${cl(3 + m.cols.length)}${r + 1}`); r++;
+    // header 2 tầng
+    [["Lối lên mái", 0], ["Cây xanh", 1], ["Ưu tiên", 2], ["SL CN", 3]].forEach(([v, c]) => { cells.push({r, c, v, s:3}); cells.push({r:r + 1, c, v:"", s:3}); merges.push(`${cl(c)}${r + 1}:${cl(c)}${r + 2}`); });
+    let c0 = 4; ["u", "s", "h"].forEach(g => { const cs = m.cols.filter(c => c.g === g); if(!cs.length) return; const st = g === "u" ? 4 : g === "s" ? 5 : 6;
+      cells.push({r, c:c0, v:GROUPS[g].n, s:st}); for(let i = 1; i < cs.length; i++) cells.push({r, c:c0 + i, v:"", s:st}); if(cs.length > 1) merges.push(`${cl(c0)}${r + 1}:${cl(c0 + cs.length - 1)}${r + 1}`);
+      cs.forEach((x, i) => cells.push({r:r + 1, c:c0 + i, v:x.full || x.n, s:st})); c0 += cs.length; });
+    r += 2;
+    m.rows.forEach(row => {
+      const sub = row.type === "sub", tot = row.type === "tot", sT = sub ? 7 : tot ? 10 : 9, sN = sub ? 11 : tot ? 12 : 8;
+      cells.push({r, c:0, v:sub ? row.label : tot ? "Tổng cộng" : "", s:sT});
+      cells.push({r, c:1, v:row.type === "row" ? row.label : sub ? "Sub-Total" : "", s:sT});
+      cells.push({r, c:2, v:row.type === "row" ? PRIO[row.pr].n : "", s:sT});
+      cells.push({r, c:3, v:row.L.length, s:sN});
+      m.cols.forEach((x, i) => cells.push({r, c:4 + i, v:row.L.filter(x.f).length, s:sN}));
+      r++;
+    });
+    return {r, w:4 + m.cols.length};
+  }
+  /* ---------- lấy đúng dữ liệu các sheet mà nút “Xuất Excel” của dashboard tạo ra ---------- */
+  function captureSheets(){
+    const orig = window.xlsxBlob; let got = null;
+    try{ window.xlsxBlob = sh => { got = sh; throw {__cap:1}; }; exportXlsx(); }
+    catch(e){ if(!e || !e.__cap) throw e; }
+    finally{ window.xlsxBlob = orig; }
+    const m = {}; (got || []).forEach(s => m[s.name] = s); return m;
+  }
+  /* sheet “Chi tiết chi nhánh” dạng pivot như file gốc: nhóm theo Có Clinic */
+  const PV_H = ["Lối lên mái", "Cây xanh", "Giai đoạn", "Đơn vị thực hiện", "Hình thức hoàn thành", "Chi nhánh", "Người thực hiện"];
+  const pvLoi = a => ({co:"có", khong:"Không", blank:"(blank)"})[loiOf(a)];
+  const pvTree = a => ({hit:"Ảnh hưởng mái", no:"Không ảnh hưởng", blank:"Không có cây xanh"})[treeOf(a)];
+  function pivotGroups(){
+    const ord = a => [LOI.findIndex(x => x[0] === loiOf(a)), TREE.findIndex(x => x[0] === treeOf(a)), STG_SX.indexOf(a.stg), UNIT_SX.indexOf(a.unit)];
+    const srt = L => L.slice().sort((x, y) => { const p = ord(x), q = ord(y); for(let i = 0; i < 4; i++) if(p[i] !== q[i]) return p[i] - q[i]; return (howOf(x)).localeCompare(howOf(y), "vi") || x.r.ten.localeCompare(y.r.ten, "vi"); });
+    return G().map(g => ({k:g.k, lbl:g.k === "clinic" ? "Có" : "(blank)", t:g.t, L:srt(g.L)}));
+  }
+  const pvRow = a => [pvLoi(a), pvTree(a), stgName(a.stg), unitName(a.unit), a.stg === "done" ? howOf(a) : "(blank)", a.r.ten || "", a.person || ""];
+
+  /* ---------- workbook Excel đủ các sheet, đúng thứ tự file gốc ---------- */
+  function rowsToCells(rows, headStyle){
+    const cells = []; rows.forEach((r, i) => r.forEach((v, c) => cells.push({r:i, c, v:(typeof v === "number" ? v : v == null ? "" : String(v)), s:i === 0 ? (headStyle || 13) : 9}))); return cells;
+  }
+  function buildWorkbook(sheets){
+    const enc = new TextEncoder(), f = (name, s) => ({name, data:enc.encode(s)});
+    const safe = n => n.replace(/[\\\/\?\*\[\]:]/g, " ").slice(0, 31);
+    const ct = sheets.map((_, i) => `<Override PartName="/xl/worksheets/sheet${i + 1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join("");
+    const files = [
+      f("[Content_Types].xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>${ct}</Types>`),
+      f("_rels/.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>`),
+      f("xl/workbook.xml", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${sheets.map((s, i) => `<sheet name="${xe(safe(s.name))}" sheetId="${i + 1}" r:id="rId${i + 1}"/>`).join("")}</sheets></workbook>`),
+      f("xl/_rels/workbook.xml.rels", `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${sheets.map((_, i) => `<Relationship Id="rId${i + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i + 1}.xml"/>`).join("")}<Relationship Id="rId${sheets.length + 1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`),
+      f("xl/styles.xml", STYLES),
+      ...sheets.map((s, i) => { let x = sheetXML(s.cells, s.merges || [], s.widths || [], s.freeze || null); if(s.filter) x = x.replace("</sheetData>", `</sheetData><autoFilter ref="${s.filter}"/>`); return f(`xl/worksheets/sheet${i + 1}.xml`, x); })];
+    return zipStore(files);
+  }
+  function summaryCells(){
+    const gs = G(), cells = [], merges = []; let r = 0, w = 0;
+    cells.push({r, c:0, v:"BÁO CÁO CHỐNG DỘT – VỆ SINH MÁNG XỐI · TỔNG HỢP CLINIC / COSMETIC", s:1}); r++;
+    cells.push({r, c:0, v:`Phạm vi: ${scopeText()} · số liệu đến ${fmtD(TODAY)} · ${document.getElementById("bSheet").textContent}`, s:2}); r++;
+    cells.push({r, c:0, v:"Ưu tiên 1: không có lối lên + cây ảnh hưởng mái · Ưu tiên 2: có lối lên + cây ảnh hưởng mái · Ưu tiên 3: cây không ảnh hưởng mái hoặc không có cây xanh · Bổ sung thông tin: chưa rõ lối lên mái", s:2}); r += 2;
+    gs.forEach(g => { if(!g.L.length) return;
+      let b = block(cells, merges, r, `${nf(g.L.length)} ${g.t.toUpperCase()}`, g.L, true); r = b.r + 1; w = Math.max(w, b.w);
+      UNIT_SX.filter(k => g.L.some(a => a.unit === k)).forEach(k => { b = block(cells, merges, r, `${g.t} · ${unitName(k)} (${nf(g.L.filter(a => a.unit === k).length)} CN)`, g.L.filter(a => a.unit === k), false); r = b.r + 1; });
+      r++; });
+    return {name:"Summary", cells, merges, widths:[24, 26, 18, 9, ...Array(Math.max(0, w - 4)).fill(15)]};
+  }
+  function pivotCells(){
+    const cells = [], merges = []; let r = 0;
+    pivotGroups().forEach(g => {
+      cells.push({r, c:0, v:"Có Clinic", s:7}); cells.push({r, c:1, v:g.lbl, s:7}); r += 2;
+      PV_H.forEach((v, c) => cells.push({r, c, v, s:13})); r++;
+      g.L.forEach(a => { pvRow(a).forEach((v, c) => cells.push({r, c, v, s:9})); r++; });
+      r += 2; });
+    return {name:"Chi tiết chi nhánh", cells, merges, widths:[14, 18, 24, 24, 40, 28, 34]};
+  }
+  function exportAll(){
+    const S = captureSheets(), out = [];
+    const add = (nm, extra) => { const s = S[nm]; if(!s) return; out.push(Object.assign({name:nm, cells:rowsToCells(s.rows), widths:s.widths}, extra || {})); };
+    add("Tóm tắt");
+    out.push(summaryCells());
+    out.push(pivotCells());
+    const ds = S["Danh sách CN"]; add("Danh sách CN", ds ? {freeze:{x:2, y:1}, filter:`A1:${cl(ds.rows[0].length - 1)}${ds.rows.length}`} : null);
+    ["Theo khu vực", "Theo tỉnh", "Theo đơn vị", "Không cần xử lý"].forEach(n => add(n));
+    const blob = buildWorkbook(out), u = URL.createObjectURL(blob), el = document.createElement("a");
+    el.href = u; el.download = `BaoCao_ChongDot_MangXoi_${TODAY}.xlsx`; document.body.appendChild(el); el.click(); el.remove(); setTimeout(() => URL.revokeObjectURL(u), 3000);
+    if(typeof toast === "function") toast("Đã xuất Excel đủ các sheet");
+  }
+  window.SXR = {captureSheets, pivotGroups, pvRow, PV_H, loiOf, treeOf, prioOf, howOf, stgName, unitName, renderSum: () => renderSum()};
+  window.exportSum = exportAll;
+  const btn = document.getElementById("btnSumX"); if(btn) btn.onclick = exportAll;
+
+  /* gắn vào vòng render của report */
+  const _rr = renderReport;
+  renderReport = function(){ _rr.apply(this, arguments); try{ renderSum(); }catch(err){ console.error(err); const r = document.getElementById("rSum"); if(r) r.innerHTML = '<div class="rnone">Lỗi dựng bảng tổng hợp: ' + esc(err.message) + '</div>'; } };
+  try{ if(typeof V !== "undefined" && V.length) renderSum(); }catch(e){}
+})();
+
+/* ===== Report: chia tab giống các sheet của file Excel ===== */
+(function(){
+  const bar = document.getElementById("rTabs"); if(!bar || !window.SXR) return;
+  const X = window.SXR;
+  const TABS = [
+    {k:"tt", n:"Tóm tắt"}, {k:"sum", n:"Summary"}, {k:"ct", n:"Chi tiết chi nhánh"}, {k:"ds", n:"Danh sách CN"},
+    {k:"kv", n:"Theo khu vực"}, {k:"tinh", n:"Theo tỉnh"}, {k:"dv", n:"Theo đơn vị"}, {k:"kcx", n:"Không cần xử lý"}];
+  const LSK = "mxrpt_tab";
+  let TAB = (location.hash.match(/t=(\w+)/) || [])[1] || (() => { try{ return localStorage.getItem(LSK); }catch(e){ return null; } })() || "tt";
+  if(!TABS.some(t => t.k === TAB)) TAB = "tt";
+  let SH = {}, SORT = {}, QS = {};
+  const sico = '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>';
+  const isNum = v => typeof v === "number";
+  const pctNum = v => typeof v === "string" && /%$/.test(v) ? parseFloat(v.replace(",", ".")) : null;
+  const stgK = n => (STG.find(s => s.n === n) || {}).k;
+
+  function show(k){
+    TAB = k; try{ localStorage.setItem(LSK, k); }catch(e){}
+    history.replaceState(null, "", "#t=" + k);
+    bar.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.t === k));
+    document.querySelectorAll("#rpt .rtp").forEach(p => p.classList.toggle("on", p.dataset.t === k));
+  }
+  function paintBar(){
+    const n = {ct:V.length, ds:V.length, kcx:V.filter(a => a.stg === "none").length, tinh:new Set(V.map(a => a.r.tinh || "")).size, kv:new Set(V.map(a => a.r.kv || "")).size};
+    bar.innerHTML = TABS.map((t, i) => `<button data-t="${t.k}" class="${t.k === TAB ? "on" : ""}"><span class="ri">${i + 1}</span>${esc(t.n)}${n[t.k] != null ? `<em>${nf(n[t.k])}</em>` : ""}</button>`).join("");
+  }
+
+  /* ---------- bảng chung có sắp xếp & tìm kiếm ---------- */
+  function table(key, rows, o){
+    o = o || {}; const H = rows[0]; let B = rows.slice(1).map((r, i) => ({r, i}));
+    const q = (QS[key] || "").trim().toLowerCase();
+    if(q) B = B.filter(x => x.r.some(v => String(v ?? "").toLowerCase().includes(q)));
+    const so = SORT[key];
+    if(so) B.sort((x, y) => { const a = x.r[so.c], b = y.r[so.c], pa = pctNum(a), pb = pctNum(b);
+      const r = isNum(a) && isNum(b) ? a - b : pa != null && pb != null ? pa - pb : String(a ?? "").localeCompare(String(b ?? ""), "vi", {numeric:true}); return so.d * r; });
+    const numCol = H.map((_, c) => rows.slice(1).some(r => isNum(r[c])) && rows.slice(1).every(r => r[c] === "" || r[c] == null || isNum(r[c])));
+    const max = H.map((_, c) => numCol[c] ? Math.max(1, ...rows.slice(1).map(r => +r[c] || 0)) : 0);
+    const th = H.map((h, c) => { const k = stgK(h), on = so && so.c === c;
+      return `<th data-sc="${c}" class="${numCol[c] || pctNum(rows[1] && rows[1][c]) != null ? "num" : ""}${c < (o.stick || 0) ? " stk" + c : ""}${on ? " srt" : ""}">${k ? `<i class="sxd" style="background:${STG[STGI[k]].c}"></i>` : ""}${esc(h)}${on ? (so.d > 0 ? " ▲" : " ▼") : ""}</th>`; }).join("");
+    const td = (v, c, x) => {
+      const cls = c < (o.stick || 0) ? ` class="stk${c}"` : "";
+      if(o.heat && numCol[c] && c > 1){ const k = stgK(H[c]); if(!v) return `<td class="num"><span class="z">·</span></td>`;
+        return `<td class="num"><button class="hc" style="--hc:${k ? STG[STGI[k]].c : "#1570ef"};--a:${(0.12 + 0.6 * (+v / max[c])).toFixed(3)}" data-cell="${x.i}|${c}">${nf(v)}</button></td>`; }
+      const p = pctNum(v); if(p != null) return `<td class="num"><div class="pbar"><i style="width:${Math.min(100, p)}%"></i></div><b>${esc(v)}</b></td>`;
+      if(isNum(v)) return `<td class="num"${cls}>${nf(v)}</td>`;
+      if(o.pill && o.pill.includes(c) && stgK(v)) return `<td${cls}><span class="sgp" style="--hc:${STG[STGI[stgK(v)]].c}">${esc(v)}</span></td>`;
+      if(c === 0 && o.bold0) return `<td${cls}><b>${esc(v ?? "")}</b></td>`;
+      return `<td${cls}${o.nw ? ` title="${esc(v ?? "")}"` : ""}>${esc(v ?? "")}</td>`; };
+    const body = B.map(x => `<tr data-ri="${x.i}">${x.r.map((v, c) => td(v, c, x)).join("")}</tr>`).join("");
+    let foot = "";
+    if(o.total){ const t = H.map((_, c) => c === 0 ? "Tổng cộng" : numCol[c] ? rows.slice(1).reduce((s, r) => s + (+r[c] || 0), 0) : "");
+      const iN = H.indexOf("Số CN"), done = STG.filter(s => s.k === "done" || s.k === "none").map(s => H.indexOf(s.n)).filter(i => i >= 0);
+      const pc = H.indexOf("% chốt"); if(pc >= 0 && iN >= 0) t[pc] = fmtP(pct(done.reduce((s, i) => s + t[i], 0), t[iN]));
+      foot = `<tfoot><tr>${t.map((v, c) => pctNum(v) != null ? `<td class="num"><div class="pbar"><i style="width:${pctNum(v)}%"></i></div><b>${esc(v)}</b></td>` : `<td class="${isNum(v) ? "num" : ""}">${isNum(v) ? nf(v) : esc(v)}</td>`).join("")}</tr></tfoot>`; }
+    const tools = o.search ? `<div class="tbt"><label class="tsr">${sico}<input type="search" data-qs="${key}" placeholder="${esc(o.search)}" value="${esc(QS[key] || "")}"></label><span class="sm">${nf(B.length)} / ${nf(rows.length - 1)} dòng · bấm tiêu đề cột để sắp xếp${o.rowHint ? " · " + o.rowHint : ""}</span></div>` : `<div class="tbt"><span class="sm">bấm tiêu đề cột để sắp xếp${o.rowHint ? " · " + o.rowHint : ""}</span></div>`;
+    return `${tools}<div class="tw${o.tall ? " tall" : ""}" data-tk="${key}"><table class="xt${o.click ? " clk" : ""}${o.nw ? " nw" : ""}"><thead><tr>${th}</tr></thead><tbody>${body}</tbody>${foot}</table></div>`;
+  }
+  const H2 = (n, t, sub) => `<h2 class="rsec"><span>${n}</span>${t}${sub ? ` <small>${sub}</small>` : ""}</h2>`;
+
+  /* ---------- từng tab ---------- */
+  function tabTT(){
+    const s = SH["Tóm tắt"]; if(!s) return "";
+    const R = s.rows, get = k => (R.find(r => r[0] === k) || []);
+    const N = get("Tổng số chi nhánh")[1] || 0, ch = get("Đã chốt (hoàn thành + không cần xử lý)");
+    const st = STG.map(x => ({x, r:get(x.n)}));
+    const iT = R.findIndex(r => r[0] === "Tóm tắt"), iV = R.findIndex(r => r[0] === "Việc cần quyết");
+    const bul = R.slice(iT + 1, iV > 0 ? iV : undefined).filter(r => r[0]).map(r => r[0]);
+    const RK = typeof riskItems === "function" ? riskItems(V) : [];
+    return `${H2(1, "Tóm tắt", "đúng sheet “Tóm tắt” của file Excel")}
+      <section class="rcard ttc">
+        <div class="ttmeta"><div><span>Ngày báo cáo</span><b>${esc(get("Ngày báo cáo")[1] || "")}</b></div><div><span>Phạm vi</span><b>${esc(get("Phạm vi")[1] || "")}</b></div><div class="w"><span>Nguồn dữ liệu</span><b>${esc(get("Ngày báo cáo")[2] || "")}</b></div></div>
+        <div class="ttk">
+          <div class="ttb hero"><span>Đã chốt</span><b>${esc(ch[2] || "")}</b><small>${nf(ch[1] || 0)} / ${nf(N)} chi nhánh · hoàn thành + không cần xử lý</small><div class="pbar lg"><i style="width:${pctNum(ch[2]) || 0}%"></i></div></div>
+          ${st.map(({x, r}) => `<button class="ttb" style="--hc:${x.c}" data-stg="${x.k}"><span><i class="sxd" style="background:${x.c}"></i>${esc(x.n)}</span><b>${nf(r[1] || 0)}</b><small>${esc(r[2] || "")}</small></button>`).join("")}
+        </div>
+      </section>
+      <section class="rcard"><div class="rch"><h3>Tóm tắt điều hành</h3></div><ul class="ttl">${bul.map(t => `<li>${esc(t)}</li>`).join("")}</ul></section>
+      <section class="rcard"><div class="rch"><h3>Việc cần quyết</h3><div class="rsub">bấm một dòng để xem danh sách chi nhánh</div></div>
+        <div class="tw"><table class="xt clk"><thead><tr><th>Việc cần quyết</th><th class="num">Số CN</th><th>Hành động</th></tr></thead><tbody>${RK.map((r, i) => `<tr data-rk="${i}"><td><span class="sev ${r.sv || ""}"></span><b>${esc(String(r.t).replace(/<[^>]+>/g, ""))}</b>${r.d ? `<div class="sm">${esc(String(r.d).replace(/<[^>]+>/g, ""))}</div>` : ""}</td><td class="num"><b class="big">${nf(r.n)}</b></td><td>${esc(r.a || "")}</td></tr>`).join("")}</tbody></table></div></section>
+`;
+  }
+  function tabCT(){
+    const gs = X.pivotGroups();
+    return `${H2(3, "Chi tiết chi nhánh", "đúng sheet “Chi tiết chi nhánh” – nhóm theo Có Clinic")}` + gs.map(g => {
+      let prev = [];
+      const rows = g.L.map(a => { const v = X.pvRow(a); let keep = true;
+        const cells = v.map((x, c) => { if(c < 5 && keep && prev[c] === x) return `<td class="rep">${esc(x)}</td>`; keep = false; return c === 5 ? `<td><b>${esc(x)}</b></td>` : c === 2 && stgK(x) ? `<td><span class="sgp" style="--hc:${STG[STGI[stgK(x)]].c}">${esc(x)}</span></td>` : `<td>${esc(x)}</td>`; }).join("");
+        prev = v; return `<tr data-i="${a.r.i}">${cells}</tr>`; }).join("");
+      return `<section class="rcard sxcard sx-${g.k}"><div class="sxhd"><div class="sxtag">${g.k === "clinic" ? "Clinic" : "Cosmetic"}</div><div><h3>Có Clinic: ${esc(g.lbl)} · ${nf(g.L.length)} chi nhánh</h3><div class="rsub">sắp theo lối lên mái → cây xanh → giai đoạn → đơn vị · ô mờ = giống dòng trên · bấm một dòng để xem chi tiết</div></div></div>
+        <div class="tw tall"><table class="xt clk pv"><thead><tr>${X.PV_H.map(h => `<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${rows}</tbody></table></div></section>`; }).join("");
+  }
+  const sheetTab = (n, title, sub, key, o) => { const s = SH[title]; return `${H2(n, title, sub)}<section class="rcard">${s ? table(key, s.rows, o) : '<div class="rnone">Không có dữ liệu</div>'}</section>`; };
+
+  function render(){
+    try{ SH = X.captureSheets(); }catch(e){ console.error(e); SH = {}; }
+    paintBar();
+    const put = (id, html) => { const el = document.getElementById(id); if(el) el.innerHTML = html; };
+    put("rtTT", tabTT());
+    put("rtCT", tabCT());
+    put("rtDS", sheetTab(4, "Danh sách CN", "đúng sheet “Danh sách CN” · 1 dòng = 1 chi nhánh", "ds", {search:"Tìm chi nhánh, mã CN, tỉnh, người thực hiện…", stick:2, bold0:false, pill:[7], tall:true, nw:true, click:true, rowHint:"bấm một dòng để xem chi tiết"}));
+    put("rtKV", sheetTab(5, "Theo khu vực", "số chi nhánh theo giai đoạn", "kv", {heat:true, total:true, bold0:true, click:true, rowHint:"bấm một con số để xem danh sách"}));
+    put("rtTINH", sheetTab(6, "Theo tỉnh", "số chi nhánh theo giai đoạn", "tinh", {heat:true, total:true, bold0:true, search:"Tìm tỉnh / thành…", tall:true, click:true, rowHint:"bấm một con số để xem danh sách"}));
+    put("rtDV", sheetTab(7, "Theo đơn vị", "số chi nhánh theo giai đoạn", "dv", {heat:true, total:true, bold0:true, click:true, rowHint:"bấm một con số để xem danh sách"}));
+    put("rtKCX", sheetTab(8, "Không cần xử lý", "thuê tòa nhà / chung cư / kiot / chung chủ", "kcx", {bold0:false, click:true, nw:true, rowHint:"bấm một dòng để xem chi tiết"}));
+    show(TAB);
+  }
+  const rerender = key => { render(); const inp = document.querySelector(`[data-qs="${key}"]`); if(inp){ inp.focus(); const v = inp.value; inp.setSelectionRange(v.length, v.length); } };
+
+  /* ---------- sự kiện ---------- */
+  bar.addEventListener("click", e => { const b = e.target.closest("button[data-t]"); if(b){ show(b.dataset.t); window.scrollTo({top:Math.min(window.scrollY, bar.getBoundingClientRect().top + window.scrollY - 8), behavior:"smooth"}); } });
+  const GF = {kv:[a => a.r.kv || "(chưa rõ)", "Khu vực", "Theo khu vực"], tinh:[a => a.r.tinh || "(chưa rõ)", "Tỉnh/TP", "Theo tỉnh"], dv:[a => UNIT[a.unit], "Đơn vị thực hiện", "Theo đơn vị"]};
+  document.getElementById("rpt").addEventListener("click", e => {
+    const th = e.target.closest(".rtp th[data-sc]"); if(th){ const key = th.closest("[data-tk]").dataset.tk, c = +th.dataset.sc; const so = SORT[key]; SORT[key] = so && so.c === c ? (so.d > 0 ? {c, d:-1} : null) : {c, d:1}; render(); return; }
+    const sb = e.target.closest(".ttb[data-stg]"); if(sb){ const k = sb.dataset.stg; rOpenList(X.stgName(k), V.filter(a => a.stg === k)); return; }
+    const rk = e.target.closest("tr[data-rk]"); if(rk){ const r = riskItems(V)[+rk.dataset.rk]; if(r && r.fn) rOpenList(String(r.lb || r.t).replace(/<[^>]+>/g, ""), V.filter(r.fn)); return; }
+    const hc = e.target.closest(".hc[data-cell]"), tr = e.target.closest(".rtp tr[data-ri]");
+    const tk = (hc || tr) && (hc || tr).closest("[data-tk]"); const key = tk && tk.dataset.tk;
+    if(key && GF[key]){ const s = SH[GF[key][2]], ri = hc ? +hc.dataset.cell.split("|")[0] : +tr.dataset.ri, row = s.rows[ri + 1], f = GF[key][0];
+      let L = V.filter(a => f(a) === row[0]), t = `${GF[key][1]}: ${row[0]}`;
+      if(hc){ const c = +hc.dataset.cell.split("|")[1], k = stgK(s.rows[0][c]); if(k){ L = L.filter(a => a.stg === k); t += " · " + s.rows[0][c]; } }
+      rOpenList(t, L); return; }
+    if(key === "ds" && tr){ const a = V[+tr.dataset.ri]; if(a) openDrawer(a.r.i); return; }
+    if(key === "kcx" && tr){ const a = V.filter(x => x.stg === "none")[+tr.dataset.ri]; if(a) openDrawer(a.r.i); return; }
+    const pv = e.target.closest(".rtp table.pv tr[data-i]"); if(pv){ openDrawer(+pv.dataset.i); return; }
+  });
+  let qt = null;
+  document.getElementById("rpt").addEventListener("input", e => { const i = e.target.closest("[data-qs]"); if(!i) return; QS[i.dataset.qs] = i.value; clearTimeout(qt); qt = setTimeout(() => rerender(i.dataset.qs), 160); });
+  window.addEventListener("hashchange", () => { const k = (location.hash.match(/t=(\w+)/) || [])[1]; if(k && k !== TAB && TABS.some(t => t.k === k)) show(k); });
+
+  const _rr2 = renderReport;
+  renderReport = function(){ _rr2.apply(this, arguments); try{ render(); }catch(err){ console.error(err); } };
+  try{ if(typeof V !== "undefined" && V.length) render(); else show(TAB); }catch(e){ console.error(e); }
+})();
 
 </script>
 </body>
